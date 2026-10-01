@@ -8,5 +8,5 @@ sites:
 status-website:
   name: System Status
   introTitle: "Live Service Monitoring"
-  baseUrl: /status-page     # Omit if using a custom CNAME domain below
+  baseUrl: /    # Omit if using a custom CNAME domain below
   # cname: status.yourdomain.com # Optional custom domain setup
