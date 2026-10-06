@@ -5,11 +5,11 @@
     "icon": "https://icons.duckduckgo.com/ip3/debweb.marten-grue.ts.net.ico",
     "slug": "project-arkanum",
     "status": "down",
-    "uptime": "56.76%",
+    "uptime": "43.77%",
     "uptimeDay": "0.00%",
-    "uptimeWeek": "56.76%",
-    "uptimeMonth": "56.76%",
-    "uptimeYear": "56.76%",
+    "uptimeWeek": "43.77%",
+    "uptimeMonth": "43.77%",
+    "uptimeYear": "43.77%",
     "time": 2402,
     "timeDay": 0,
     "timeWeek": 2402,
@@ -17,7 +17,8 @@
     "timeYear": 2402,
     "dailyMinutesDown": {
       "2026-10-01": 10,
-      "2026-10-05": 19,
+      "2026-10-06": 20,
+      "2026-10-05": 1440,
       "2026-10-04": 1440,
       "2026-10-03": 627
     }
