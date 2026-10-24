@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 2. Prime Factorization | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 2. Prime Factorization | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 2. Prime Factorization</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<p>Prime factorization is the process of representing a number as a product of prime numbers. Prime numbers are numbers greater than 1 that are divisible only by themselves and 1 (for example, 2, 3, 5, 7).</p>
+<h2>Definition</h2>
+<p>The prime factorization of a number N can be written as:</p>
+<p>N = p₁^(e₁) · p₂^(e₂) · ... · pₖ^(eₖ)</p>
+<p>Where p₁, p₂, ..., pₖ are the prime factors of N, and e₁, e₂, ..., eₖ are their respective exponents.</p>
+<p><strong>Example:</strong> The number 120 can be factored into prime numbers as: 120 = 2³ · 3 · 5.</p>
+<hr>
+<h3>1. Trial Division</h3>
+<ul><li><strong>Description:</strong> We check the divisibility of the number N by prime numbers sequentially, starting from 2 up to √N. If the number is divisible, we record the factor and continue with the quotient.</li><li><strong>Steps:</strong></li><li>Start with p = 2.</li><li>While p ≤ √N:</li><li>If N mod p = 0, then p is a factor. Divide N by p.</li><li>Increment p by 1 when division is no longer possible.</li><li>If N &gt; 1 after the loop, then N itself is a prime factor.</li><li><strong>Complexity:</strong> O(√N)</li></ul>
+<p><strong>Example:</strong> Factorizing 60:</p>
+<ol><li>60 mod 2 = 0 → 2 (first factor). Divide: 60 / 2 = 30.</li><li>30 mod 2 = 0 → 2. Divide: 30 / 2 = 15.</li><li>15 mod 3 = 0 → 3. Divide: 15 / 3 = 5.</li><li>5 &gt; √5, add 5. Result: 60 = 2² · 3 · 5.</li></ol>
+<hr>
+<h3>2. Sieve of Eratosthenes</h3>
+<ul><li><strong>Description:</strong> An efficient method for finding all prime numbers up to N, which can aid in factorization.</li><li><strong>Algorithm:</strong></li><li>Create an array of numbers from 2 to N.</li><li>Cross out all multiples of 2, then 3, and so on up to √N.</li><li>The remaining numbers are primes.</li><li><strong>Application:</strong> Use the discovered prime numbers to divide N.</li><li><strong>Complexity:</strong> O(N log log N) to construct the sieve.</li></ul>
+<hr>
+<h3>3. Pollard’s Rho Algorithm</h3>
+<ul><li><strong>Description:</strong> A fast factorization algorithm for large numbers.</li><li><strong>Idea:</strong> Uses a pseudo-random search via the function f(x) = (x² + c) mod N to find divisors.</li><li><strong>Steps:</strong></li><li>Choose a starting seed x₀ and function f(x).</li><li>Generate the sequence x₁, x₂, ...</li><li>Find the greatest common divisor (gcd) between the differences of numbers in the sequence and N.</li><li>If gcd &gt; 1, it is a non-trivial factor of N.</li><li><strong>Complexity:</strong> On average O(N^(1/4)).</li><li><strong>Application:</strong> Used in cryptography.</li></ul>
+<hr>
+<h3>4. Fermat&#x27;s Factorization Method</h3>
+<ul><li><strong>Description:</strong> Based on representing an odd number N as the difference of two squares:</li></ul>
+<p>  N = a² - b² = (a - b)(a + b)</p>
+<ul><li><strong>Steps:</strong></li><li>Set a = ⌈√N⌉.</li><li>Compute b² = a² - N.</li><li>If b² is a perfect square, then N = (a - b)(a + b).</li><li>Repeat recursively for the resulting factors until only prime numbers remain.</li><li><strong>Complexity:</strong> O(√N).</li></ul>
+<hr>
+<h3>5. Lenstra Elliptic-Curve Factorization</h3>
+<ul><li><strong>Description:</strong> A modern factorization method using elliptic curves. It is especially efficient for finding small prime factors of large composite numbers.</li><li><strong>Complexity:</strong> Depends on the choice of the curve and the size of the prime factor.</li></ul>
+<img src="../img/adsfp2.png" style="width: 100%;">
+</div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

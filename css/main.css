@@ -148,3 +148,6 @@ blockquote {
 }
 .post-notice a { text-decoration: underline; }
 .post-meta a { text-decoration: underline; }
+
+/* Comments */
+.comments { margin-top: 30px; }
