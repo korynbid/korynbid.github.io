@@ -90,42 +90,7 @@
 <ul><li><strong>Finding all neighbors of vertex v:</strong> O(n), where n is the total number of vertices in the graph (since the entire row or column must be scanned).</li><li><strong>Checking for an edge between vertices u and v:</strong> O(1), as it involves direct matrix array lookup.</li><li><strong>Adding an edge:</strong> O(1).</li></ul>
 <hr>
 <h2>Comparison of Adjacency List and Adjacency Matrix</h2>
-<table width="100%">
-    <thead>
-        <tr>
-            <th>Feature</th>
-            <th>Adjacency List</th>
-            <th>Adjacency Matrix</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Memory</td>
-            <td>O(n + e), where n = vertices, e = edges</td>
-            <td>O(n^2)</td>
-        </tr>
-        <tr>
-            <td>Edge Lookup</td>
-            <td>O(k), where k = degree of vertex u</td>
-            <td>O(1)</td>
-        </tr>
-        <tr>
-            <td>Find All Neighbors</td>
-            <td>O(k)</td>
-            <td>O(n)</td>
-        </tr>
-        <tr>
-            <td>Add Edge</td>
-            <td>O(1)</td>
-            <td>O(1)</td>
-        </tr>
-        <tr>
-            <td>Remove Edge</td>
-            <td>O(k)</td>
-            <td>O(1)</td>
-        </tr>
-    </tbody>
-</table>
+<p>| Feature | Adjacency List | Adjacency Matrix | | :--- | :--- | :--- | | <strong>Memory</strong> | O(n + e), where n = vertices, e = edges | O(n^2) | | <strong>Edge Lookup</strong> | O(k), where k = degree of vertex u | O(1) | | <strong>Find All Neighbors</strong> | O(k) | O(n) | | <strong>Add Edge</strong> | O(1) | O(1) | | <strong>Remove Edge</strong> | O(k) | O(1) |</p>
 <hr>
 <h2>When to Use an Adjacency List</h2>
 <ul><li>For <strong>sparse graphs</strong> (where the number of edges is much less than <code>n^2</code>).</li><li>When memory conservation is important while primarily operating on a vertex&#x27;s immediate neighbors.</li><li>For <strong>dynamic graphs</strong> where edges are frequently added or removed.</li></ul>
@@ -137,6 +102,7 @@
       </div>
       <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
       <section class="comments">
         <script src="https://giscus.app/client.js"
                 data-repo="korynbid/korynbid.github.io"
@@ -163,7 +129,7 @@
     <p class="text">&copy; 2026 korynbid</p>
   </div>
 </footer>
-
+<script src="../js/views.js"></script>
 <script data-goatcounter="https://korynbid.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>

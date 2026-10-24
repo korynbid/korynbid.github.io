@@ -43,19 +43,6 @@
 <ol><li>Define the search range: from the start to the end of the array.</li><li>Find the middle of this range.</li><li>If the middle element is equal to the target value, terminate the search.</li><li>If the target element is less than the middle element, repeat the search on the left half.</li><li>If the target element is greater than the middle element, repeat the search on the right half.</li><li>Repeat steps 2–5 until the element is found or the search range becomes empty.</li></ol>
 <h2>Complexity</h2>
 <ul><li><strong>Time Complexity:</strong> O(log n), where <code>n</code> is the number of elements in the array. This means doubling the size of the array increases the required steps by only 1.</li><li><strong>Space Complexity:</strong> O(1) — the iterative algorithm requires a constant amount of memory because it operates in place without allocating additional data structures.</li></ul>
-<pre><code>def binary_search(arr, target):
-    low = 0
-    high = len(arr) - 1
-
-    while low &lt;= high:
-        mid = (low + high) // 2
-        if arr[mid] == target:
-            return mid
-        elif arr[mid] &lt; target:
-            low = mid + 1
-        else:
-            high = mid - 1
-    return -1</code></pre>
 <h2>Applications</h2>
 <ul><li><strong>Search in Sorted Collections:</strong> Binary search is used to locate elements in sorted arrays or lists, which is beneficial for databases and search engines.</li><li><strong>Binary Search Trees (BST):</strong> The core principle of binary search is applied to locate nodes within balanced search trees.</li><li><strong>Large Datasets:</strong> Binary search efficiently handles massive volumes of data when querying sorted datasets.</li></ul>
 <h2>Advantages</h2>
@@ -65,6 +52,7 @@
       </div>
       <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
       <section class="comments">
         <script src="https://giscus.app/client.js"
                 data-repo="korynbid/korynbid.github.io"
@@ -91,7 +79,7 @@
     <p class="text">&copy; 2026 korynbid</p>
   </div>
 </footer>
-
+<script src="../js/views.js"></script>
 <script data-goatcounter="https://korynbid.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>

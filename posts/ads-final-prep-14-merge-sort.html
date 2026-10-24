@@ -58,37 +58,6 @@
 <ul><li>Performs the merging of sorted subarrays using the <code>merge</code> function.</li></ul>
 <ol><li><strong><code>sort</code> Method:</strong></li></ol>
 <ul><li>Accepts an array, initializes the merge sort process, and returns the fully sorted array.</li></ul>
-<pre><code>class MergeSort:
-    def __init__(self):
-        self.array = []
-
-    def merge(self, left, right):
-        result = []
-        i = j = 0
-        while i &lt; len(left) and j &lt; len(right):
-            if left[i] &lt; right[j]:
-                result.append(left[i])
-                i += 1
-            else:
-                result.append(right[j])
-                j += 1
-        result.extend(left[i:])
-        result.extend(right[j:])
-        return result
-
-    def mergesort(self, arr):
-        if len(arr) &lt;= 1:
-            return arr
-        mid = len(arr) // 2
-        left = arr[:mid]
-        right = arr[mid:]
-        left = self.mergesort(left)
-        right = self.mergesort(right)
-        return self.merge(left, right)
-
-    def sort(self, arr):
-        self.array = arr
-        return self.mergesort(arr)</code></pre>
 <h2>Advantages of Merge Sort</h2>
 <ol><li><strong>Guaranteed Complexity O(n log n):</strong> Unlike Quick Sort, which can degrade to O(n²) in the worst case, Merge Sort consistently maintains O(n log n) performance.</li></ol>
 <ol><li><strong>Stability:</strong> Merge Sort is stable, meaning elements with equal values maintain their original relative order from the input array.</li></ol>
@@ -101,10 +70,10 @@
 <ol><li><strong>In-Place Merging:</strong> Modifying the merge operation to sort in-place avoids allocating temporary auxiliary arrays, minimizing space overhead at the expense of greater algorithmic complexity.</li></ol>
 <h2>Conclusion</h2>
 <p>Merge Sort is a stable and efficient sorting algorithm that guarantees O(n log n) runtime performance in all scenarios. It is especially useful when dealing with large volumes of data where predictable execution time and element stability are required. However, its auxiliary space requirement makes it less suited for memory-restricted systems.</p>
-      
-</div>
+      </div>
       <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
       <section class="comments">
         <script src="https://giscus.app/client.js"
                 data-repo="korynbid/korynbid.github.io"
@@ -131,7 +100,7 @@
     <p class="text">&copy; 2026 korynbid</p>
   </div>
 </footer>
-
+<script src="../js/views.js"></script>
 <script data-goatcounter="https://korynbid.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>

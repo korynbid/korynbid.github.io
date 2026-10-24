@@ -48,44 +48,6 @@
 <ol><li><strong><code>search(self, key)</code>:</strong></li><li>Method for looking up an element by key. It checks the calculated bucket index and traverses the chain at that slot to locate the key.</li></ol>
 <ol><li><strong><code>delete(self, key)</code>:</strong></li><li>Method for removing an element by key. If found, the corresponding key-value pair is removed from the chain.</li></ol>
 <ol><li><strong><code>__str__(self)</code>:</strong></li><li>String representation method that formats the hash table for convenient display and logging.</li></ol>
-<pre><code>class HashTable:
-    def __init__(self, size=10):
-        self.size = size
-        self.table = [None] * size
-
-    def _hash(self, key):
-        return hash(key) % self.size
-
-    def insert(self, key, value):
-        index = self._hash(key)
-        if self.table[index] is None:
-            self.table[index] = [(key, value)]
-        else:
-            for idx, (k, v) in enumerate(self.table[index]):
-                if k == key:
-                    self.table[index][idx] = (key, value)
-                    return
-            self.table[index].append((key, value))
-
-    def search(self, key):
-        index = self._hash(key)
-        if self.table[index] is not None:
-            for k, v in self.table[index]:
-                if k == key:
-                    return v
-        return None
-
-    def delete(self, key):
-        index = self._hash(key)
-        if self.table[index] is not None:
-            for i, (k, v) in enumerate(self.table[index]):
-                if k == key:
-                    del self.table[index][i]
-                    return True
-        return False
-
-    def __str__(self):
-        return str(self.table)</code></pre>
 <h2>Collision Resolution Techniques</h2>
 <ol><li><strong>Chaining (Separate Chaining):</strong></li><li>When multiple keys hash to the same index, they are stored within a linked list (or other dynamic collection) at that slot. This method is simple and effective, though it increases dynamic memory usage.</li></ol>
 <ol><li><strong>Open Addressing:</strong></li><li>When a collision occurs, the algorithm searches for another open slot in the array using a probing sequence (e.g., linear probing or quadratic probing). This avoids extra memory allocations outside the main array but complicates search and deletion logic.</li></ol>
@@ -100,6 +62,7 @@
       </div>
       <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
       <section class="comments">
         <script src="https://giscus.app/client.js"
                 data-repo="korynbid/korynbid.github.io"
@@ -126,7 +89,7 @@
     <p class="text">&copy; 2026 korynbid</p>
   </div>
 </footer>
-
+<script src="../js/views.js"></script>
 <script data-goatcounter="https://korynbid.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
