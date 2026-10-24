@@ -52,6 +52,30 @@
 <ol><li>Select a pivot element.</li></ol>
 <ol><li>Partition the array into two parts based on comparisons with the pivot element.</li></ol>
 <ol><li>Recursively sort both parts of the array.</li></ol>
+<pre><code>class QuickSort:
+    def __init__(self):
+        self.array = []
+
+    def partition(self, low, high):
+        pivot = self.array[high]
+        i = low - 1
+        for j in range(low, high):
+            if self.array[j] &lt; pivot:
+                i += 1
+                self.array[i], self.array[j] = self.array[j], self.array[i]
+        self.array[i + 1], self.array[high] = self.array[high], self.array[i + 1]
+        return i + 1
+
+    def quicksort(self, low, high):
+        if low &lt; high:
+            pi = self.partition(low, high)
+            self.quicksort(low, pi - 1)
+            self.quicksort(pi + 1, high)
+
+    def sort(self, arr):
+        self.array = arr
+        self.quicksort(0, len(arr) - 1)
+        return self.array</code></pre>
 <h2>Code Structure &amp; Logic</h2>
 <ol><li><strong><code>partition</code> method:</strong></li><li>Selects a pivot element (typically the last element of the active subarray).</li><li>Iterates through array elements and rearranges them depending on whether each element is smaller than the pivot.</li><li>Returns the final index position where the pivot belongs.</li></ol>
 <ol><li><strong><code>quicksort</code> method:</strong></li><li>Recursively sorts the left and right partitions relative to the pivot index returned by <code>partition</code>.</li></ol>

@@ -45,6 +45,37 @@
 <ul><li><strong>Time Complexity:</strong></li><li><strong>Building the heap:</strong> O(n)</li><li><strong>Extracting an element &amp; restoring the heap:</strong> O(log n)</li><li><strong>Total Complexity:</strong> O(n log n) across best, average, and worst cases.</li><li><strong>Space Complexity:</strong> O(1) — sorting is performed in-place without additional memory allocations beyond the array itself.</li></ul>
 <h2>Steps of the Heap Sort Algorithm</h2>
 <ol><li><strong>Build the Heap:</strong> Transform the array into a heap. Start from the last internal (non-leaf) node and move upward to the root, calling the <code>heapify</code> operation on each node.</li><li><strong>Extract Elements:</strong> Swap the root element (maximum or minimum) with the last element of the heap. Reduce the heap size by 1 and call <code>heapify</code> on the root to restore heap properties.</li></ol>
+<pre><code>class HeapSort:
+    def __init__(self):
+        self.array = []
+
+    def heapify(self, n, i):
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        if left &lt; n and self.array[left] &gt; self.array[largest]:
+            largest = left
+
+        if right &lt; n and self.array[right] &gt; self.array[largest]:
+            largest = right
+
+        if largest != i:
+            self.array[i], self.array[largest] = self.array[largest], self.array[i]
+            self.heapify(n, largest)
+
+    def sort(self, arr):
+        self.array = arr
+        n = len(arr)
+
+        for i in range(n // 2 - 1, -1, -1):
+            self.heapify(n, i)
+
+        for i in range(n - 1, 0, -1):
+            self.array[i], self.array[0] = self.array[0], self.array[i]
+            self.heapify(i, 0)
+
+        return self.array</code></pre> 
 <h2>Code Explanation</h2>
 <ol><li>In a <code>HeapSort</code> implementation, the primary methods are:</li><li><code>heapify(n, i)</code>: Restores the heap property for a subtree rooted at index <code>i</code>, where <code>n</code> is the current size of the heap. Checks <code>i</code> against its left and right children and swaps if a child is larger (in a max-heap).</li><li><code>sort(arr)</code>: Sorts the array by first building the heap and then repeatedly extracting elements while restoring the heap at each step.</li><li>Inside the <code>sort</code> method:</li><li>Heap construction starts from the last parent node at index <code>n // 2 - 1</code> down to <code>0</code>.</li><li>Once constructed, elements are extracted sequentially by swapping the root to the end of the active array range and re-heapifying.</li></ol>
 <h2>Advantages of Heap Sort</h2>

@@ -49,6 +49,37 @@
 <ol><li>Divide the array into two halves.</li></ol>
 <ol><li>Recursively apply Merge Sort to each half.</li></ol>
 <ol><li>Merge the sorted halves into a single sorted array.</li></ol>
+<pre><code>class MergeSort:
+    def __init__(self):
+        self.array = []
+
+    def merge(self, left, right):
+        result = []
+        i = j = 0
+        while i &lt; len(left) and j &lt; len(right):
+            if left[i] &lt; right[j]:
+                result.append(left[i])
+                i += 1
+            else:
+                result.append(right[j])
+                j += 1
+        result.extend(left[i:])
+        result.extend(right[j:])
+        return result
+
+    def mergesort(self, arr):
+        if len(arr) &lt;= 1:
+            return arr
+        mid = len(arr) // 2
+        left = arr[:mid]
+        right = arr[mid:]
+        left = self.mergesort(left)
+        right = self.mergesort(right)
+        return self.merge(left, right)
+
+    def sort(self, arr):
+        self.array = arr
+        return self.mergesort(arr)</code></pre>
 <h2>Code Explanation</h2>
 <ol><li><strong><code>merge</code> Method:</strong></li></ol>
 <ul><li>Accepts two sorted arrays (<code>left</code> and <code>right</code>) and merges them into a single sorted array.</li></ul>

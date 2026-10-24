@@ -41,6 +41,44 @@
 <ol><li><strong>Insert:</strong> Adding a new element (key-value pair) to the hash table.</li><li><strong>Delete:</strong> Removing an element by its key.</li><li><strong>Search (Lookup):</strong> Finding an element by its key.</li><li><strong>Collision Handling:</strong> When two distinct keys hash to the same index, a collision occurs. Various techniques, such as chaining or open addressing, are used to resolve collisions.</li></ol>
 <h2>How a Hash Table Works</h2>
 <ol><li><strong>Hash Function:</strong> The hash function takes a key and converts it into an array index. A good hash function distributes keys uniformly across the array to minimize collisions.</li><li><strong>Array Storage:</strong> An array is used to store the elements. Each table slot holds a key-value pair, where the key is unique.</li><li><strong>Collisions:</strong> If two different keys map to the same array index, a collision happens. Collisions can be managed using strategies like separate chaining or open addressing.</li></ol>
+<pre><code>class HashTable:
+    def __init__(self, size=10):
+        self.size = size
+        self.table = [None] * size
+
+    def _hash(self, key):
+        return hash(key) % self.size
+
+    def insert(self, key, value):
+        index = self._hash(key)
+        if self.table[index] is None:
+            self.table[index] = [(key, value)]
+        else:
+            for idx, (k, v) in enumerate(self.table[index]):
+                if k == key:
+                    self.table[index][idx] = (key, value)
+                    return
+            self.table[index].append((key, value))
+
+    def search(self, key):
+        index = self._hash(key)
+        if self.table[index] is not None:
+            for k, v in self.table[index]:
+                if k == key:
+                    return v
+        return None
+
+    def delete(self, key):
+        index = self._hash(key)
+        if self.table[index] is not None:
+            for i, (k, v) in enumerate(self.table[index]):
+                if k == key:
+                    del self.table[index][i]
+                    return True
+        return False
+
+    def __str__(self):
+        return str(self.table)</code></pre>
 <h2>Code Explanation</h2>
 <ol><li><strong><code>__init__(self, size)</code>:</strong></li><li>Constructor that initializes the hash table with a specified size. The <code>self.table</code> array stores the entries/buckets.</li></ol>
 <ol><li><strong><code>_hash(self, key)</code>:</strong></li><li>The internal hash function that converts a key into an array index. It uses Python&#x27;s built-in <code>hash()</code> function to derive a numeric hash value and then applies the modulo operator (<code>%</code>) with the table size to determine the array index.</li></ol>
