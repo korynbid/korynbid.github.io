@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 17. Calculation | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 17. Calculation | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 17. Calculation</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Calculations play an important role in algorithm development, especially in mathematical and scientific problems where computational accuracy and efficiency are crucial. Computational algorithms include various methods for performing arithmetic operations, rounding, solving equations, and executing more complex operations such as integration and differentiation.</p>
+<p>This topic covers the fundamental computational methods used across other algorithms and data structures, including operations with large numbers, solving mathematical problems, rounding values, and optimizing calculations.</p>
+<h2>Main Types of Calculations</h2>
+<ol><li><strong>Arithmetic Calculations:</strong></li><li>Basic arithmetic operations (addition, subtraction, multiplication, division).</li><li>Applied in many algorithms and data structures, such as calculating hashes, working with graphs, solving optimization problems, etc.</li></ol>
+<ol><li><strong>Rounding:</strong></li><li>Rounding numbers (rounding up, down, to the nearest integer, or to a specific number of decimal places) is frequently used in floating-point calculations.</li><li>Rounding is essential for managing accuracy in algorithms when handling large numbers or floating-point numbers requires a balanced approach to precision.</li></ol>
+<ol><li><strong>Solving Equations:</strong></li><li>Algorithms for finding solutions to equations, such as Newton&#x27;s method, the bisection method, and methods for finding roots of non-linear equations and systems of equations.</li><li>Applied in numerical methods and used to solve real-world problems such as physical simulations.</li></ol>
+<ol><li><strong>Function Evaluation:</strong></li><li>Numerical methods such as Taylor series expansions and numerical integration are used to compute values of mathematical functions (e.g., sine, cosine, logarithm).</li><li>Such calculations appear in machine learning, computer graphics, physics, and economics.</li></ol>
+<ol><li><strong>Mathematical Optimization:</strong></li><li>Algorithms for finding the maximum or minimum of a function (e.g., gradient descent).</li><li>Used in a wide range of tasks including forecasting, model training, process optimization, and more.</li></ol>
+<h2>Key Computational Methods</h2>
+<ol><li><strong>Floating-Point Arithmetic Methods:</strong></li><li>Floating-point numbers require a special approach because they are susceptible to precision errors due to limited representation accuracy.</li><li>Techniques such as rounding, normalization, and precision-loss mitigation are applied to preserve accuracy.</li></ol>
+<ol><li><strong>Solving Linear and Non-Linear Equations:</strong></li><li>Linear equations can be solved using matrix methods like Gaussian elimination or Gauss-Jordan elimination.</li><li>Non-linear equations are solved using iterative methods such as Newton-Raphson or the Secant method.</li></ol>
+<ol><li><strong>Numerical Integration Methods:</strong></li><li>In tasks related to finding the area under a curve or solving differential equations, numerical integration methods such as the rectangle rule, trapezoidal rule, and Simpson&#x27;s rule are used.</li></ol>
+<ol><li><strong>Optimization Methods:</strong></li><li>Optimization is the search for the minimum or maximum value of a function under given conditions.</li><li>Examples of methods: gradient descent, Newton&#x27;s methods, genetic algorithms, random search algorithms, and others.</li></ol>
+<h2>Example 1: Rounding in Algorithms</h2>
+<p>Consider the task of rounding a number to a specified number of decimal places. This is useful when processing monetary amounts or working with calculation results that do not require excessive precision.</p>
+<pre><code>def round_number(number, decimal_places):
+    &quot;&quot;&quot;
+    Rounds a number to a specified number of decimal places.
+    :param number: The number to round
+    :param decimal_places: Number of decimal places
+    :return: Rounded number
+    &quot;&quot;&quot;
+    factor = 10 ** decimal_places
+    return round(number * factor) / factor
+
+# Usage example
+number = 3.14159265358979
+rounded_number = round_number(number, 3)
+print(f&quot;Rounded number: {rounded_number}&quot;)</code></pre>
+<h3>Explanation</h3>
+<p>In this example, the <code>round_number</code> function rounds a number to the specified decimal precision by multiplying it by 10^(decimal_places), rounding the result, and then dividing back. This allows obtaining values with the desired precision.</p>
+<h2>Example 2: Solving Linear Equations</h2>
+<p>Gaussian elimination is used to solve a system of linear equations. Consider the following system of equations:</p>
+<p>x + y + z = 6<br>2y + 5z = -4<br>3x + 2y + z = 27  </p>
+<p>Below is the Python code to solve this system using Gaussian elimination:</p>
+<pre><code>import numpy as np
+
+def gaussian_elimination(a, b):
+    n = len(b)
+
+    # Forward elimination
+    for i in range(n):
+        # Find maximum element in column for numerical stability
+        max_row = max(range(i, n), key=lambda r: abs(a[r][i]))
+        a[i], a[max_row] = a[max_row], a[i]
+        b[i], b[max_row] = b[max_row], b[i]
+
+        # Transform matrix to upper triangular form
+        for j in range(i + 1, n):
+            ratio = a[j][i] / a[i][i]
+            for k in range(i, n):
+                a[j][k] -= ratio * a[i][k]
+            b[j] -= ratio * b[i]
+
+    # Back substitution
+    x = np.zeros(n)
+    for i in range(n - 1, -1, -1):
+        x[i] = b[i] / a[i][i]
+        for j in range(i - 1, -1, -1):
+            b[j] -= a[j][i] * x[i]
+
+    return x
+
+# Usage example
+a = np.array([[1, 1, 1], [0, 2, 5], [3, 2, 1]], dtype=float)
+b = np.array([6, -4, 27], dtype=float)
+
+solution = gaussian_elimination(a, b)
+print(f&quot;System solution: {solution}&quot;)</code></pre>
+<h3>Explanation</h3>
+<p>Gaussian elimination solves a system of linear equations by converting the matrix into an upper triangular form and performing back substitution to find the unknown variables. NumPy is used for handling arrays and simplifying array operations.</p>
+<h2>Applications of Calculations</h2>
+<ul><li><strong>Numerical Methods:</strong> Critical for solving problems in physics, engineering, economics, and bioinformatics that involve processing large volumes of data and performing exact calculations.</li><li><strong>Mathematical Modeling:</strong> Applied in finding solutions to differential equations, optimizing processes, and predicting the behavior of complex systems.</li><li><strong>Machine Learning Algorithms:</strong> Many algorithms (such as gradient descent and other optimization techniques) rely on numerical calculations to minimize error metrics.</li></ul>
+<h2>Conclusion</h2>
+<p>Calculations play a key role in algorithms and scientific computing. Algorithms for rounding, solving equations, and optimization form the foundation for solving real-world problems in numerical analysis, modeling, and optimization. Selecting appropriate computational methods is essential for achieving the required accuracy and efficiency.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

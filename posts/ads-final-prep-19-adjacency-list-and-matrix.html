@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 19. Adjacency List and Matrix | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 19. Adjacency List and Matrix | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 19. Adjacency List and Matrix</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Graph representation is the foundation for most graph processing algorithms, such as Breadth-First Search (BFS), Depth-First Search (DFS), Dijkstra&#x27;s algorithm, and others. Depending on the task and data characteristics, a graph can be represented using various data structures, including an adjacency list and an adjacency matrix. These structures allow for efficient storage and manipulation of graphs to execute various operations.</p>
+<h2>1. Adjacency List</h2>
+<p>An adjacency list is a data structure that represents a graph as an array of lists, where each vertex stores a list of its neighbors. An adjacency list is one of the most efficient ways to represent a graph, especially for sparse graphs where the number of edges is significantly smaller than the maximum possible.</p>
+<h3>Advantages of Adjacency List</h3>
+<ul><li><strong>Memory Efficiency:</strong> For graphs with a small number of edges, an adjacency list consumes less memory than an adjacency matrix.</li></ul>
+<ul><li><strong>Dynamic Flexibility:</strong> Adding and removing edges in an adjacency list is simpler than in an adjacency matrix because elements can simply be appended or removed from the list of neighbors.</li></ul>
+<h3>Adjacency List Structure</h3>
+<p>An adjacency list can be implemented using an array or list (or a dictionary/hash map in languages like Python), where the index (or key) represents a vertex, and the corresponding value is a list of its adjacent vertices.</p>
+<h3>Example</h3>
+<p>Suppose we have the following graph with 5 vertices (0, 1, 2, 3, 4):</p>
+<pre><code>    0 -&gt; 1
+    |    ^
+    v    |
+    2 -&gt; 3 -&gt; 4</code></pre>
+<p>For this graph, the adjacency list is:</p>
+<pre><code>0: [1, 2]
+1: [0, 3]
+2: [0, 3]
+3: [1, 2, 4]
+4: [3]</code></pre>
+<p>Here:</p>
+<ul><li>Vertex 0 is connected to vertices 1 and 2.</li><li>Vertex 1 is connected to vertices 0 and 3, and so on.</li></ul>
+<h3>How It Works</h3>
+<p>To find all vertices adjacent to a given vertex, we simply look up the vertex index in the adjacency list to retrieve its set of neighbors.</p>
+<h3>Time Complexity</h3>
+<ul><li><strong>Finding all neighbors of vertex v:</strong> O(k), where k is the number of edges outgoing from vertex v.</li><li><strong>Checking for an edge between vertices u and v:</strong> O(k), where k is the number of edges in the adjacency list of vertex u.</li><li><strong>Adding an edge:</strong> O(1) when using a dynamic list.</li></ul>
+<hr>
+<h2>2. Adjacency Matrix</h2>
+<p>An adjacency matrix is a two-dimensional grid (matrix) where rows and columns correspond to vertices in the graph, and cell values indicate whether an edge exists between the respective vertices. This representation is useful when a graph is dense (has many edges) or when edge existence checks must be fast.</p>
+<h3>Advantages of Adjacency Matrix</h3>
+<ul><li><strong>Fast Edge Lookup:</strong> Checking whether an edge exists between two vertices takes O(1) time, making the adjacency matrix an ideal choice for dense graphs.</li></ul>
+<ul><li><strong>Implementation Simplicity:</strong> A matrix is straightforward to implement and maintains a fixed size, which can be advantageous in certain applications.</li></ul>
+<h3>Adjacency Matrix Structure</h3>
+<p>For a directed graph, an adjacency matrix is a square matrix where element <code>A[i][j]</code> equals 1 if an edge exists from vertex <code>i</code> to vertex <code>j</code>, and 0 otherwise.</p>
+<h3>Example</h3>
+<p>Using the same graph structure from the previous example:</p>
+<pre><code>    0 -&gt; 1
+    |    ^
+    v    |
+    2 -&gt; 3 -&gt; 4</code></pre>
+<p>The adjacency matrix is represented as follows:</p>
+<pre><code>    0  1  2  3  4
+0  [0, 1, 1, 0, 0]
+1  [1, 0, 0, 1, 0]
+2  [0, 0, 0, 1, 0]
+3  [0, 0, 0, 0, 1]
+4  [0, 0, 0, 0, 0]</code></pre>
+<p>Here:</p>
+<ul><li>Row 0 indicates that vertex 0 has directed edges to vertices 1 and 2.</li><li>Row 1 indicates that vertex 1 has directed edges to vertices 0 and 3, and so on.</li></ul>
+<h3>How It Works</h3>
+<p>To verify whether an edge exists between vertex <code>u</code> and vertex <code>v</code>, we check element <code>A[u][v]</code>. If it equals 1, the edge exists; otherwise, it does not.</p>
+<h3>Time Complexity</h3>
+<ul><li><strong>Finding all neighbors of vertex v:</strong> O(n), where n is the total number of vertices in the graph (since the entire row or column must be scanned).</li><li><strong>Checking for an edge between vertices u and v:</strong> O(1), as it involves direct matrix array lookup.</li><li><strong>Adding an edge:</strong> O(1).</li></ul>
+<hr>
+<h2>Comparison of Adjacency List and Adjacency Matrix</h2>
+<table width="100%">
+    <thead>
+        <tr>
+            <th>Feature</th>
+            <th>Adjacency List</th>
+            <th>Adjacency Matrix</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Memory</td>
+            <td>O(n + e), where n = vertices, e = edges</td>
+            <td>O(n^2)</td>
+        </tr>
+        <tr>
+            <td>Edge Lookup</td>
+            <td>O(k), where k = degree of vertex u</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Find All Neighbors</td>
+            <td>O(k)</td>
+            <td>O(n)</td>
+        </tr>
+        <tr>
+            <td>Add Edge</td>
+            <td>O(1)</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Remove Edge</td>
+            <td>O(k)</td>
+            <td>O(1)</td>
+        </tr>
+    </tbody>
+</table>
+<hr>
+<h2>When to Use an Adjacency List</h2>
+<ul><li>For <strong>sparse graphs</strong> (where the number of edges is much less than <code>n^2</code>).</li><li>When memory conservation is important while primarily operating on a vertex&#x27;s immediate neighbors.</li><li>For <strong>dynamic graphs</strong> where edges are frequently added or removed.</li></ul>
+<h2>When to Use an Adjacency Matrix</h2>
+<ul><li>For <strong>dense graphs</strong> where the number of edges is close to <code>n^2</code> (e.g., complete graphs).</li><li>When frequent, fast edge-existence queries between arbitrary pairs of vertices are required.</li><li>For applications requiring matrix operations or rapid lookup times.</li></ul>
+<hr>
+<h2>Conclusion</h2>
+<p>Choosing between an adjacency list and an adjacency matrix depends on the specific problem, graph density, and required operations. Adjacency lists are preferred for sparse graphs and dynamic graph modifications, whereas adjacency matrices excel in dense graphs and scenarios requiring constant-time edge lookups.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

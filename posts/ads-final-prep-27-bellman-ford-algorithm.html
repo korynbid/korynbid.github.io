@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 27. Bellman-Ford Algorithm | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 27. Bellman-Ford Algorithm | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 27. Bellman-Ford Algorithm</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>The Bellman-Ford Algorithm is an algorithm for finding the shortest paths from a single source vertex to all other vertices in a weighted graph. Unlike Dijkstra&#x27;s algorithm, which only works on graphs with non-negative edge weights, the Bellman-Ford algorithm can handle graphs containing negative edge weights. However, it cannot correctly produce shortest paths if the graph contains a negative-weight cycle (a cycle whose total edge weight sum is negative).</p>
+<p>The algorithm works by iteratively relaxing all edges in the graph. It sequentially improves shortest-path estimates by checking all edges and updating vertex distances.</p>
+<h2>Steps of the Bellman-Ford Algorithm:</h2>
+<ol><li><strong>Initialize distances:</strong> Set the distance to all vertices to infinity (∞), except for the starting vertex, which is set to 0.</li></ol>
+<ol><li><strong>Edge Relaxation:</strong> For every edge (u, v) with weight w(u, v), check if the distance to vertex v can be shortened by going through vertex u:</li></ol>
+<p>   <code>dist[v] = min(dist[v], dist[u] + w(u, v))</code></p>
+<ol><li><strong>Repeat Relaxation:</strong> Repeat step 2 for all edges V - 1 times (where V is the number of vertices). This guarantees finding shortest paths for graphs without negative cycles.</li></ol>
+<ol><li><strong>Negative Cycle Detection:</strong> After V - 1 iterations, run one more check across all edges. If any distance can still be reduced, it indicates the presence of a negative-weight cycle.</li></ol>
+<h2>Example Output</h2>
+<p><strong>Shortest distances from vertex 0:</strong></p>
+<ul><li>To vertex 0: 0</li><li>To vertex 1: -1</li><li>To vertex 2: 2</li><li>To vertex 3: -2</li><li>To vertex 4: 1</li></ul>
+<h2>Step-by-Step Explanation</h2>
+<ol><li><strong>Initialization:</strong></li></ol>
+<p>   Set the distance from the starting vertex to itself as 0 and to all other vertices as infinity (∞).</p>
+<ol><li><strong>Edge Relaxation:</strong></li></ol>
+<p>   In each pass, iterate through every edge in the graph. If going through vertex u to vertex v yields a shorter path than currently known, update <code>dist[v]</code>.</p>
+<ol><li><strong>Negative Cycle Verification:</strong></li></ol>
+<p>   After completing V - 1 iterations, check all edges once more. If a path distance can still be decreased, a negative cycle exists, and the algorithm reports it.</p>
+<h2>Python Implementation</h2>
+<pre><code>INF = float(&#x27;inf&#x27;)
+
+def bellman_ford(graph, start):
+    &quot;&quot;&quot;
+    Implementation of the Bellman-Ford algorithm to find shortest paths
+    from a start vertex to all other vertices in a graph.
+    
+    graph - list of edges represented as tuples (u, v, weight)
+    start - starting vertex identifier
+    
+    Returns a dictionary of shortest distances from start to all vertices.
+    &quot;&quot;&quot;
+    # Initialize distances
+    dist = {i: INF for i in range(len(graph))}
+    dist[start] = 0
+
+    # Relax edges V - 1 times (where V is the number of vertices)
+    for _ in range(len(graph) - 1):
+        for u, v, weight in graph:
+            if dist[u] != INF and dist[u] + weight &lt; dist[v]:
+                dist[v] = dist[u] + weight
+
+    # Check for negative-weight cycles
+    for u, v, weight in graph:
+        if dist[u] != INF and dist[u] + weight &lt; dist[v]:
+            print(&quot;Graph contains a negative-weight cycle!&quot;)
+            return None
+
+    return dist
+
+# Example usage:
+# Graph represented as an edge list: (u, v, edge_weight)
+graph = [
+    (0, 1, -1), # Edge from vertex 0 to vertex 1 with weight -1
+    (0, 2, 4),  # Edge from vertex 0 to vertex 2 with weight 4
+    (1, 2, 3),  # Edge from vertex 1 to vertex 2 with weight 3
+    (1, 3, 2),  # Edge from vertex 1 to vertex 3 with weight 2
+    (1, 4, 2),  # Edge from vertex 1 to vertex 4 with weight 2
+    (3, 2, 5),  # Edge from vertex 3 to vertex 2 with weight 5
+    (3, 1, 1),  # Edge from vertex 3 to vertex 1 with weight 1
+    (4, 3, -3)  # Edge from vertex 4 to vertex 3 with weight -3
+]
+
+start = 0
+distances = bellman_ford(graph, start)
+
+if distances:
+    print(f&quot;Shortest distances from vertex {start}:&quot;)
+    for vertex, distance in distances.items():
+        print(f&quot;To vertex {vertex}: {distance}&quot;)</code></pre>
+<h2>Complexity</h2>
+<ul><li><strong>Time Complexity:</strong> O(V · E), where V is the number of vertices and E is the number of edges. The algorithm performs V - 1 iterations, checking all E edges in each step.</li><li><strong>Space Complexity:</strong> O(V), as it requires storing shortest distance values for all vertices in the graph.</li></ul>
+<h2>Applications of the Bellman-Ford Algorithm</h2>
+<ol><li><strong>Graphs with Negative Edge Weights:</strong> Unlike Dijkstra&#x27;s algorithm, Bellman-Ford reliably handles graphs that contain edges with negative weights.</li><li><strong>Negative Cycle Detection:</strong> Used to detect negative cycles in graphs, which is crucial for analyzing financial systems, trade loops, and network models.</li><li><strong>Financial Modeling:</strong> Applied in foreign exchange arbitrage detection, where negative cycles correspond to profitable currency exchange loops.</li><li><strong>Graph Theory:</strong> Frequently used in theoretical computational graph problems and routing protocols (such as Distance-Vector Routing protocols like RIP).</li></ol>
+<h2>Conclusion</h2>
+<p>The Bellman-Ford algorithm is a versatile tool for finding single-source shortest paths in graphs with arbitrary edge weights and serves as an effective mechanism for detecting negative-weight cycles.</p>
+      </div>
+      <nav class="pager" aria-label="More in this series">
+        <a class="pager-prev" href="ads-final-prep-26-floyd-warshall-algorithm.html"><span>&larr; Previous</span>26. Floyd-Warshall Algorithm</a>
+      </nav>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

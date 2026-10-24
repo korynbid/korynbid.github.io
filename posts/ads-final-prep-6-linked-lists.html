@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 6. Linked Lists | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 6. Linked Lists | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 6. Linked Lists</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<p>A Linked List is a data structure consisting of nodes (elements), where each node contains data and a pointer (reference) to the next node in the sequence. Linked lists are used to store dynamic datasets and offer flexibility in memory management.</p>
+<h2>Key Characteristics of Linked Lists</h2>
+<ol><li><strong>Dynamic Length:</strong> The number of elements can change during program execution.</li></ol>
+<ol><li><strong>No Fixed Size Limit:</strong> A linked list can grow as long as available memory permits.</li></ol>
+<ol><li><strong>Non-Contiguous Storage:</strong> Elements can be allocated anywhere in memory, linked together via pointers.</li></ol>
+<ol><li><strong>Insertion and Deletion:</strong> Executed in O(1) time complexity if the pointer to the target node is already known.</li></ol>
+<h2>Types of Linked Lists</h2>
+<ol><li><strong>Singly Linked List:</strong></li></ol>
+<p>   Each node contains data and a pointer to the next node. The last node points to <code>null</code>.</p>
+<p>   ``<code>    [data | next] -&gt; [data | next] -&gt; [data | next] -&gt; null    </code>``</p>
+<ol><li><strong>Doubly Linked List:</strong></li></ol>
+<p>   Each node contains pointers to both the next and the previous nodes.</p>
+<p>   ``<code>    null &lt;- [prev | data | next] &lt;-&gt; [prev | data | next] &lt;-&gt; [prev | data | next] -&gt; null    </code>``</p>
+<ol><li><strong>Circular Linked List:</strong></li></ol>
+<p>   The last node references the first node, forming a closed ring/loop.</p>
+<h2>Advantages of Linked Lists</h2>
+<ul><li><strong>Efficient Memory Management:</strong> The list can grow and shrink dynamically as needed.</li></ul>
+<ul><li><strong>Fast Insertions and Deletions:</strong> Adding or removing nodes requires only updating pointers.</li></ul>
+<ul><li><strong>No Pre-allocation:</strong> Memory does not need to be allocated in advance.</li></ul>
+<h2>Disadvantages of Linked Lists</h2>
+<ul><li><strong>Linear Access Time:</strong> Accessing an element takes O(n) time complexity since the list must be traversed sequentially.</li></ul>
+<ul><li><strong>Memory Overhead:</strong> Storing pointers requires additional memory compared to contiguous arrays.</li></ul>
+<ul><li><strong>Implementation Complexity:</strong> More complex to implement and debug relative to basic arrays.</li></ul>
+<pre><code>class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        current = self.head
+        while current.next:
+            current = current.next
+        current.next = new_node
+
+    def prepend(self, data):
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
+
+    def delete(self, data):
+        if not self.head:
+            return
+        if self.head.data == data:
+            self.head = self.head.next
+            return
+        current = self.head
+        while current.next and current.next.data != data:
+            current = current.next
+        if current.next:
+            current.next = current.next.next
+
+    def display(self):
+        current = self.head
+        while current:
+            print(current.data, end=" -&gt; ")
+            current = current.next
+        print("None")</code></pre>   
+</div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

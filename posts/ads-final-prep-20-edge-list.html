@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 20. Edge List | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 20. Edge List | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 20. Edge List</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>An edge list is a graph representation method where all edges of a graph are stored as a list, with each edge represented as a pair of vertices that it connects. This is one of the simplest and most compact representations of a graph, often used when it is necessary to operate directly on edges rather than vertices or their neighbors.</p>
+<p>An edge list is particularly useful when processing graphs where direct edge operations are crucial—such as listing or analyzing all edges—without requiring fast lookup for a specific vertex&#x27;s neighbors. It is ideal for storing graphs where edges lack attributes or weights, or for sparse graphs with a relatively small number of edges.</p>
+<h2>1. Edge List Structure</h2>
+<p>In an edge list, each edge is represented by a pair (or tuple) of vertices. For a directed graph, an edge <code>(u, v)</code> denotes a directed edge going from vertex <code>u</code> to vertex <code>v</code>. For an undirected graph, an edge <code>(u, v)</code> can also implicitly represent the edge <code>(v, u)</code>.</p>
+<h3>Example for a Directed Graph</h3>
+<p>Suppose we have the following directed graph:</p>
+<pre><code>    0 -&gt; 1
+    |    ^
+    v    |
+    2 -&gt; 3 -&gt; 4</code></pre>
+<p>The edge list for this graph would be:</p>
+<p><code>[(0, 1), (0, 2), (1, 3), (2, 3), (3, 4)]</code></p>
+<p>Here, each element of the list is a tuple showing an edge between two vertices. Vertex 0 is connected to vertices 1 and 2, vertex 1 is connected to vertex 3, and so on.</p>
+<h2>2. Advantages of Edge List</h2>
+<ul><li><strong>Compactness:</strong> An edge list is a memory-efficient way to store a graph, especially if the graph is sparse.</li></ul>
+<ul><li><strong>Ease of Implementation:</strong> Simple to build and straightforward to maintain for storing graphs.</li></ul>
+<ul><li><strong>Suitable for Edge-Centric Operations:</strong> Particularly convenient when an algorithm focuses primarily on iterating through edges (e.g., Kruskal&#x27;s algorithm for minimum spanning trees).</li></ul>
+<h2>3. Disadvantages of Edge List</h2>
+<ul><li><strong>Slow Neighbor Lookups:</strong> Unlike an adjacency list, which allows retrieving all neighbors of a vertex in time proportional to its degree, an edge list requires scanning the entire list to find all edges connected to a given vertex.</li></ul>
+<ul><li><strong>Slow Modify/Delete Operations:</strong> Operations such as searching for or removing specific edges require traversing the entire edge list.</li></ul>
+<h2>4. Applications of Edge List</h2>
+<p>An edge list is utilized across various graph processing tasks and algorithms:</p>
+<ul><li><strong>Graph Traversal Algorithms:</strong> Algorithms such as Depth-First Search (DFS) and Breadth-First Search (BFS) can operate on graphs represented as edge lists (though with higher lookup overhead).</li></ul>
+<ul><li><strong>Minimum Spanning Trees:</strong> Algorithms like Kruskal&#x27;s or Prim&#x27;s rely directly on edge lists to evaluate and process graph edges in order of weight.</li></ul>
+<ul><li><strong>Shortest Path Search:</strong> Algorithms like Dijkstra&#x27;s and Bellman-Ford can be implemented using edge lists.</li></ul>
+<h2>5. Implementation of Edge List</h2>
+<p>An edge list can be created using standard dynamic sequences, such as a Python list or dynamic arrays in other programming languages. Each element is represented as a tuple containing two endpoints connected by an edge.</p>
+<pre><code>class Graph:
+    def __init__(self):
+        self.edges = []
+
+    def add_edge(self, u, v):
+        self.edges.append((u, v))
+
+    def get_edges(self):
+        return self.edges
+
+    def display(self):
+        for edge in self.edges:
+            print(f&quot;Edge: {edge[0]} -&gt; {edge[1]}&quot;)</code></pre>
+<h3>How the Code Works</h3>
+<ol><li><strong><code>Graph</code> Class:</strong> Represents the graph using an internal edge list (<code>self.edges</code>).</li><li><strong><code>add_edge(u, v)</code> Method:</strong> Appends a new directed edge tuple <code>(u, v)</code> to the list.</li><li><strong><code>get_edges()</code> Method:</strong> Returns the complete list of graph edges.</li><li><strong><code>display()</code> Method:</strong> Prints each edge in the readable format <code>&quot;Edge: 0 -&gt; 1&quot;</code>.</li></ol>
+<h2>6. Graph Operations on Edge List</h2>
+<p>Working with a graph stored as an edge list involves the following core operations:</p>
+<ul><li><strong>Adding an Edge:</strong> Appending a new edge to the list takes <strong>O(1)</strong> time.</li></ul>
+<ul><li><strong>Removing an Edge:</strong> Searching for and deleting an edge takes <strong>O(e)</strong> time, where <code>e</code> is the total number of edges.</li></ul>
+<ul><li><strong>Finding Incident Edges:</strong> Locating all edges connected to vertex <code>u</code> requires scanning the entire list, taking <strong>O(e)</strong> time.</li></ul>
+<h2>7. When to Use an Edge List</h2>
+<p>An edge list is most suitable in the following scenarios:</p>
+<ul><li>Storing <strong>sparse graphs</strong> where the total number of edges is relatively small compared to <code>n^2</code>.</li></ul>
+<ul><li>When simple, minimal memory storage is required and frequent neighbor lookups for specific vertices are not needed.</li></ul>
+<ul><li>For <strong>edge-centric algorithms</strong>, such as finding minimum spanning trees or processing global edge lists.</li></ul>
+<h2>Conclusion</h2>
+<p>An edge list is a practical and simple data structure for representing graphs. It is particularly effective for sparse graphs and tasks where operating directly on edges is the main focus. However, for applications requiring rapid neighbor lookups or frequent edge presence checks between arbitrary vertices, an edge list is less efficient than an adjacency list or an adjacency matrix.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

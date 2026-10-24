@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 24. Spanning Tree Algorithms (Kruskal, Prim) | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 24. Spanning Tree Algorithms (Kruskal, Prim) | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 24. Spanning Tree Algorithms (Kruskal, Prim)</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Minimum Spanning Tree (MST) algorithms are used to find a tree that spans all vertices in a graph with the minimum total edge weight. For undirected graphs, there are several algorithms for finding a minimum spanning tree. The two most famous algorithms are <strong>Kruskal&#x27;s Algorithm</strong> and <strong>Prim&#x27;s Algorithm</strong>.</p>
+<ol><li><strong>Kruskal&#x27;s Algorithm:</strong></li></ol>
+<p>   Kruskal&#x27;s algorithm builds a minimum spanning tree by sorting edges by weight and adding them to the tree while avoiding cycles. It works efficiently with graphs represented as edge lists.</p>
+<ol><li><strong>Prim&#x27;s Algorithm:</strong></li></ol>
+<p>   Prim&#x27;s algorithm starts from a single vertex and sequentially adds edges with the minimum weight to the spanning tree, gradually expanding it. Prim&#x27;s algorithm is efficient when working with graphs represented as adjacency lists or matrices.</p>
+<hr>
+<h2>1. Kruskal&#x27;s Algorithm</h2>
+<p>Kruskal&#x27;s algorithm is a greedy algorithm that builds a minimum spanning tree by sequentially adding edges with the smallest weight. An important part of the algorithm is the use of the <strong>Disjoint Set Union (DSU / Union-Find)</strong> data structure, which allows for efficient tracking and merging of connected components.</p>
+<h3>Steps of Kruskal&#x27;s Algorithm:</h3>
+<ol><li>Sort graph edges by weight.</li><li>Initialize an empty tree.</li><li>Sequentially add edges to the tree if they do not form a cycle (checked via Union-Find).</li><li>The algorithm completes when the tree covers all vertices.</li></ol>
+<h3>Explanation &amp; Example:</h3>
+<p>Given an edge-list representation, we:</p>
+<ol><li>Sort edges by weight in non-decreasing order.</li><li>Initialize a <code>UnionFind</code> object to track connected components.</li><li>Iterate through sorted edges and add each edge to the MST if its endpoint vertices belong to different components (verified and merged via <code>union</code>).</li><li>Stop when all vertices are connected.</li></ol>
+<p><strong>Example Output:</strong> <code>Minimum Spanning Tree (Kruskal): [(0, 1, 1), (0, 2, 2), (2, 3, 4)]</code></p>
+<h3>Python Implementation (Kruskal&#x27;s Algorithm):</h3>
+<pre><code>class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x):
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # path compression
+        return self.parent[x]
+
+    def union(self, x, y):
+        rootX = self.find(x)
+        rootY = self.find(y)
+
+        if rootX != rootY:
+            # Union by rank
+            if self.rank[rootX] &gt; self.rank[rootY]:
+                self.parent[rootY] = rootX
+            elif self.rank[rootX] &lt; self.rank[rootY]:
+                self.parent[rootX] = rootY
+            else:
+                self.parent[rootY] = rootX
+                self.rank[rootX] += 1
+            return True
+        return False
+
+def kruskal(n, edges):
+    # edges: list of edges in the format (weight, vertex1, vertex2)
+    uf = UnionFind(n)
+    mst = []
+    edges.sort()  # Sort edges by weight
+
+    for weight, u, v in edges:
+        if uf.union(u, v):
+            mst.append((u, v, weight))  # Add edge to minimum spanning tree
+    return mst
+
+# Example usage:
+n = 4  # Number of vertices
+edges = [
+    (1, 0, 1),  # Edge with weight 1 between vertices 0 and 1
+    (3, 1, 2),
+    (2, 0, 2),
+    (4, 2, 3),
+    (5, 1, 3)
+]
+
+mst = kruskal(n, edges)
+print(&quot;Minimum Spanning Tree (Kruskal):&quot;, mst)</code></pre>
+<hr>
+<h2>2. Prim&#x27;s Algorithm</h2>
+<p>Prim&#x27;s algorithm works on a graph by growing a single MST component starting from an arbitrary vertex. It uses a <strong>minimum priority queue (min-heap)</strong> to pick the edge with the smallest weight that connects a vertex inside the tree to an unvisited vertex outside the tree at each step.</p>
+<h3>Steps of Prim&#x27;s Algorithm:</h3>
+<ol><li>Start with an arbitrary vertex (e.g., vertex 0).</li><li>Consider all edges connecting vertices inside the tree to vertices outside the tree, and select the edge with the minimum weight.</li><li>Repeat step 2 until all vertices are included in the tree.</li></ol>
+<h3>Explanation &amp; Example:</h3>
+<ol><li>Start at vertex 0 and push <code>(0, 0)</code> (weight, vertex) into a min-heap.</li><li>Pop the element with the lowest weight. If the vertex has not been visited, mark it as visited and record its edge.</li><li>Push all outward edges from this vertex into the min-heap.</li><li>Continue until all vertices are processed.</li></ol>
+<p><strong>Example Output:</strong> <code>Minimum Spanning Tree (Prim): [(0, 0), (1, 1), (2, 2), (3, 4)]</code></p>
+<h3>Python Implementation (Prim&#x27;s Algorithm):</h3>
+<pre><code>import heapq
+
+def prim(n, graph):
+    # graph: adjacency list where graph[u] contains tuples of (weight, neighbor)
+    mst = []
+    visited = [False] * n
+    min_heap = [(0, 0)]  # (edge_weight, vertex)
+
+    while min_heap:
+        weight, u = heapq.heappop(min_heap)
+        if visited[u]:
+            continue
+        visited[u] = True
+        mst.append((u, weight))
+
+        for weight, v in graph[u]:
+            if not visited[v]:
+                heapq.heappush(min_heap, (weight, v))
+
+    return mst
+
+# Example usage:
+n = 4  # Number of vertices
+graph = {
+    0: [(1, 1), (2, 2)],  # Vertex 0 connected to 1 (weight 1) and 2 (weight 2)
+    1: [(3, 3)],         # Vertex 1 connected to 3 (weight 3)
+    2: [(4, 3)],         # Vertex 2 connected to 3 (weight 4)
+    3: []
+}
+
+mst = prim(n, graph)
+print(&quot;Minimum Spanning Tree (Prim):&quot;, mst)</code></pre>
+<hr>
+<h2>Algorithm Complexity</h2>
+<ul><li><strong>Kruskal&#x27;s Algorithm:</strong></li><li><strong>Time Complexity:</strong> O(E log E), where E is the number of edges, primarily due to sorting the edges.</li><li><strong>Space Complexity:</strong> O(V + E), where V is the number of vertices and E is the number of edges, required for storing edge lists and the Union-Find structure.</li></ul>
+<ul><li><strong>Prim&#x27;s Algorithm:</strong></li><li><strong>Time Complexity:</strong> O(E log V), where E is the number of edges and V is the number of vertices, due to heap operations for edge insertion and extraction.</li><li><strong>Space Complexity:</strong> O(V + E), required to store the adjacency graph representation and priority queue.</li></ul>
+<hr>
+<h2>Practical Applications</h2>
+<ol><li><strong>Kruskal&#x27;s Algorithm</strong> is generally faster for <strong>sparse graphs</strong> (graphs where the number of edges E is much smaller than V²).</li><li><strong>Prim&#x27;s Algorithm</strong> performs better on <strong>dense graphs</strong> (graphs where E is close to V²).</li></ol>
+<p>Both algorithms are widely applied in network design, telecommunication layouts, circuit wiring, transportation route planning, and any problem involving minimum-cost connection structures.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 13. Quick Sort | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 13. Quick Sort | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 13. Quick Sort</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Quick Sort is one of the most popular and efficient sorting algorithms. It utilizes the Divide and Conquer principle.</p>
+<p>The algorithm operates by selecting a pivot element from the array and partitioning the array into two sub-arrays: one containing elements smaller than the pivot, and the other containing elements larger than the pivot. The algorithm then recursively sorts these sub-arrays.</p>
+<p>Quick Sort works on any array type and features an efficient average time complexity. It was developed by Tony Hoare in 1960.</p>
+<h2>How It Works</h2>
+<ol><li><strong>Pivot Selection:</strong> A pivot element is selected. Several pivot selection strategies exist, such as picking the first element, last element, a random element, or the median.</li></ol>
+<ol><li><strong>Partitioning:</strong> The array is partitioned into two sub-arrays:</li><li>Elements smaller than the pivot are moved to the left side.</li><li>Elements larger than the pivot are moved to the right side.</li></ol>
+<ol><li><strong>Recursive Sorting:</strong> After partitioning, the algorithm recursively sorts the left and right sub-arrays by repeating the process.</li></ol>
+<p>This process continues until sub-arrays reach a size of 0 or 1, at which point the array is fully sorted.</p>
+<h2>Complexity</h2>
+<ul><li><strong>Average Case Complexity:</strong> O(n log n), where n is the number of elements in the array. This is achieved when the array splits into two approximately equal sub-arrays at each step.</li></ul>
+<ul><li><strong>Worst-Case Complexity:</strong> O(n²), which occurs when pivot selection is poor (e.g., repeatedly selecting the absolute minimum or maximum element), causing the array to partition into one element and n - 1 remaining elements.</li></ul>
+<ul><li><strong>Best-Case Complexity:</strong> O(n log n), when the array is consistently divided into two equal sub-arrays.</li></ul>
+<ul><li><strong>Space Complexity:</strong> O(log n) on average (for storing recursive call stacks), and O(n) in the worst case.</li></ul>
+<h2>Algorithm Steps</h2>
+<ol><li>Select a pivot element.</li></ol>
+<ol><li>Partition the array into two parts based on comparisons with the pivot element.</li></ol>
+<ol><li>Recursively sort both parts of the array.</li></ol>
+<pre><code>class QuickSort:
+    def __init__(self):
+        self.array = []
+
+    def partition(self, low, high):
+        pivot = self.array[high]
+        i = low - 1
+        for j in range(low, high):
+            if self.array[j] &lt; pivot:
+                i += 1
+                self.array[i], self.array[j] = self.array[j], self.array[i]
+        self.array[i + 1], self.array[high] = self.array[high], self.array[i + 1]
+        return i + 1
+
+    def quicksort(self, low, high):
+        if low &lt; high:
+            pi = self.partition(low, high)
+            self.quicksort(low, pi - 1)
+            self.quicksort(pi + 1, high)
+
+    def sort(self, arr):
+        self.array = arr
+        self.quicksort(0, len(arr) - 1)
+        return self.array</code></pre>
+<h2>Code Structure &amp; Logic</h2>
+<ol><li><strong><code>partition</code> method:</strong></li><li>Selects a pivot element (typically the last element of the active subarray).</li><li>Iterates through array elements and rearranges them depending on whether each element is smaller than the pivot.</li><li>Returns the final index position where the pivot belongs.</li></ol>
+<ol><li><strong><code>quicksort</code> method:</strong></li><li>Recursively sorts the left and right partitions relative to the pivot index returned by <code>partition</code>.</li></ol>
+<ol><li><strong><code>sort</code> method:</strong></li><li>Initializes the sorting process on the input array passed as an argument.</li></ol>
+<h2>Advantages of Quick Sort</h2>
+<ul><li><strong>Average-Case Efficiency O(n log n):</strong> Highly efficient compared to simpler quadratic sorting algorithms such as Bubble Sort or Insertion Sort.</li></ul>
+<ul><li><strong>Fast Practical Execution:</strong> Even when compared to other algorithms with equivalent asymptotic complexity, Quick Sort often performs faster due to low overhead and cache-friendly access patterns.</li></ul>
+<ul><li><strong>Scalability on Large Datasets:</strong> Remains one of the most widely used algorithms for real-world production sorting routines.</li></ul>
+<h2>Disadvantages of Quick Sort</h2>
+<ul><li><strong>Worst-Case O(n²):</strong> Poor pivot selection can cause severe performance degradation on ordered or near-ordered inputs.</li></ul>
+<ul><li><strong>Unstable Sorting:</strong> Identical key elements may lose their original relative ordering during swapping.</li></ul>
+<ul><li><strong>Recursion Overhead:</strong> Deep recursion stacks can lead to stack overflow errors on extremely large datasets if not optimized.</li></ul>
+<h2>Optimizations</h2>
+<ol><li><strong>Pivot Selection Strategies:</strong> To avoid worst-case O(n²) behavior, strategies such as randomized pivot selection or the &quot;median-of-three&quot; (first, middle, and last elements) strategy can be employed.</li></ol>
+<ol><li><strong>Tail Recursion Elimination:</strong> Transforming one of the recursive calls into an iterative loop reduces stack depth and saves stack memory overhead.</li></ol>
+<h2>Conclusion</h2>
+<p>Quick Sort is one of the fastest and most widely adopted sorting algorithms for handling large datasets. It performs efficiently in most practical scenarios; however, proper pivot selection strategies and optimizations should be applied to prevent worst-case performance scenarios.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

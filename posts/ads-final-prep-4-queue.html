@@ -59,7 +59,31 @@
 <h2>Disadvantages of a Queue</h2>
 <ul><li><strong>Restricted access:</strong> You can only interact with the front and rear of the queue.</li></ul>
 <ul><li><strong>Fixed capacity:</strong> If implemented using a standard array, it may be limited in size.</li></ul>
-<img src="../img/adsfp4.png" style="width: 100%;">
+<pre><code>class Queue:
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, item):
+        self.queue.append(item)
+
+    def dequeue(self):
+        if not self.is_empty():
+            return self.queue.pop(0)
+        raise IndexError("Attempt to remove an element from an empty queue")
+
+    def front(self):
+        if not self.is_empty():
+            return self.queue[0]
+        raise IndexError("Attempt to retrieve the first element from an empty queue")
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def size(self):
+        return len(self.queue)
+
+    def display(self):
+        print("Current queue:", self.queue)</code></pre>
 </div>
       <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>

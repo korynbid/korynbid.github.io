@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 15. Hash Tables | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 15. Hash Tables | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 15. Hash Tables</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A Hash Table is a data structure that enables efficient insertion, deletion, and lookup operations. It works by utilizing a hash function, which converts a key into an index in an array where the corresponding value is stored. This allows data access in amortized O(1) time complexity in most cases.</p>
+<p>Hash tables are widely used across various applications such as databases, caches, data analytics, and many other domains requiring fast key-based data lookup.</p>
+<h2>Core Hash Table Operations</h2>
+<ol><li><strong>Insert:</strong> Adding a new element (key-value pair) to the hash table.</li><li><strong>Delete:</strong> Removing an element by its key.</li><li><strong>Search (Lookup):</strong> Finding an element by its key.</li><li><strong>Collision Handling:</strong> When two distinct keys hash to the same index, a collision occurs. Various techniques, such as chaining or open addressing, are used to resolve collisions.</li></ol>
+<h2>How a Hash Table Works</h2>
+<ol><li><strong>Hash Function:</strong> The hash function takes a key and converts it into an array index. A good hash function distributes keys uniformly across the array to minimize collisions.</li><li><strong>Array Storage:</strong> An array is used to store the elements. Each table slot holds a key-value pair, where the key is unique.</li><li><strong>Collisions:</strong> If two different keys map to the same array index, a collision happens. Collisions can be managed using strategies like separate chaining or open addressing.</li></ol>
+<h2>Code Explanation</h2>
+<ol><li><strong><code>__init__(self, size)</code>:</strong></li><li>Constructor that initializes the hash table with a specified size. The <code>self.table</code> array stores the entries/buckets.</li></ol>
+<ol><li><strong><code>_hash(self, key)</code>:</strong></li><li>The internal hash function that converts a key into an array index. It uses Python&#x27;s built-in <code>hash()</code> function to derive a numeric hash value and then applies the modulo operator (<code>%</code>) with the table size to determine the array index.</li></ol>
+<ol><li><strong><code>insert(self, key, value)</code>:</strong></li><li>Method for inserting elements into the table. It calculates the target index using the hash function. If elements already exist at this index (due to a collision), they are appended to a chain (list). If the key already exists in the chain, its value is updated.</li></ol>
+<ol><li><strong><code>search(self, key)</code>:</strong></li><li>Method for looking up an element by key. It checks the calculated bucket index and traverses the chain at that slot to locate the key.</li></ol>
+<ol><li><strong><code>delete(self, key)</code>:</strong></li><li>Method for removing an element by key. If found, the corresponding key-value pair is removed from the chain.</li></ol>
+<ol><li><strong><code>__str__(self)</code>:</strong></li><li>String representation method that formats the hash table for convenient display and logging.</li></ol>
+<pre><code>class HashTable:
+    def __init__(self, size=10):
+        self.size = size
+        self.table = [None] * size
+
+    def _hash(self, key):
+        return hash(key) % self.size
+
+    def insert(self, key, value):
+        index = self._hash(key)
+        if self.table[index] is None:
+            self.table[index] = [(key, value)]
+        else:
+            for idx, (k, v) in enumerate(self.table[index]):
+                if k == key:
+                    self.table[index][idx] = (key, value)
+                    return
+            self.table[index].append((key, value))
+
+    def search(self, key):
+        index = self._hash(key)
+        if self.table[index] is not None:
+            for k, v in self.table[index]:
+                if k == key:
+                    return v
+        return None
+
+    def delete(self, key):
+        index = self._hash(key)
+        if self.table[index] is not None:
+            for i, (k, v) in enumerate(self.table[index]):
+                if k == key:
+                    del self.table[index][i]
+                    return True
+        return False
+
+    def __str__(self):
+        return str(self.table)</code></pre>
+<h2>Collision Resolution Techniques</h2>
+<ol><li><strong>Chaining (Separate Chaining):</strong></li><li>When multiple keys hash to the same index, they are stored within a linked list (or other dynamic collection) at that slot. This method is simple and effective, though it increases dynamic memory usage.</li></ol>
+<ol><li><strong>Open Addressing:</strong></li><li>When a collision occurs, the algorithm searches for another open slot in the array using a probing sequence (e.g., linear probing or quadratic probing). This avoids extra memory allocations outside the main array but complicates search and deletion logic.</li></ol>
+<h2>Advantages of Hash Tables</h2>
+<ol><li><strong>High Performance:</strong> On average, insertion, lookup, and deletion operations run in O(1) time complexity, making hash tables one of the fastest data structures for key-based retrieval.</li><li><strong>Flexibility:</strong> Hash tables can accept virtually any data type as keys provided a suitable hash function is available.</li><li><strong>Widespread Industry Adoption:</strong> Extensively utilized in real-world systems, including caching layers, database indexing, set implementations, and associative dictionaries.</li></ol>
+<h2>Disadvantages of Hash Tables</h2>
+<ol><li><strong>Collisions:</strong> Hash functions may unevenly distribute elements, causing collisions that require extra processing and reduce overall performance.</li><li><strong>Unordered Data:</strong> Hash tables do not maintain element insertion order or sorted key order (unlike trees or ordered lists).</li><li><strong>Memory Considerations:</strong> Open addressing techniques require careful sizing; a high load factor can severely degrade lookup speeds and increase allocation needs.</li></ol>
+<h2>Applications of Hash Tables</h2>
+<ul><li><strong>Caching:</strong> Fast key-value lookups in caching layers (e.g., in-memory key-value stores).</li><li><strong>Set Implementation:</strong> Storing unique items efficiently in standard programming libraries.</li><li><strong>Searching and Indexing:</strong> Accelerating record lookups in database indexes and search engine indices.</li><li><strong>Data Analytics:</strong> Rapidly processing, grouping, and aggregating large-scale datasets.</li></ul>
+<h2>Conclusion</h2>
+<p>Hash tables are among the most powerful and performant data structures for lookup, insertion, and deletion operations. Achieving optimal performance requires an appropriate hash function and effective collision resolution. Consequently, hash tables are an indispensable building block in modern software systems and algorithms handling high-volume data.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -44,7 +44,31 @@
 <ul><li><strong>Simplicity:</strong> Straightforward implementation.</li><li><strong>High Performance:</strong> All basic operations execute in O(1) time complexity.</li></ul>
 <h2>Disadvantages of a Stack</h2>
 <ul><li><strong>Restricted Access:</strong> You can only access the topmost element.</li><li><strong>Size Limitations:</strong> Can be fixed in size if implemented using a static array.</li></ul>
-<img src="../img/adsfp3.png" style="width: 100%;">
+<pre><code>class Stack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, item):
+        self.stack.append(item)
+
+    def pop(self):
+        if not self.is_empty():
+            return self.stack.pop()
+        raise IndexError("Attempt to extract an element from an empty stack")
+
+    def peek(self):
+        if not self.is_empty():
+            return self.stack[-1]
+        raise IndexError("Attempt to retrieve the top element from an empty stack")
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+    def size(self):
+        return len(self.stack)
+
+    def display(self):
+        print("Current stack:", self.stack)</code></pre>
 </div>
       <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>

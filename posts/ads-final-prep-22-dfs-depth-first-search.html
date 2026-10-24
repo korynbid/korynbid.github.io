@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 22. DFS (Depth-First Search) | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 22. DFS (Depth-First Search) | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 22. DFS (Depth-First Search)</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Depth-First Search (DFS) is a graph traversal algorithm that explores as far as possible along each branch before backtracking and exploring other paths. DFS is used for a variety of tasks, such as checking graph connectivity, finding connected components, detecting cycles in a graph, and serving as a building block for various advanced graph algorithms.</p>
+<h3>Key Features:</h3>
+<ul><li><strong>Operating Principle:</strong> The algorithm starts at an initial vertex and travels along edges to its neighbors, going deeper into the graph. When it can no longer go deeper, it backtracks to explore other branches.</li></ul>
+<ul><li><strong>Visiting Order:</strong> All reachable vertices down a single path are explored to their end (or until a dead end is reached) before exploring alternative branches.</li></ul>
+<h2>Applications of DFS</h2>
+<ul><li>Checking graph connectivity.</li></ul>
+<ul><li>Finding connected components in undirected graphs.</li></ul>
+<ul><li>Detecting cycles in directed and undirected graphs.</li></ul>
+<ul><li>Performing topological sorting in directed acyclic graphs (DAGs).</li></ul>
+<ul><li>Solving pathfinding problems, such as finding all possible paths between two vertices.</li></ul>
+<h2>DFS Algorithm Steps</h2>
+<ol><li>Start at vertex <code>s</code> and mark it as visited.</li></ol>
+<ol><li>For each unvisited neighboring vertex, recursively call DFS.</li></ol>
+<ol><li>The algorithm terminates when all vertices reachable from the start vertex have been visited.</li></ol>
+<p>Unlike BFS, which uses a Queue (FIFO), DFS usually utilizes <strong>recursion</strong> or an explicit <strong>Stack (LIFO)</strong> to dive deep into graph branches before backtracking.</p>
+<h2>Example</h2>
+<p>Consider the following graph:</p>
+<pre><code>     0
+   /   \
+  1     2
+  \    / \
+    3 4   5
+</code></pre>
+<p>Adjacency list representation:</p>
+<pre><code>graph = {
+    0: [1, 2],
+    1: [0, 3],
+    2: [0, 4, 5],
+    3: [1],
+    4: [2],
+    5: [2]
+}
+</code></pre>
+<h2>Python Implementation</h2>
+<pre><code>def dfs(graph, vertex, visited=None):
+    if visited is None:
+        visited = set()
+
+    visited.add(vertex)
+    print(vertex, end=&quot; &quot;)
+
+    for neighbor in graph[vertex]:
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
+</code></pre>
+<h3>Code Explanation</h3>
+<ol><li>We start with a target starting vertex (e.g., <code>0</code>).</li></ol>
+<ol><li>The <code>dfs</code> function accepts the current <code>vertex</code> to explore and a <code>visited</code> set tracking visited nodes to prevent infinite loops.</li></ol>
+<ol><li>Whenever a vertex is visited, we process it (e.g., print its value).</li></ol>
+<ol><li>We then recursively invoke <code>dfs</code> on all unvisited neighbors.</li></ol>
+<h2>Complexity of DFS</h2>
+<ul><li><strong>Time Complexity:</strong> <strong>O(V + E)</strong>, where <code>V</code> is the number of vertices and <code>E</code> is the number of edges. Each vertex and edge is visited at most once.</li></ul>
+<ul><li><strong>Space Complexity:</strong> <strong>O(V)</strong>, required for storing visited nodes and the call stack during recursive execution (or an explicit stack).</li></ul>
+<h2>Practical Applications of DFS</h2>
+<ol><li><strong>Checking Connectivity:</strong></li><li>To check if a graph is connected, launch DFS from an arbitrary vertex. If all vertices in the graph are marked as visited after the traversal, the graph is connected.</li></ol>
+<ol><li><strong>Finding Connected Components:</strong></li><li>If a graph is disconnected, run DFS repeatedly on each unvisited vertex to identify all separate connected components.</li></ol>
+<ol><li><strong>Cycle Detection in Graphs:</strong></li><li>DFS easily identifies cycles (especially in directed graphs) using recursion call tracking (e.g., distinguishing vertices as <em>unvisited</em>, <em>currently processing</em>, or <em>fully processed</em>). Finding a neighbor that is <em>currently processing</em> indicates a back-edge (cycle).</li></ol>
+<ol><li><strong>Topological Sort:</strong></li><li>In Directed Acyclic Graphs (DAGs), DFS can be used to order vertices linearly according to edge directions by adding nodes to the result list upon finishing their recursive calls.</li></ol>
+<h3>Problem Example: Detecting Cycles in a Directed Graph</h3>
+<p>We can use DFS to detect cycles in a directed graph by tracking the recursion stack (<code>rec_stack</code>):</p>
+<pre><code>def has_cycle(graph):
+    visited = set()     # Set to track visited vertices
+    rec_stack = set()   # Set to track vertices in the current recursion stack
+
+    def dfs_cycle(v):
+        visited.add(v)
+        rec_stack.add(v)
+
+        for neighbor in graph[v]:
+            if neighbor not in visited:
+                if dfs_cycle(neighbor):
+                    return True
+            elif neighbor in rec_stack:
+                return True
+
+        rec_stack.remove(v)
+        return False
+
+    # Run DFS from every unvisited vertex
+    for vertex in graph:
+        if vertex not in visited:
+            if dfs_cycle(vertex):
+                return True
+
+    return False
+
+# Example Usage
+graph_with_cycle = {
+    0: [1],
+    1: [2],
+    2: [0]  # Cycle: 0 -&gt; 1 -&gt; 2 -&gt; 0
+}
+
+graph_without_cycle = {
+    0: [1],
+    1: [2],
+    2: []
+}
+
+print(&quot;Graph with cycle:&quot;, has_cycle(graph_with_cycle))       # Output: True
+print(&quot;Graph without cycle:&quot;, has_cycle(graph_without_cycle))   # Output: False
+</code></pre>
+<h2>Conclusion</h2>
+<p>DFS is a versatile and essential algorithm for graph traversal. It is heavily utilized for cycle detection, topological sorting, and exploring all deep branches of a search space before backtracking. Its simplicity and recursive nature make it a fundamental technique in computer science and algorithm design.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

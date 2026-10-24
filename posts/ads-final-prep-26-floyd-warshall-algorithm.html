@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 26. Floyd-Warshall Algorithm | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 26. Floyd-Warshall Algorithm | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 26. Floyd-Warshall Algorithm</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>The Floyd-Warshall Algorithm is an all-pairs shortest path algorithm used for finding the shortest paths between every pair of vertices in a weighted graph. Unlike Dijkstra&#x27;s algorithm, which finds the shortest path from a single source vertex to all other vertices, the Floyd-Warshall algorithm computes shortest paths between every pair of vertices simultaneously. It works with both positive and negative edge weights, provided the graph contains no negative-weight cycles.</p>
+<p>This algorithm is ideal for scenarios where the shortest distances between all pairs of vertices must be precomputed. It utilizes dynamic programming to update a distance matrix by systematically testing every vertex as a potential intermediate path node.</p>
+<h2>Steps of the Floyd-Warshall Algorithm:</h2>
+<ol><li><strong>Initialize the distance matrix:</strong></li><li>For every pair of vertices (i, j), set <code>dist[i][j]</code> to the edge weight between them.</li><li>If no edge exists between i and j, set <code>dist[i][j]</code> to infinity (∞).</li><li>Set the distance from any vertex to itself to zero (<code>dist[i][i] = 0</code>).</li></ol>
+<ol><li><strong>Iterative Distance Update:</strong></li><li>For each vertex k acting as an intermediate node, update the distance between all vertex pairs (i, j) by checking if passing through k yields a shorter path:</li></ol>
+<p>     <code>dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])</code></p>
+<ol><li><strong>Repeat:</strong> Repeat this process for all candidate intermediate vertices k = 0, 1, …, n-1 to compute the final matrix of all-pairs shortest paths.</li></ol>
+<hr>
+<h2>Step-by-Step Explanation</h2>
+<ol><li><strong>Initialization:</strong></li></ol>
+<p>   We construct an n × n distance matrix. Main diagonal entries are set to <code>0</code> (distance to self). For all other vertex pairs, if a direct edge exists, its weight is recorded; otherwise, the value is set to infinity (<code>INF</code>).</p>
+<ol><li><strong>Distance Updates:</strong></li></ol>
+<p>   At each step k, the algorithm evaluates whether traveling from vertex i to vertex j through an intermediate vertex k produces a smaller total distance than the current best-known path <code>dist[i][j]</code>.</p>
+<ol><li><strong>Completion:</strong></li></ol>
+<p>   After trying every vertex k as an intermediate node, the matrix contains the shortest path distances between all vertex pairs.</p>
+<hr>
+<h2>Example Output</h2>
+<p><strong>Shortest Paths Matrix:</strong></p>
+<pre><code>[0, 3, 4, 10, 6, 6]
+[3, 0, 1, 7, 3, 4]
+[4, 1, 0, 7, 3, 4]
+[10, 7, 7, 0, 2, 3]
+[6, 3, 3, 2, 0, 3]
+[6, 4, 4, 3, 3, 0]</code></pre>
+<hr>
+<h2>Python Implementation</h2>
+<pre><code>INF = float(&#x27;inf&#x27;)
+
+def floyd_warshall(graph):
+    # graph: adjacency matrix where graph[i][j] is edge weight from i to j.
+    # If no edge exists, graph[i][j] should be set to float(&#x27;inf&#x27;).
+    
+    n = len(graph)
+    dist = [[INF] * n for _ in range(n)]
+    
+    # Fill in base distances for direct edges and self-loops
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                dist[i][j] = 0
+            elif graph[i][j] != 0:  # If an edge exists between i and j
+                dist[i][j] = graph[i][j]
+                
+    # Floyd-Warshall core algorithm
+    for k in range(n):      # Intermediate vertex
+        for i in range(n):  # Source vertex
+            for j in range(n):  # Destination vertex
+                if dist[i][j] &gt; dist[i][k] + dist[k][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+                    
+    return dist
+
+# Example usage:
+graph = [
+    [0, 3, INF, INF, INF, INF],     # Vertex 0 connected to 1 (weight 3)
+    [3, 0, 1, INF, INF, INF],       # Vertex 1 connected to 2 (weight 1)
+    [INF, 1, 0, 7, INF, INF],       # Vertex 2 connected to 3 (weight 7)
+    [INF, INF, 7, 0, 2, 3],         # Vertex 3 connected to 4 (weight 2) &amp; 5 (weight 3)
+    [INF, INF, INF, 2, 0, 3],       # Vertex 4 connected to 3 (weight 2) &amp; 5 (weight 3)
+    [INF, INF, INF, 3, 3, 0]        # Vertex 5 connected to 3 (weight 3) &amp; 4 (weight 3)
+]
+
+distances = floyd_warshall(graph)
+
+print(&quot;Shortest Paths Matrix:&quot;)
+for row in distances:
+    print(row)</code></pre>
+<hr>
+<h2>Complexity</h2>
+<ul><li><strong>Time Complexity:</strong> O(n³), where n is the number of vertices in the graph, due to the triple nested loop iterating over all vertices for each intermediate candidate step.</li><li><strong>Space Complexity:</strong> O(n²), as it requires an n × n distance matrix to store all-pairs shortest path weights.</li></ul>
+<hr>
+<h2>Applications of the Floyd-Warshall Algorithm</h2>
+<ol><li><strong>Graphs with Negative Edge Weights:</strong> Unlike Dijkstra&#x27;s algorithm, Floyd-Warshall handles graphs with negative edge weights seamlessly, provided there are no negative-weight cycles.</li><li><strong>Network Routing:</strong> Used for computing all-pairs shortest paths in transportation, logistics, and telecommunications networks.</li><li><strong>Precomputing Routing Tables:</strong> Useful in static network environments where shortest paths between all node pairs need to be calculated once and queried frequently.</li><li><strong>Graph Structural Analysis:</strong> Frequently applied in computing graph transitive closures, graph diameter, and connectivity properties.</li></ol>
+<hr>
+<h2>Conclusion</h2>
+<p>The Floyd-Warshall algorithm offers a clean and structured dynamic programming solution for calculating all-pairs shortest paths, making it a foundational tool in graph theory, network design, and algorithm analysis.</p>
+      </div>
+      <nav class="pager" aria-label="More in this series">
+        <a class="pager-prev" href="ads-final-prep-25-dijkstra-s-algorithm.html"><span>&larr; Previous</span>25. Dijkstra&#x27;s Algorithm</a>
+        <a class="pager-next" href="ads-final-prep-27-bellman-ford-algorithm.html"><span>Next &rarr;</span>27. Bellman-Ford Algorithm</a>
+      </nav>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

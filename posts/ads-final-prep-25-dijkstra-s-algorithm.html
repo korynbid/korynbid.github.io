@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 25. Dijkstra&#x27;s Algorithm | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 25. Dijkstra&#x27;s Algorithm | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 25. Dijkstra&#x27;s Algorithm</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Dijkstra&#x27;s Algorithm is an algorithm used to find the shortest path from a single source vertex to all other vertices in a graph with non-negative edge weights. The algorithm uses a greedy approach, repeatedly selecting the vertex with the minimum distance, and updates the distances to neighboring vertices. </p>
+<p>This algorithm works on graphs represented as adjacency lists or adjacency matrices and is one of the most popular methods for finding shortest paths in graphs with positive edge weights.</p>
+<h2>Main Steps of Dijkstra&#x27;s Algorithm:</h2>
+<ol><li>Initialize the distance to all vertices as infinity (∞), except for the starting vertex, which is set to 0.</li></ol>
+<ol><li>Use a minimum priority queue (min-heap) to store vertices along with their current shortest distances.</li></ol>
+<ol><li>Extract the vertex with the minimum distance from the priority queue and update the distances to its neighboring vertices.</li></ol>
+<ol><li>Repeat steps 2 and 3 until all vertices have been processed.</li></ol>
+<p>The algorithm guarantees that we find the shortest paths from the starting vertex to all other vertices in the graph.</p>
+<hr>
+<h2>Algorithm Steps:</h2>
+<ol><li><strong>Initialize distances:</strong> Set distance to all vertices to infinity, except the start vertex, which has a distance of 0.</li></ol>
+<ol><li><strong>Push to Priority Queue:</strong> Add the starting vertex to the priority queue with distance 0.</li></ol>
+<ol><li><strong>Process Vertices:</strong> In a loop, extract the vertex with the minimum distance from the priority queue and update the distance to its neighbors if finding a path through this vertex is shorter.</li></ol>
+<ol><li><strong>Repeat:</strong> Continue until all vertices are processed.</li></ol>
+<h3>Example Output:</h3>
+<p><code>Distances from vertex A: {&#x27;A&#x27;: 0, &#x27;B&#x27;: 1, &#x27;C&#x27;: 3, &#x27;D&#x27;: 4}</code></p>
+<h3>Step-by-Step Explanation:</h3>
+<ol><li>We start at vertex <code>&#x27;A&#x27;</code>, which has a distance of 0.</li></ol>
+<ol><li>The algorithm adds all its neighboring vertices (in this case, <code>&#x27;B&#x27;</code> and <code>&#x27;C&#x27;</code>) to the priority queue, assigning them distances 1 and 4, respectively.</li></ol>
+<ol><li>By popping vertices with the minimum distance from the priority queue, the algorithm updates the distances to neighboring vertices whenever a shorter path through the current vertex is found.</li></ol>
+<ol><li>The algorithm completes when all reachable vertices have been processed.</li></ol>
+<hr>
+<h2>Python Implementation</h2>
+<pre><code>import heapq
+
+def dijkstra(graph, start):
+    # graph: dictionary where keys are vertices and values are lists of tuples (neighbor, weight)
+    # start: starting vertex
+    distances = {vertex: float(&#x27;infinity&#x27;) for vertex in graph}  # Initialize distances as infinity
+    distances[start] = 0  # Distance to the start vertex is 0
+    priority_queue = [(0, start)]  # Min-heap storing tuples of (distance, vertex)
+
+    while priority_queue:
+        current_distance, current_vertex = heapq.heappop(priority_queue)
+
+        # If the extracted distance is greater than the recorded distance, skip processing
+        if current_distance &gt; distances[current_vertex]:
+            continue
+
+        # Process all neighboring vertices
+        for neighbor, weight in graph[current_vertex]:
+            distance = current_distance + weight
+
+            # If a shorter path to the neighbor is found, update it
+            if distance &lt; distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(priority_queue, (distance, neighbor))
+
+    return distances
+
+# Example Usage:
+graph = {
+    &#x27;A&#x27;: [(&#x27;B&#x27;, 1), (&#x27;C&#x27;, 4)],  # Vertex A connected to B (weight 1) and C (weight 4)
+    &#x27;B&#x27;: [(&#x27;A&#x27;, 1), (&#x27;C&#x27;, 2), (&#x27;D&#x27;, 5)],  # Vertex B connected to A (weight 1), C (weight 2), and D (weight 5)
+    &#x27;C&#x27;: [(&#x27;A&#x27;, 4), (&#x27;B&#x27;, 2), (&#x27;D&#x27;, 1)],  # Vertex C connected to A (weight 4), B (weight 2), and D (weight 1)
+    &#x27;D&#x27;: [(&#x27;B&#x27;, 5), (&#x27;C&#x27;, 1)]   # Vertex D connected to B (weight 5) and C (weight 1)
+}
+
+start_vertex = &#x27;A&#x27;
+distances = dijkstra(graph, start_vertex)
+
+print(f&quot;Distances from vertex {start_vertex}: {distances}&quot;)</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Distances from vertex A: {&#x27;A&#x27;: 0, &#x27;B&#x27;: 1, &#x27;C&#x27;: 3, &#x27;D&#x27;: 4}</code></pre>
+<hr>
+<h2>Complexity of Dijkstra&#x27;s Algorithm:</h2>
+<ul><li><strong>Time Complexity:</strong> <code>O((V + E) log V)</code>, where <code>V</code> is the number of vertices and <code>E</code> is the number of edges. The execution time depends on extracting the minimum element from the priority queue and updating edge distances.</li></ul>
+<ul><li><strong>Space Complexity:</strong> <code>O(V + E)</code>, where <code>V</code> is the number of vertices and <code>E</code> is the number of edges, as we store the graph adjacency list, distance array/dictionary, and priority queue.</li></ul>
+<hr>
+<h2>Applications of Dijkstra&#x27;s Algorithm:</h2>
+<ol><li><strong>Routing:</strong> Used for finding optimal data transmission paths in networks (e.g., internet routers).</li></ol>
+<ol><li><strong>Path Planning:</strong> Used in navigation systems (GPS) to find the shortest routes between locations.</li></ol>
+<ol><li><strong>Graph Analysis:</strong> Applied in analyzing transport networks, such as calculating the fastest travel routes.</li></ol>
+<ol><li><strong>Cost Estimation:</strong> Can be used to calculate the minimum cost of achieving goals in optimization problems.</li></ol>
+<p>Dijkstra&#x27;s Algorithm is an efficient and widely used method for working with graphs containing non-negative edge weights.</p>
+      </div>
+      <nav class="pager" aria-label="More in this series">
+        <a class="pager-prev" href="ads-final-prep-24-spanning-tree-algorithms-kruskal-prim.html"><span>&larr; Previous</span>24. Spanning Tree Algorithms (Kruskal, Prim)</a>
+        <a class="pager-next" href="ads-final-prep-26-floyd-warshall-algorithm.html"><span>Next &rarr;</span>26. Floyd-Warshall Algorithm</a>
+      </nav>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

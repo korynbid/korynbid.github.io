@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 9. Binary Search Tree | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 9. Binary Search Tree | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 9. Binary Search Tree</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<p><strong>Description:</strong> A Binary Search Tree (BST) is a node-based binary tree data structure where each node satisfies the following properties:</p>
+<ul><li>All values in the <strong>left subtree</strong> of a node are strictly less than the node&#x27;s value.</li><li>All values in the <strong>right subtree</strong> of a node are strictly greater than the node&#x27;s value.</li></ul>
+<p>This structure organizes data to enable efficient searching, insertion, and deletion operations, particularly when working with sorted or semi-sorted data collections.</p>
+<h2>Structure</h2>
+<ul><li><strong>Root:</strong> The topmost node from which tree operations originate.</li><li><strong>Left Subtree:</strong> Contains nodes with values smaller than the parent node.</li><li><strong>Right Subtree:</strong> Contains nodes with values larger than the parent node.</li><li><strong>Leaves:</strong> Bottom nodes that do not have any child nodes.</li></ul>
+<h2>Core Operations</h2>
+<ol><li><strong>Search:</strong> Begins at the root and recursively or iteratively proceeds left or right based on comparisons with the target value.</li><li><strong>Insertion:</strong> Places a new element into its proper position according to the left/right subtree ordering rules.</li><li><strong>Deletion:</strong> Removing an element requires handling three structural scenarios:</li><li><strong>Node has no children (leaf node):</strong> Simply remove the node.</li><li><strong>Node has one child:</strong> Replace the node with its child.</li><li><strong>Node has two children:</strong> Find the in-order successor (smallest in the right subtree) or in-order predecessor (largest in the left subtree) to swap values, then delete that node.</li></ol>
+<h2>Construction Example</h2>
+<p>Given the sequence of numbers: <code>[50, 30, 70, 20, 40, 60, 80]</code></p>
+<ol><li><code>50</code> becomes the <strong>root</strong>.</li><li><code>30</code> &lt; <code>50</code> → inserted into the <strong>left subtree</strong> of <code>50</code>.</li><li><code>70</code> &gt; <code>50</code> → inserted into the <strong>right subtree</strong> of <code>50</code>.</li><li><code>20</code> &lt; <code>50</code> and <code>20</code> &lt; <code>30</code> → inserted into the <strong>left subtree</strong> of <code>30</code>.</li><li><code>40</code> &lt; <code>50</code> but <code>40</code> &gt; <code>30</code> → inserted into the <strong>right subtree</strong> of <code>30</code>.</li><li><code>60</code> &gt; <code>50</code> but <code>60</code> &lt; <code>70</code> → inserted into the <strong>left subtree</strong> of <code>70</code>.</li><li><code>80</code> &gt; <code>50</code> and <code>80</code> &gt; <code>70</code> → inserted into the <strong>right subtree</strong> of <code>70</code>.</li></ol>
+<h3>Resulting Tree:</h3>
+<pre><code>       50
+      /  \
+    30    70
+   /  \   / \
+  20  40 60  80</code></pre>
+<h2>Insertion Algorithm Steps</h2>
+<ol><li>Start at the root node.</li><li>If the new value is smaller than the current node, move to the left child.</li><li>If the new value is larger than the current node, move to the right child.</li><li>Repeat steps 2–3 until an empty slot (<code>null</code>) is reached, and attach the new node there.</li></ol>
+<h2>Time Complexity</h2>
+<ul><li><strong>Search:</strong> O(log n) on average for balanced trees, where <code>n</code> is the number of nodes. In the worst-case scenario (unbalanced/skewed tree), search degrades to O(n).</li><li><strong>Insertion:</strong> Average O(log n), worst-case O(n).</li><li><strong>Deletion:</strong> Average O(log n), worst-case O(n).</li></ul>
+<h2>Practical Applications</h2>
+<ul><li><strong>Database Indexing:</strong> Used for quick record retrieval and ranged queries.</li><li><strong>Sorting Algorithms:</strong> Tree Sort builds a BST to output sorted data in-order.</li><li><strong>Dynamic Query Processing:</strong> Applied in routing algorithms and real-time lookup engines.</li></ul>
+<h2>Advantages</h2>
+<ul><li>Fast lookups, insertions, and deletions when the tree remains balanced.</li><li>Intuitive implementation offering strong dynamic data capabilities.</li></ul>
+<h2>Disadvantages</h2>
+<ul><li>Performance depends on tree height. If elements are inserted in pre-sorted order, the tree degenerates into a linear linked list with O(n) performance.</li><li>Self-balancing trees (such as AVL trees or Red-Black trees) are required to automatically maintain logarithmic height during dynamic modifications.</li></ul>
+<pre><code>class Node:
+    def __init__(self, key):
+        self.left = None
+        self.right = None
+        self.value = key
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, key):
+        if self.root is None:
+            self.root = Node(key)
+        else:
+            self._insert_recursive(self.root, key)
+
+    def _insert_recursive(self, node, key):
+        if key &lt; node.value:
+            if node.left is None:
+                node.left = Node(key)
+            else:
+                self._insert_recursive(node.left, key)
+        elif key &gt; node.value:
+            if node.right is None:
+                node.right = Node(key)
+            else:
+                self._insert_recursive(node.right, key)
+
+    def search(self, key):
+        return self._search_recursive(self.root, key)
+
+    def _search_recursive(self, node, key):
+        if node is None or node.value == key:
+            return node
+        if key &lt; node.value:
+            return self._search_recursive(node.left, key)
+        return self._search_recursive(node.right, key)</code></pre>         
+</div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

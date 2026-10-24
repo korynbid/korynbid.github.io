@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 8. Binary Search | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 8. Binary Search | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 8. Binary Search</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<p><strong>Description:</strong> The Binary Search algorithm (also known as half-interval search) is used to find an element within a sorted array. The algorithm works by halving the search space at each step. First, it compares the middle element of the array with the target value. Depending on whether the target value is greater or smaller than the middle element, the search continues in the corresponding half (left or right). This process repeats until the element is found or the search range is reduced to zero.</p>
+<h2>Example Walkthrough</h2>
+<p>Suppose we have the following sorted array: <code>[1, 3, 5, 7, 9, 11, 13, 15, 17]</code></p>
+<p>We are searching for the number <code>7</code>.</p>
+<ol><li><strong>Compare with the middle element</strong> of the array (in this case, <code>9</code>):</li><li><code>7</code> is less than <code>9</code>, so we narrow our search range to the left sub-array: <code>[1, 3, 5, 7]</code>.</li><li><strong>Compare with the middle element</strong> of the left half (e.g., <code>3</code> or <code>5</code> depending on rounding):</li><li>If middle is <code>7</code>, <code>7 == 7</code>, meaning the target element has been found.</li></ol>
+<h2>Algorithm Steps</h2>
+<ol><li>Define the search range: from the start to the end of the array.</li><li>Find the middle of this range.</li><li>If the middle element is equal to the target value, terminate the search.</li><li>If the target element is less than the middle element, repeat the search on the left half.</li><li>If the target element is greater than the middle element, repeat the search on the right half.</li><li>Repeat steps 2–5 until the element is found or the search range becomes empty.</li></ol>
+<h2>Complexity</h2>
+<ul><li><strong>Time Complexity:</strong> O(log n), where <code>n</code> is the number of elements in the array. This means doubling the size of the array increases the required steps by only 1.</li><li><strong>Space Complexity:</strong> O(1) — the iterative algorithm requires a constant amount of memory because it operates in place without allocating additional data structures.</li></ul>
+<pre><code>def binary_search(arr, target):
+    low = 0
+    high = len(arr) - 1
+
+    while low &lt;= high:
+        mid = (low + high) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] &lt; target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return -1</code></pre>
+<h2>Applications</h2>
+<ul><li><strong>Search in Sorted Collections:</strong> Binary search is used to locate elements in sorted arrays or lists, which is beneficial for databases and search engines.</li><li><strong>Binary Search Trees (BST):</strong> The core principle of binary search is applied to locate nodes within balanced search trees.</li><li><strong>Large Datasets:</strong> Binary search efficiently handles massive volumes of data when querying sorted datasets.</li></ul>
+<h2>Advantages</h2>
+<ul><li>Extremely efficient for searching in pre-sorted data.</li><li>Search time grows logarithmically, enabling fast processing of large volumes of information.</li></ul>
+<h2>Disadvantages</h2>
+<ul><li>Works strictly on sorted arrays or lists. If the data is unsorted, it must be sorted first, adding extra computational complexity (typically O(n log n)).</li></ul>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

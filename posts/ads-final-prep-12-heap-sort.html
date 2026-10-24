@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 12. Heap Sort | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 12. Heap Sort | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 12. Heap Sort</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Heap Sort is a comparison-based sorting algorithm that utilizes a heap data structure to organize elements. It works by creating a heap from unsorted data and repeatedly extracting elements from the heap in sorted order.</p>
+<p>The algorithm consists of two main phases:</p>
+<ol><li><strong>Building the Heap:</strong> Converting the input array into a heap.</li><li><strong>Extracting Elements from the Heap:</strong> Extracting the root (the maximum or minimum element depending on the type of heap), swapping it with the last element in the heap, and restoring the heap property for the remaining elements.</li></ol>
+<p>The Heap Sort algorithm is <strong>unstable</strong>, as duplicate elements may change their relative order during execution.</p>
+<h2>How It Works</h2>
+<ol><li>A heap (max-heap or min-heap) is built, organizing elements such that the maximum (or minimum) element is always at the top (root).</li><li>The maximum (or minimum) element is extracted and moved to the end of the array.</li><li>The heap structure is restored for the remaining elements.</li><li>This process repeats until all elements are sorted.</li></ol>
+<h2>Complexity</h2>
+<ul><li><strong>Time Complexity:</strong></li><li><strong>Building the heap:</strong> O(n)</li><li><strong>Extracting an element &amp; restoring the heap:</strong> O(log n)</li><li><strong>Total Complexity:</strong> O(n log n) across best, average, and worst cases.</li><li><strong>Space Complexity:</strong> O(1) — sorting is performed in-place without additional memory allocations beyond the array itself.</li></ul>
+<h2>Steps of the Heap Sort Algorithm</h2>
+<ol><li><strong>Build the Heap:</strong> Transform the array into a heap. Start from the last internal (non-leaf) node and move upward to the root, calling the <code>heapify</code> operation on each node.</li><li><strong>Extract Elements:</strong> Swap the root element (maximum or minimum) with the last element of the heap. Reduce the heap size by 1 and call <code>heapify</code> on the root to restore heap properties.</li></ol>
+<pre><code>class HeapSort:
+    def __init__(self):
+        self.array = []
+
+    def heapify(self, n, i):
+        largest = i
+        left = 2 * i + 1
+        right = 2 * i + 2
+
+        if left &lt; n and self.array[left] &gt; self.array[largest]:
+            largest = left
+
+        if right &lt; n and self.array[right] &gt; self.array[largest]:
+            largest = right
+
+        if largest != i:
+            self.array[i], self.array[largest] = self.array[largest], self.array[i]
+            self.heapify(n, largest)
+
+    def sort(self, arr):
+        self.array = arr
+        n = len(arr)
+
+        for i in range(n // 2 - 1, -1, -1):
+            self.heapify(n, i)
+
+        for i in range(n - 1, 0, -1):
+            self.array[i], self.array[0] = self.array[0], self.array[i]
+            self.heapify(i, 0)
+
+        return self.array</code></pre>             
+<h2>Code Explanation</h2>
+<ol><li>In a <code>HeapSort</code> implementation, the primary methods are:</li><li><code>heapify(n, i)</code>: Restores the heap property for a subtree rooted at index <code>i</code>, where <code>n</code> is the current size of the heap. Checks <code>i</code> against its left and right children and swaps if a child is larger (in a max-heap).</li><li><code>sort(arr)</code>: Sorts the array by first building the heap and then repeatedly extracting elements while restoring the heap at each step.</li><li>Inside the <code>sort</code> method:</li><li>Heap construction starts from the last parent node at index <code>n // 2 - 1</code> down to <code>0</code>.</li><li>Once constructed, elements are extracted sequentially by swapping the root to the end of the active array range and re-heapifying.</li></ol>
+<h2>Advantages of Heap Sort</h2>
+<ul><li><strong>Guaranteed Time Complexity:</strong> Guarantees O(n log n) runtime performance in the worst, best, and average cases.</li><li><strong>Low Memory Footprint:</strong> Performs sorting &quot;in-place&quot; using constant extra space, O(1).</li></ul>
+<h2>Disadvantages of Heap Sort</h2>
+<ul><li><strong>Unstable Sort:</strong> Relative order of identical elements is not preserved.</li><li><strong>Implementation Overhead:</strong> Requires multiple auxiliary operations to rebuild the heap, making it slightly more complex than algorithms like Quick Sort or Insertion Sort for small datasets.</li></ul>
+<p>Heap Sort is particularly useful when guaranteed O(n log n) runtime is required regardless of the initial ordering of elements, and when minimal memory usage is critical.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

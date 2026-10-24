@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 10. Priority Queues | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 10. Priority Queues | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 10. Priority Queues</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<p><strong>Description:</strong> A Priority Queue is a data structure where each element has an associated priority. Elements with higher priority are dequeued before elements with lower priority, regardless of their insertion order. </p>
+<p>The main difference between a priority queue and a standard queue (which processes elements in First-In, First-Out / FIFO order) is that element retrieval in a priority queue is determined strictly by priority rather than insertion sequence.</p>
+<h2>Key Operations</h2>
+<ol><li><strong>Enqueue:</strong> Adds an element to the priority queue with a specified priority level.</li></ol>
+<ol><li><strong>Dequeue:</strong> Removes and returns the element with the highest priority.</li></ol>
+<ol><li><strong>Peek:</strong> Views the element with the highest priority without removing it.</li></ol>
+<ol><li><strong>Change Priority:</strong> Updates the priority level of an existing element in the queue.</li></ol>
+<h2>Implementation Approaches</h2>
+<p>Priority queues can be implemented using various data structures:</p>
+<ol><li><strong>Array or List:</strong> Elements are stored in a linear array or list. If kept sorted on every insertion, the retrieval operation takes O(1) time, but insertion takes O(n) time.</li></ol>
+<ol><li><strong>Heap:</strong> Typically implemented using a binary heap (Min-Heap or Max-Heap). Elements are structured such that extracting the highest-priority element takes O(log n) time, and inserting a new element also takes O(log n) time.</li></ol>
+<ol><li><strong>Binary Search Tree (BST):</strong> Can be used to maintain elements ordered by priority, but heaps are generally preferred due to lower overhead and simpler structure.</li></ol>
+<h2>Time Complexities (Heap-Based)</h2>
+<ul><li><strong>Enqueue (Insertion):</strong> O(log n) — Inserting an element requires restoring the heap property (heapify-up).</li></ul>
+<ul><li><strong>Dequeue (Extraction):</strong> O(log n) — Extracting the root (maximum or minimum value) requires swapping with the last node and restructuring the heap (heapify-down).</li></ul>
+<ul><li><strong>Peek:</strong> O(1) — The element with the highest priority is always located at the root of the heap.</li></ul>
+<ul><li><strong>Change Priority:</strong> O(log n) — Updating an element&#x27;s priority may require locating, removing, or adjusting its position within the heap.</li></ul>
+<h2>Types of Priority Queues</h2>
+<ol><li><strong>Max-Priority Queue (Max-Heap):</strong> The element with the highest numerical priority value is kept at the root and retrieved first. Used when tasks with the largest values require immediate processing.</li></ol>
+<ol><li><strong>Min-Priority Queue (Min-Heap):</strong> The element with the lowest numerical priority value resides at the root. Frequently used in shortest-path algorithms like Dijkstra&#x27;s algorithm.</li></ol>
+<ol><li><strong>Sorted Queue:</strong> Elements are maintained in a strictly ordered list, making retrieval O(1) at the expense of slower O(n) insertions.</li></ol>
+<pre><code>class PriorityQueue:
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, priority, item):
+        self.queue.append((priority, item))
+        self._heapify_up(len(self.queue) - 1)
+
+    def dequeue(self):
+        if self.is_empty():
+            raise IndexError("dequeue from an empty priority queue")
+        self._swap(0, len(self.queue) - 1)
+        item = self.queue.pop()
+        self._heapify_down(0)
+        return item[1]
+
+    def peek(self):
+        if self.is_empty():
+            raise IndexError("peek from an empty priority queue")
+        return self.queue[0][1]
+
+    def is_empty(self):
+        return len(self.queue) == 0
+
+    def _heapify_up(self, index):
+        while index &gt; 0:
+            parent_index = (index - 1) // 2
+            if self.queue[index][0] &lt; self.queue[parent_index][0]:
+                self._swap(index, parent_index)
+                index = parent_index
+            else:
+                break
+
+    def _heapify_down(self, index):
+        while 2 * index + 1 &lt; len(self.queue):
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+            if left_child_index &lt; len(self.queue) and self.queue[left_child_index][0] &lt; self.queue[smallest][0]:
+                smallest = left_child_index
+            if right_child_index &lt; len(self.queue) and self.queue[right_child_index][0] &lt; self.queue[smallest][0]:
+                smallest = right_child_index
+            if smallest != index:
+                self._swap(index, smallest)
+                index = smallest
+            else:
+                break
+
+    def _swap(self, i, j):
+        self.queue[i], self.queue[j] = self.queue[j], self.queue[i]</code></pre>       
+<h2>Applications</h2>
+<ol><li><strong>Dijkstra’s Algorithm:</strong> Priority queues track vertices ordered by their tentative distance from the source vertex to find the shortest path in non-negatively weighted graphs.</li></ol>
+<ol><li><strong>Operating System Task Scheduling:</strong> Manages process execution queues where high-priority processes preempt lower-priority ones.</li></ol>
+<ol><li><strong>Real-Time Data Processing:</strong> Used in event-driven systems where critical events or queries must be handled before routine background tasks.</li></ol>
+<h2>Advantages</h2>
+<ul><li>Fast processing of highest-priority elements.</li></ul>
+<ul><li>Well-suited for dynamic environments where element priorities change during execution.</li></ul>
+<h2>Disadvantages</h2>
+<ul><li>Insertion and deletion operations carry higher overhead compared to standard FIFO queues.</li></ul>
+<ul><li>Modifying element priorities often requires repositioning nodes, which can impact performance if executed frequently.</li></ul>
+<hr>
+<p><em>Priority queues are a powerful tool for optimizing problems where operation execution order depends on relative importance or urgency.</em></p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

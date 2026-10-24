@@ -54,7 +54,44 @@
 <h2>Disadvantages of a Deque</h2>
 <ol><li><strong>Memory Overhead:</strong> May consume more memory than required, especially if implemented using dynamic arrays.</li></ol>
 <ol><li><strong>Restricted Access:</strong> Elements between the first and last cannot be directly accessed.</li></ol>
-<img src="../img/adsfp5.png" style="width: 100%;">      
+<pre><code>class Deque:
+    def __init__(self):
+        self.deque = []
+
+    def push_front(self, item):
+        self.deque.insert(0, item)
+
+    def push_back(self, item):
+        self.deque.append(item)
+
+    def pop_front(self):
+        if not self.is_empty():
+            return self.deque.pop(0)
+        raise IndexError("Attempt to remove an element from an empty queue")
+
+    def pop_back(self):
+        if not self.is_empty():
+            return self.deque.pop()
+        raise IndexError("Attempt to remove an element from an empty queue")
+
+    def front(self):
+        if not self.is_empty():
+            return self.deque[0]
+        raise IndexError("The queue is empty")
+
+    def back(self):
+        if not self.is_empty():
+            return self.deque[-1]
+        raise IndexError("The queue is empty")
+
+    def is_empty(self):
+        return len(self.deque) == 0
+
+    def size(self):
+        return len(self.deque)
+
+    def display(self):
+        print("Queue contents:", self.deque)</code></pre>    
 </div>
       <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>

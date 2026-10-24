@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 18. Knuth-Morris-Pratt Algorithm | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 18. Knuth-Morris-Pratt Algorithm | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 18. Knuth-Morris-Pratt Algorithm</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>The Knuth-Morris-Pratt (KMP) algorithm is an efficient substring search algorithm that uses preprocessing of the pattern (search string) to speed up the search process. The algorithm was developed by Donald Knuth, Vaughan Pratt, and James H. Morris in 1977 and is an example of an algorithm with linear time complexity, making it significantly faster in practice than a simple brute-force approach.</p>
+<p>Instead of checking whether every character in the string matches the pattern characters, the KMP algorithm uses information about previous mismatches to &quot;skip&quot; parts of the string that have already been checked and clearly cannot lead to a match. This significantly speeds up the search.</p>
+<h2>How the KMP Algorithm Works</h2>
+<ol><li><strong>Pattern Preprocessing:</strong></li></ol>
+<ul><li>First, the algorithm constructs an auxiliary array called the &quot;prefix function&quot;. This array allows calculating how many characters of the pattern can be skipped when a mismatch occurs.</li></ul>
+<ul><li>The prefix function for a string is an array where each element <code>p[i]</code> represents the length of the longest proper prefix of the substring ending at position <code>i</code> that is also a suffix of this substring.</li></ul>
+<ul><li>For example, for the string <code>&quot;ABAB&quot;</code>, the prefix function looks like: <code>[0, 0, 1, 2]</code>.</li></ul>
+<ol><li><strong>Substring Search in String:</strong></li></ol>
+<ul><li>Once the prefix function is built, the algorithm begins searching for occurrences of the pattern in the string. At each mismatch, the algorithm uses the prefix function to shift the pattern, avoiding re-checking characters that have already been checked.</li></ul>
+<ul><li>The runtime complexity of the algorithm is O(n + m), where <code>n</code> is the length of the text string and <code>m</code> is the length of the pattern. Thus, substring search becomes linear in time, which is significantly faster on large strings compared to the naive method (which has a complexity of O(n · m)).</li></ul>
+<h2>Algorithm Steps</h2>
+<ol><li><strong>Convert pattern to prefix function:</strong></li></ol>
+<ul><li>For each character of the pattern, a prefix function is constructed. It stores information about how much of a portion of the pattern matches its beginning.</li></ul>
+<ol><li><strong>Substring search:</strong></li></ol>
+<ul><li>The search process consists of sequentially checking characters of the text string, taking into account matches already found in the pattern. If a mismatch occurs, the algorithm shifts the pattern to the appropriate position using the prefix function.</li></ul>
+<h2>Python Implementation</h2>
+<pre><code>def compute_prefix_function(pattern):
+    m = len(pattern)
+    prefix_function = [0] * m
+    k = 0
+    for i in range(1, m):
+        while k &gt; 0 and pattern[k] != pattern[i]:
+            k = prefix_function[k - 1]
+        if pattern[k] == pattern[i]:
+            k += 1
+        prefix_function[i] = k
+    return prefix_function
+
+
+def kmp_search(text, pattern):
+    n = len(text)
+    m = len(pattern)
+    prefix_function = compute_prefix_function(pattern)
+    result = []
+    k = 0
+    for i in range(n):
+        while k &gt; 0 and pattern[k] != text[i]:
+            k = prefix_function[k - 1]
+        if pattern[k] == text[i]:
+            k += 1
+        if k == m:
+            result.append(i - m + 1)
+            k = prefix_function[k - 1]
+
+    return result</code></pre>
+<h2>Code Explanation</h2>
+<ol><li><strong><code>compute_prefix_function</code>:</strong> This function builds the prefix function array for the pattern. It iterates over the characters of the pattern and fills the <code>prefix_function</code> array, which stores the length of the longest proper prefix that is also a suffix for each position in the pattern.</li></ol>
+<ol><li><strong><code>kmp_search</code>:</strong> The main search function. It iterates through the text string, using the prefix function to efficiently shift the pattern upon mismatch. When the pattern matches a section of the text string completely, the starting index of the match is appended to the result list.</li></ol>
+<h2>Example Walkthrough</h2>
+<p>If we have: <code>text = &quot;ababcababcabc&quot;</code> <code>pattern = &quot;abc&quot;</code></p>
+<p>The KMP algorithm will first construct the prefix function for the pattern <code>&quot;abc&quot;</code>, which looks like: <code>prefix_function = [0, 0, 0]</code></p>
+<p>After that, the algorithm searches for occurrences of the pattern in the string. The matching starting indices found will be: Substrings <code>&#x27;abc&#x27;</code> found at indices: <code>[2, 6, 10]</code></p>
+<h2>Applications of the KMP Algorithm</h2>
+<ul><li><strong>String Searching:</strong> KMP is an efficient solution for finding substrings in text and is used in various text-processing tasks, such as searching text files, text analysis, editing, and data processing.</li></ul>
+<ul><li><strong>Text Processing Algorithms:</strong> The algorithm is used for efficient text search and analysis in applications like text editors, search engines, and document processors.</li></ul>
+<ul><li><strong>Bioinformatics:</strong> In genome sequencing tasks where pattern occurrences must be found rapidly in long DNA sequences.</li></ul>
+<h2>Advantages</h2>
+<ol><li><strong>Linear Complexity:</strong> The KMP algorithm runs in O(n + m) time, where <code>n</code> is the length of the string and <code>m</code> is the length of the pattern. This makes it much faster than naive &quot;brute-force&quot; algorithms.</li></ol>
+<ol><li><strong>Efficiency on Large Strings:</strong> KMP is especially effective when working with long text strings and performing repeated searches for the same pattern.</li></ol>
+<h2>Conclusion</h2>
+<p>The Knuth-Morris-Pratt algorithm is a powerful and efficient tool for substring search. It utilizes the concept of a prefix function to optimize searching and remains one of the classic algorithms for string processing.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

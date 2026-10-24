@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 14. Merge Sort | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 14. Merge Sort | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 14. Merge Sort</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Merge Sort is a sorting algorithm based on the Divide and Conquer principle. It divides an array into two halves, recursively sorts these halves, and then merges the sorted subarrays back into a single sorted array. </p>
+<p>It is one of the most stable and predictable sorting algorithms with a guaranteed time complexity of O(n log n), making it highly efficient for processing large datasets.</p>
+<h2>How It Works</h2>
+<ol><li><strong>Divide:</strong> The original array is split into two subarrays. This splitting process continues recursively until subarrays of length 1 are obtained, which are inherently sorted.</li></ol>
+<ol><li><strong>Merge:</strong> Once the arrays are divided into single-element subarrays, the merging process begins. Two sorted subarrays are combined into a new, fully ordered array.</li></ol>
+<p>The algorithm guarantees a execution time of O(n log n) under all conditions, making it more predictable than algorithms like Quick Sort.</p>
+<h2>Complexity</h2>
+<ul><li><strong>Time Complexity:</strong></li></ul>
+<ul><li><strong>Best, Average, and Worst Cases:</strong> All have the same complexity of O(n log n). This is because the algorithm always divides the array in half and performs a merge operation across all elements of the array.</li></ul>
+<ul><li><strong>Space Complexity:</strong> O(n), as merging requires additional auxiliary memory to store temporary subarrays.</li></ul>
+<h2>Algorithm Steps</h2>
+<ol><li>Divide the array into two halves.</li></ol>
+<ol><li>Recursively apply Merge Sort to each half.</li></ol>
+<ol><li>Merge the sorted halves into a single sorted array.</li></ol>
+<h2>Code Explanation</h2>
+<ol><li><strong><code>merge</code> Method:</strong></li></ol>
+<ul><li>Accepts two sorted arrays (<code>left</code> and <code>right</code>) and merges them into a single sorted array.</li></ul>
+<ul><li>Compares elements sequentially, appending the smaller element to the result array. Any remaining elements from either subarray are appended at the end.</li></ul>
+<ol><li><strong><code>mergesort</code> Method:</strong></li></ol>
+<ul><li>A recursive function that divides the array in half until each subarray reaches a length of 1 (a base sorted state).</li></ul>
+<ul><li>Performs the merging of sorted subarrays using the <code>merge</code> function.</li></ul>
+<ol><li><strong><code>sort</code> Method:</strong></li></ol>
+<ul><li>Accepts an array, initializes the merge sort process, and returns the fully sorted array.</li></ul>
+<pre><code>class MergeSort:
+    def __init__(self):
+        self.array = []
+
+    def merge(self, left, right):
+        result = []
+        i = j = 0
+        while i &lt; len(left) and j &lt; len(right):
+            if left[i] &lt; right[j]:
+                result.append(left[i])
+                i += 1
+            else:
+                result.append(right[j])
+                j += 1
+        result.extend(left[i:])
+        result.extend(right[j:])
+        return result
+
+    def mergesort(self, arr):
+        if len(arr) &lt;= 1:
+            return arr
+        mid = len(arr) // 2
+        left = arr[:mid]
+        right = arr[mid:]
+        left = self.mergesort(left)
+        right = self.mergesort(right)
+        return self.merge(left, right)
+
+    def sort(self, arr):
+        self.array = arr
+        return self.mergesort(arr)</code></pre>
+<h2>Advantages of Merge Sort</h2>
+<ol><li><strong>Guaranteed Complexity O(n log n):</strong> Unlike Quick Sort, which can degrade to O(n²) in the worst case, Merge Sort consistently maintains O(n log n) performance.</li></ol>
+<ol><li><strong>Stability:</strong> Merge Sort is stable, meaning elements with equal values maintain their original relative order from the input array.</li></ol>
+<ol><li><strong>Ideal for Large Datasets:</strong> Thanks to its guaranteed time performance and efficiency with large inputs, Merge Sort is widely used in real-world applications, such as processing large files or external database sorting.</li></ol>
+<h2>Disadvantages of Merge Sort</h2>
+<ol><li><strong>Space Complexity O(n):</strong> The algorithm requires extra memory to store temporary arrays during the merge phase, which can be restrictive when working with extremely large arrays in memory-constrained environments.</li></ol>
+<ol><li><strong>Less Efficient for Small Datasets:</strong> For smaller arrays, algorithms such as Quick Sort or Insertion Sort can perform faster due to lower constant factor overhead and smaller memory footprints.</li></ol>
+<h2>Merge Sort Optimizations</h2>
+<ol><li><strong>Iterative Version:</strong> Instead of a recursive call structure, an iterative (bottom-up) approach can be used to avoid stack overflow risks on extremely large datasets. However, it is slightly more complex to implement.</li></ol>
+<ol><li><strong>In-Place Merging:</strong> Modifying the merge operation to sort in-place avoids allocating temporary auxiliary arrays, minimizing space overhead at the expense of greater algorithmic complexity.</li></ol>
+<h2>Conclusion</h2>
+<p>Merge Sort is a stable and efficient sorting algorithm that guarantees O(n log n) runtime performance in all scenarios. It is especially useful when dealing with large volumes of data where predictable execution time and element stability are required. However, its auxiliary space requirement makes it less suited for memory-restricted systems.</p>
+      
+</div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

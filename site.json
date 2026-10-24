@@ -43,5 +43,203 @@
     "author": "Archiveskk",
     "reference": "https://t.me/c/2310214877/1713/1733",
     "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 6. Linked Lists",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-6-linked-lists",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\linked_lists_data_structure.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 7. Doubly-Linked Lists",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-7-doubly-linked-lists",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\doubly_linked_lists.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 8. Binary Search",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-8-binary-search",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\binary_search_algorithm.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 9. Binary Search Tree",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-9-binary-search-tree",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\binary_search_tree.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 10. Priority Queues",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-10-priority-queues",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\priority_queues.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 11. Heap",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-11-heap",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\heap_data_structure.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 12. Heap Sort",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-12-heap-sort",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\heap_sort_algorithm.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 13. Quick Sort",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-13-quick-sort",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\quick_sort_algorithm.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 14. Merge Sort",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-14-merge-sort",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\merge_sort_algorithm.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 15. Hash Tables",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-15-hash-tables",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\hash_tables.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 16. Rabin-Karp Algorithm Based on Hash",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-16-rabin-karp-algorithm-based-on-hash",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\rabin_karp_algorithm.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 17. Calculation",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-17-calculation",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\calculation.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 18. Knuth-Morris-Pratt Algorithm",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-18-knuth-morris-pratt-algorithm",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\knuth_morris_pratt_algorithm.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 19. Adjacency List and Matrix",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-19-adjacency-list-and-matrix",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\adjacency_list_and_matrix.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 20. Edge List",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-20-edge-list",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\edge_list.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 21. BFS (Breadth-First Search)",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-21-bfs-breadth-first-search",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\breadth_first_search_bfs.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 22. DFS (Depth-First Search)",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-22-dfs-depth-first-search",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\depth_first_search_dfs.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 23. Topological Sort",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-23-topological-sort",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\topological_sort_guide.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 24. Spanning Tree Algorithms (Kruskal, Prim)",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-24-spanning-tree-algorithms-kruskal-prim",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\spanning_tree_algorithms_guide.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 25. Dijkstra's Algorithm",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-25-dijkstra-s-algorithm",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dijkstra_s_algorithm_guide.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 26. Floyd-Warshall Algorithm",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-26-floyd-warshall-algorithm",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\floyd_warshall_algorithm_guide.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
+  },
+  {
+    "title": "[ADS-FINAL-PREP] 27. Bellman-Ford Algorithm",
+    "category": "Algorithms & Data Structures",
+    "slug": "ads-final-prep-27-bellman-ford-algorithm",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\bellman_ford_algorithm_guide.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1713/1733",
+    "date": "2026-10-24"
   }
 ]

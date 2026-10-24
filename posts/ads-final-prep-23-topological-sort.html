@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 23. Topological Sort | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 23. Topological Sort | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 23. Topological Sort</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Topological sort is an algorithm for ordering vertices in a Directed Acyclic Graph (DAG). In a topological sort, for every directed edge (u, v), vertex u must precede vertex v in the resulting ordering.</p>
+<h2>Principle of Operation:</h2>
+<ul><li>Topological sorting is used <strong>only</strong> for Directed Acyclic Graphs (DAGs)—that is, graphs that contain no cycles.</li><li>Vertices of the graph are ordered in such a way that for every edge u → v, vertex u appears before vertex v.</li><li>Topological sorting is useful, for example, in solving scheduling problems, such as ordering tasks with dependencies.</li></ul>
+<h2>Key Problems Solved by Topological Sort:</h2>
+<ol><li>Determining the execution order of tasks with dependencies.</li><li>Scheduling operations where certain operations must be completed before others.</li><li>Resolving dependency calculation problems across various fields (e.g., program compilation).</li></ol>
+<h2>Topological Sorting Algorithms:</h2>
+<p>There are several popular algorithms for topological sorting:</p>
+<ol><li><strong>Kahn&#x27;s Algorithm</strong> (uses a queue and in-degrees).</li><li><strong>Recursive DFS Approach</strong> (where vertices are added to the list after completing traversal).</li></ol>
+<p>We will consider both methods.</p>
+<hr>
+<h3>1. Kahn&#x27;s Algorithm (Using a Queue)</h3>
+<p>Kahn&#x27;s algorithm is based on the following principle:</p>
+<ul><li>For each vertex, count the number of incoming edges (<strong>in-degree</strong>).</li><li>Vertices with an <strong>in-degree of 0</strong> can be immediately added to the result (they have no dependencies).</li><li>After adding a vertex to the result, decrement the in-degree of its neighbors. If any neighbor&#x27;s in-degree becomes 0, add it to the queue.</li></ul>
+<h4>Algorithm Step-by-Step:</h4>
+<ol><li>First, compute the in-degree for every vertex.</li><li>Place all vertices with an in-degree of 0 into a queue.</li><li>Extract a vertex from the queue, add it to the result list, and decrement the in-degree of its neighbors.</li><li>When a neighbor&#x27;s in-degree reaches 0, it is added to the queue.</li><li>If all vertices have been added to the result by the end of the algorithm, the graph is acyclic and topological sorting was successful.</li></ol>
+<h4>Python Implementation (Kahn&#x27;s Algorithm):</h4>
+<pre><code>from collections import deque
+
+# Function to perform topological sort using Kahn&#x27;s algorithm
+def topological_sort_kahn(graph):
+    # Calculate in-degree for each vertex
+    in_degree = {node: 0 for node in graph}  # Initially all in-degrees are 0
+    for node in graph:
+        for neighbor in graph[node]:
+            in_degree[neighbor] += 1  # Increment in-degree for neighbors
+
+    # Add all vertices with 0 in-degree to the queue
+    queue = deque([node for node in graph if in_degree[node] == 0])
+    result = []  # Final list of topologically sorted vertices
+
+    while queue:
+        node = queue.popleft()  # Take a vertex with 0 in-degree
+        result.append(node)     # Add it to the result
+
+        # Reduce in-degree for all neighbors
+        for neighbor in graph[node]:
+            in_degree[neighbor] -= 1  # Decrement neighbor&#x27;s in-degree
+            if in_degree[neighbor] == 0:  # If neighbor&#x27;s in-degree becomes 0
+                queue.append(neighbor)    # Add it to the queue
+
+    # If all vertices are in the result, sorting was successful
+    if len(result) == len(graph):
+        return result  # Return topologically sorted list
+    else:
+        return &quot;Cycle detected in graph, topological sort impossible&quot;
+
+# Usage Example:
+graph = {
+    &#x27;A&#x27;: [&#x27;B&#x27;, &#x27;C&#x27;],
+    &#x27;B&#x27;: [&#x27;D&#x27;],
+    &#x27;C&#x27;: [&#x27;D&#x27;],
+    &#x27;D&#x27;: []
+}
+
+print(&quot;Topological Sort using Kahn&#x27;s Algorithm:&quot;)
+print(topological_sort_kahn(graph))</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Topological Sort using Kahn&#x27;s Algorithm:
+[&#x27;A&#x27;, &#x27;B&#x27;, &#x27;C&#x27;, &#x27;D&#x27;]</code></pre>
+<hr>
+<h3>2. Recursive DFS Approach (Using a Stack / Recursion)</h3>
+<p>This method uses Depth-First Search (DFS) to guarantee that each vertex is added to the result list after all of its outgoing neighbors have been processed.</p>
+<h4>Algorithm Step-by-Step:</h4>
+<ol><li>Perform a recursive depth-first search for each unvisited vertex.</li><li>After visiting all neighbors of a vertex, add the vertex itself to the result list.</li><li>Since vertices are appended after all their dependencies/neighbors are processed, the resulting list contains vertices in reverse topological order.</li><li>Reverse the result list before returning it to obtain the correct ordering.</li></ol>
+<h4>Python Implementation (DFS Approach):</h4>
+<pre><code>def topological_sort_dfs(graph):
+    visited = set()  # Set to track visited vertices
+    result = []      # Final list of topologically sorted vertices
+
+    def dfs(node):
+        # If vertex was already visited, return
+        if node in visited:
+            return
+        visited.add(node)
+
+        # Visit all neighbors of the vertex
+        for neighbor in graph[node]:
+            dfs(neighbor)
+
+        # Add vertex to result after visiting all its neighbors
+        result.append(node)
+
+    # Run DFS from every vertex in the graph
+    for node in graph:
+        if node not in visited:
+            dfs(node)
+
+    return result[::-1]  # Reverse the result list, as vertices were added in reverse order
+
+# Usage Example:
+graph = {
+    &#x27;A&#x27;: [&#x27;B&#x27;, &#x27;C&#x27;],
+    &#x27;B&#x27;: [&#x27;D&#x27;],
+    &#x27;C&#x27;: [&#x27;D&#x27;],
+    &#x27;D&#x27;: []
+}
+
+print(&quot;Topological Sort using DFS:&quot;)
+print(topological_sort_dfs(graph))</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Topological Sort using DFS:
+[&#x27;A&#x27;, &#x27;C&#x27;, &#x27;B&#x27;, &#x27;D&#x27;]</code></pre>
+<hr>
+<h2>Complexity of Algorithms:</h2>
+<ul><li><strong>Kahn&#x27;s Algorithm:</strong></li><li><strong>Time Complexity:</strong> O(V + E), where V is the number of vertices and E is the number of edges. We visit each vertex and edge once.</li><li><strong>Space Complexity:</strong> O(V + E) for storing the graph representation, in-degrees, and queue.</li></ul>
+<ul><li><strong>Recursive DFS Approach:</strong></li><li><strong>Time Complexity:</strong> O(V + E), since every vertex and edge is visited once.</li><li><strong>Space Complexity:</strong> O(V) for the recursion stack and visited set.</li></ul>
+<hr>
+<h2>Applications of Topological Sort:</h2>
+<ol><li><strong>Task Scheduling with Dependencies:</strong> Topological sort allows ordering tasks so that each task is executed only after all its dependent tasks have finished.</li><li><strong>Program Compilation:</strong> In compilers, topological sort is used to order modules or source files so that dependencies are compiled first before the main code.</li><li><strong>Resolving Query Dependencies:</strong> When working with dependent queries in database management systems or workflow engines, topological sorting helps plan execution sequence according to dependencies.</li></ol>
+<hr>
+<h2>Conclusion</h2>
+<p>Topological sort is a powerful tool for working with graphs that finds many applications across various domains, ranging from task scheduling and build systems to complex dependency computations.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

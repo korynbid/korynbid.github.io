@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 16. Rabin-Karp Algorithm Based on Hash | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 16. Rabin-Karp Algorithm Based on Hash | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 16. Rabin-Karp Algorithm Based on Hash</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>The Rabin-Karp algorithm is an efficient substring search algorithm that uses hashing to quickly compare substrings with a given pattern. Its main idea is to compute hash values for substrings in the string and for the pattern, saving time on character-by-character comparisons when hash values do not match. If the hashes match, a direct character comparison is performed.</p>
+<p>This algorithm is especially effective when finding all occurrences of a substring in a string or searching through large texts. It is also suitable for multiple searches with the same pattern, as the pattern hash can be precomputed.</p>
+<h2>How the Rabin-Karp Algorithm Works</h2>
+<ol><li><strong>Preprocessing:</strong></li><li>Hash values are computed for the pattern and for all possible substrings of length equal to the pattern length in the main string.</li><li>Polynomial hashing is typically used, where the hash of a string S of length m is calculated as:</li></ol>
+<p>     <code>hash(S) = (S[0] <em> p^(m-1) + S[1] </em> p^(m-2) + ... + S[m-1] * p^0) mod q</code>      where <code>p</code> is the hash base (usually a prime number) and <code>q</code> is a large prime number to reduce collision probability.</p>
+<ol><li><strong>Comparison:</strong></li><li>The hash of the pattern and the hash of each substring in the main string are computed.</li><li>If the hashes match, a direct character-by-character check of the substring and pattern is performed. This is necessary because two different substrings can have the same hash value due to collisions.</li><li>If the hashes do not match, the substring is automatically rejected.</li></ol>
+<ol><li><strong>Sliding Window:</strong></li><li>The algorithm uses a &quot;sliding window&quot; technique to shift the substring along the string.</li><li>With each shift, a new hash for the next substring is computed using the previous hash, which speeds up calculations.</li></ol>
+<h2>Python Implementation</h2>
+<pre><code>def rabin_karp_search(text, pattern):
+    n = len(text)
+    m = len(pattern)
+    p = 31
+    q = 10**9 + 7
+    pattern_hash = 0
+    for i in range(m):
+        pattern_hash = (pattern_hash * p + ord(pattern[i])) % q
+
+    text_hash = 0
+    for i in range(m):
+        text_hash = (text_hash * p + ord(text[i])) % q
+
+    matches = []
+
+    for i in range(n - m + 1):
+        if text_hash == pattern_hash:
+            if text[i:i + m] == pattern:
+                matches.append(i)
+
+        if i &lt; n - m:
+            text_hash = (text_hash - ord(text[i]) * pow(p, m - 1, q)) % q
+            text_hash = (text_hash * p + ord(text[i + m])) % q
+            text_hash = (text_hash + q) % q
+    return matches</code></pre>
+<h2>Rabin-Karp Algorithm in Practice</h2>
+<p>The Rabin-Karp algorithm runs in O(n · m) time in the worst case, where <code>n</code> is the length of the string and <code>m</code> is the length of the pattern. However, using a good hash function and minimizing collisions allows achieving an average running time of O(n + m), making it very efficient for many applications.</p>
+<h2>Code Explanation</h2>
+<ol><li><strong>Initialization:</strong></li><li>We set the hash base <code>p = 31</code> and the prime number <code>q = 10^9 + 7</code> to minimize collision probability.</li></ol>
+<ol><li><strong>Hash Computation:</strong></li><li>The hash for the pattern (<code>pattern_hash</code>) is computed as the sum of character codes multiplied by powers of base <code>p</code>.</li><li>The hash for the first <code>m</code> characters of the string is computed similarly.</li></ol>
+<ol><li><strong>Search and Window Shift:</strong></li><li>The algorithm iterates through the string using a sliding window of length <code>m</code> (the pattern length).</li><li>At each step, the old hash is updated considering the removal of the first character and addition of the next character.</li><li>If the hashes match, we check whether the substring actually matches the pattern.</li></ol>
+<ol><li><strong>Hash Correction:</strong></li><li>To update the hash when sliding the window, we remove the contribution of the outgoing character from the old hash and add the contribution of the incoming character, using modulo <code>q</code> operations to prevent overflow.</li></ol>
+<h2>Advantages of Rabin-Karp Algorithm</h2>
+<ol><li><strong>Speed for Multiple Searches:</strong></li><li>If the pattern remains constant and multiple searches are needed across different strings, Rabin-Karp is very efficient because the pattern hash is calculated once, and substring comparisons take O(1) time after each shift.</li></ol>
+<ol><li><strong>Multi-Pattern Search:</strong></li><li>The algorithm can be adapted to search for multiple patterns simultaneously, which is useful for tasks like finding various patterns in a large body of text.</li></ol>
+<ol><li><strong>Reduced Search Time:</strong></li><li>With a large number of matches or when working with big texts, the Rabin-Karp algorithm significantly speeds up search by eliminating unnecessary character comparisons.</li></ol>
+<h2>Disadvantages</h2>
+<ol><li><strong>Hash Collisions:</strong></li><li>The algorithm depends heavily on the quality of the hash function. Frequent collisions (different text fragments producing identical hashes) reduce efficiency due to required character checks.</li></ol>
+<ol><li><strong>Implementation and Tuning:</strong></li><li>Good performance depends on choosing optimal hashing parameters (base <code>p</code> and modulo <code>q</code>), which requires extra calculation and configuration.</li></ol>
+<h2>Applications of Rabin-Karp Algorithm</h2>
+<ul><li><strong>Text Search:</strong> Used for fast substring searching in text editors or large documents.</li><li><strong>Bioinformatics Pattern Matching:</strong> Useful for finding DNA or protein sequences in databases.</li><li><strong>Real-time Substring Search:</strong> In systems requiring continuous string updates and pattern searching over data streams.</li></ul>
+<h2>Conclusion</h2>
+<p>The Rabin-Karp algorithm is a powerful substring search tool that speeds up searching via hashing. It is particularly valuable when processing large amounts of data or searching for multiple patterns.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 21. BFS (Breadth-First Search) | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 21. BFS (Breadth-First Search) | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 21. BFS (Breadth-First Search)</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Breadth-First Search (BFS) is a graph traversal algorithm that visits all vertices at the current level (breadth) before moving on to the vertices at the next level. It is used to find shortest paths in graphs with unweighted edges (or equal edge weights), as well as to solve various graph problems such as checking connectivity or finding connected components.</p>
+<h3>Key Features:</h3>
+<ul><li><strong>Operating Principle:</strong> The algorithm starts at a chosen source vertex, explores all of its immediate neighboring vertices, and then moves on to explore their neighbors level by level. It uses a <strong>Queue (FIFO)</strong> data structure to keep track of the vertices to visit.</li></ul>
+<ul><li><strong>Visiting Order:</strong> Vertices closer to the source vertex are visited first.</li></ul>
+<h2>Applications of BFS</h2>
+<ul><li>Finding the <strong>shortest path</strong> in unweighted graphs or graphs with equal edge weights.</li><li><strong>Checking graph connectivity</strong> (verifying if all vertices are reachable from a single starting vertex).</li><li>Finding <strong>connected components</strong> in undirected graphs.</li><li>Finding <strong>all possible paths</strong> or level-order relationships in a graph (e.g., in scheduling or state space search problems).</li></ul>
+<h2>BFS Algorithm Steps</h2>
+<ol><li>Start at vertex <code>s</code> and push it into the queue.</li><li>While the queue is not empty:</li><li>Pop a vertex <code>u</code> from the queue.</li><li>Visit all of its unvisited neighbors and push them into the queue.</li></ol>
+<p>For efficient implementation, a <code>visited</code> set is used to track visited vertices to avoid cycles and infinite loops.</p>
+<h2>Example</h2>
+<p>Consider the following graph:</p>
+<pre><code>     0
+   /   \
+  1     2
+  \    / \
+    3 4   5</code></pre>
+<p>The adjacency list representation for this graph is:</p>
+<pre><code>graph = {
+    0: [1, 2],
+    1: [0, 3],
+    2: [0, 4, 5],
+    3: [1],
+    4: [2],
+    5: [2]
+}</code></pre>
+<h2>Python Implementation</h2>
+<pre><code>from collections import deque
+
+def bfs(graph, start):
+    visited = set()
+    queue = deque([start])
+    visited.add(start)
+
+    while queue:
+        vertex = queue.popleft()
+        print(vertex, end=&quot; &quot;)
+
+        for neighbor in graph[vertex]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)</code></pre>
+<h3>How the Code Works</h3>
+<ol><li>We use a double-ended queue <code>queue</code> (<code>collections.deque</code>) to store vertices left to visit, allowing <strong>FIFO (First-In-First-Out)</strong> operations.</li><li>We start at the <code>start</code> vertex (e.g., <code>0</code>), adding it to both <code>queue</code> and the <code>visited</code> set to avoid reprocessing.</li><li>In the <code>while queue:</code> loop, we pop a vertex from the left, process it (e.g., print it), and push all of its unvisited neighbors into the queue.</li><li>The algorithm completes when all reachable vertices have been processed.</li></ol>
+<h2>Complexity of BFS</h2>
+<ul><li><strong>Time Complexity:</strong> <strong>O(V + E)</strong>, where <code>V</code> is the number of vertices and <code>E</code> is the number of edges. Every vertex and edge is visited at most once.</li><li><strong>Space Complexity:</strong> <strong>O(V)</strong>, required to maintain the <code>visited</code> set and the <code>queue</code>.</li></ul>
+<h2>Practical Uses of BFS</h2>
+<ol><li><strong>Shortest Path in Unweighted Graphs:</strong> BFS guarantees the shortest path (in terms of edge count) from the start vertex to any other reachable vertex.</li><li><strong>Checking Connectivity:</strong> If all vertices are marked as visited after running BFS from a vertex, the graph is connected.</li><li><strong>Connected Components:</strong> Running BFS iteratively on unvisited vertices identifies distinct connected components in disconnected graphs.</li><li><strong>Maze Solving / Grid Traversal:</strong> BFS finds the shortest path through grids or mazes where each cell represents a vertex and valid moves represent edges.</li></ol>
+<h2>Conclusion</h2>
+<p>Breadth-First Search (BFS) is a fundamental and powerful graph traversal algorithm. It is especially useful for shortest-path operations in unweighted graphs, checking connectivity, and component discovery. Its algorithm design is straightforward to implement and operates in linear time relative to graph size.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

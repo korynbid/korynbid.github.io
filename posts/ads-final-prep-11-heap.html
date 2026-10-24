@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[ADS-FINAL-PREP] 11. Heap | korynbid</title>
+  <meta name="description" content="[ADS-FINAL-PREP] 11. Heap | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[ADS-FINAL-PREP] 11. Heap</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A Heap is a tree-based data structure that implements a priority queue. The key characteristic of a heap is maintaining the heap property, which guarantees that every parent node satisfies a specific ordering relationship with respect to its child nodes.</p>
+<p>There are two primary types of heaps:</p>
+<ul><li><strong>Max-Heap:</strong> The parent node is always greater than or equal to its children.</li><li><strong>Min-Heap:</strong> The parent node is always less than or equal to its children.</li></ul>
+<p>A heap is represented as a complete (or nearly complete) binary tree, where each node has at most two children. Because the tree is always balanced, insertion and extraction operations can be executed efficiently.</p>
+<h2>Types of Heaps</h2>
+<ul><li><strong>Max-Heap:</strong> In a max-heap, the value of each parent node is always greater than or equal to the values of its children. Consequently, the maximum element is always located at the root (top) of the heap.</li></ul>
+<ul><li><strong>Min-Heap:</strong> In a min-heap, the value of each parent node is always less than or equal to the values of its children. Thus, the minimum element is always located at the root of the heap.</li></ul>
+<h2>Heap Operations</h2>
+<ol><li><strong>Insert:</strong></li><li>An element is added to the end of the heap (maintaining the complete binary tree structure) and then &quot;bubbled up&quot; (<code>heapify-up</code>) to restore the heap property.</li></ol>
+<ol><li><strong>Extract-Max / Extract-Min:</strong></li><li><strong>Max-Heap:</strong> The root node containing the maximum value is extracted. It is replaced by the last element in the heap, followed by a &quot;sift down&quot; (<code>heapify-down</code>) operation to restore heap ordering.</li><li><strong>Min-Heap:</strong> The root node with the minimum value is extracted, followed by the same re-balancing procedure.</li></ol>
+<ol><li><strong>Peek:</strong></li><li>An operation that retrieves the value of the root node without removing it.</li></ol>
+<h2>Algorithms Based on Heaps</h2>
+<ul><li><strong>Heap Sort:</strong> Used to sort elements using a max-heap or min-heap. The algorithm builds a heap and iteratively extracts the maximum or minimum elements to form a sorted array.</li></ul>
+<ul><li><strong>Dijkstra&#x27;s Algorithm:</strong> Used to find the shortest path in a weighted graph by repeatedly extracting the vertex with the minimum distance.</li></ul>
+<ul><li><strong>Huffman Coding:</strong> Used in data compression algorithms for optimal prefix coding, where min-heaps build the optimal encoding tree.</li></ul>
+<h2>Primary Operation Complexities</h2>
+<ul><li><strong>Insert:</strong> O(log n)</li><li><strong>Extract (Extract-Max / Extract-Min):</strong> O(log n)</li><li><strong>Peek (Root view):</strong> O(1)</li><li><strong>Build-Heap (from an unsorted array):</strong> O(n) using the bottom-up construction approach.</li></ul>
+<h2>Heap Implementation</h2>
+<p>A heap can be efficiently stored using a standard array where parent-child relationships are calculated via zero-based index formulas:</p>
+<ul><li><strong>Parent index:</strong> <code>parent(i) = ⌊(i - 1) / 2⌋</code></li><li><strong>Left child index:</strong> <code>left(i) = 2i + 1</code></li><li><strong>Right child index:</strong> <code>right(i) = 2i + 2</code></li></ul>
+<h2>Advantages</h2>
+<ul><li><strong>Efficiency:</strong> Logarithmic time complexity O(log n) for insertions and extractions makes heaps optimal for priority queue implementations.</li><li><strong>Simplicity:</strong> Array-based tree representation eliminates pointer storage overhead and keeps algorithms straightforward to implement.</li></ul>
+<h2>Disadvantages</h2>
+<ul><li><strong>Partial Ordering:</strong> A heap only guarantees strict order for the root element relative to its descendants, not a fully sorted dataset.</li><li><strong>Full Sorting Overhead:</strong> Obtaining a completely sorted sequence requires repeated extractions, taking O(n log n) time (e.g., via Heap Sort).</li></ul>
+<pre><code>class MinHeap:
+    def __init__(self):
+        self.heap = []
+
+    def insert(self, value):
+        self.heap.append(value)
+        self._heapify_up(len(self.heap) - 1)
+
+    def extract_min(self):
+        if len(self.heap) == 0:
+            raise IndexError("extract_min from an empty heap")
+        min_value = self.heap[0]
+        self.heap[0] = self.heap[-1]
+        self.heap.pop()
+        self._heapify_down(0)
+        return min_value
+
+    def peek(self):
+        if len(self.heap) == 0:
+            raise IndexError("peek from an empty heap")
+        return self.heap[0]
+
+    def _heapify_up(self, index):
+        while index &gt; 0:
+            parent_index = (index - 1) // 2
+            if self.heap[index] &lt; self.heap[parent_index]:
+                self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+                index = parent_index
+            else:
+                break
+
+    def _heapify_down(self, index):
+        while 2 * index + 1 &lt; len(self.heap):
+            left_child_index = 2 * index + 1
+            right_child_index = 2 * index + 2
+            smallest = index
+
+            if left_child_index &lt; len(self.heap) and self.heap[left_child_index] &lt; self.heap[smallest]:
+                smallest = left_child_index
+            if right_child_index &lt; len(self.heap) and self.heap[right_child_index] &lt; self.heap[smallest]:
+                smallest = right_child_index
+            if smallest != index:
+                self.heap[index], self.heap[smallest] = self.heap[smallest], self.heap[index]
+                index = smallest
+            else:
+                break</code></pre>              
+</div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
