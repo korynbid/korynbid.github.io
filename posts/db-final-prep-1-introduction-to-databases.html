@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 1. Introduction to Databases | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 1. Introduction to Databases | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 1. Introduction to Databases</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>database</strong> is a set of related information. A <strong>database system (DBMS)</strong> is a collection of interrelated data together with a set of programs that allow users to access and modify that data. A major purpose of a database system is to give users an <em>abstract view</em> of the data, hiding the complexity of how data is stored and maintained.</p>
+<h2>Where Databases Are Used</h2>
+<ul><li><strong>Enterprise information:</strong> sales (customers, products, purchases), accounting (payments, receipts, assets), human resources (employees, salaries, payroll taxes).</li><li><strong>Manufacturing:</strong> production, inventory, orders, supply chain.</li><li><strong>Banking and finance:</strong> customer information, accounts, loans, card transactions, real-time market data.</li><li><strong>Universities:</strong> registration, grades.</li><li><strong>Airlines:</strong> reservations, schedules.</li><li><strong>Telecommunication:</strong> records of calls, texts and data usage, monthly bills, prepaid balances.</li><li><strong>Web services:</strong> online retailers (order tracking, recommendations), online advertisements.</li><li><strong>Document databases</strong> and <strong>navigation systems</strong> (places of interest, roads, train and bus routes).</li></ul>
+<h2>Purpose of Database Systems</h2>
+<p>Early database applications were built directly on top of file systems, which caused:</p>
+<ol><li><strong>Data redundancy and inconsistency:</strong> the same data is stored in multiple files and formats.</li><li><strong>Difficulty in accessing data:</strong> a new program must be written for every new task.</li><li><strong>Data isolation:</strong> multiple files and formats.</li><li><strong>Integrity problems:</strong> constraints (e.g., <code>balance &gt; 0</code>) are buried in program code and are hard to change.</li><li><strong>Atomicity problems:</strong> a failure may leave the database with partial updates (e.g., a funds transfer that only completes half-way).</li><li><strong>Concurrent-access anomalies:</strong> two users reading a balance of 100 and each withdrawing 50 at the same time can corrupt the result.</li><li><strong>Security problems:</strong> hard to give users access to some, but not all, data.</li></ol>
+<p>Database systems offer solutions to all of the above.</p>
+<h2>View of Data</h2>
+<ul><li><strong>Data model:</strong> a collection of conceptual tools for describing data, data relationships, data semantics and consistency constraints.</li><li><strong>Data abstraction:</strong> hides the complexity of data structures from users through several levels.</li></ul>
+<h3>Data Models</h3>
+<ul><li>Relational model</li><li>Entity-Relationship model (mainly for database design)</li><li>Object-based models (object-oriented, object-relational)</li><li>Semi-structured model (XML)</li><li>Older models: network model, hierarchical model</li></ul>
+<h3>The Relational Model</h3>
+<ul><li>Proposed by <strong>Dr. E. F. Codd</strong> in <strong>1970</strong> in the paper <em>&quot;A Relational Model of Data for Large Shared Data Banks&quot;</em>.</li><li>Data is represented as <strong>sets of tables</strong> (rows and columns).</li><li>Instead of pointers to navigate between related entities, <strong>redundant data (keys)</strong> is used to link records in different tables.</li></ul>
+<h3>Levels of Abstraction</h3>
+<table><thead><tr><th>Level</th><th>Describes</th></tr></thead><tbody><tr><td><strong>Physical level</strong></td><td>How a record (e.g., an instructor) is physically stored</td></tr><tr><td><strong>Logical level</strong></td><td>What data is stored and the relationships among the data</td></tr><tr><td><strong>View level</strong></td><td>What parts of the data each application/user sees; views can hide information (e.g., salary) for security</td></tr></tbody></table>
+<h3>Instances and Schemas</h3>
+<ul><li><strong>Logical schema:</strong> the overall logical structure of the database (analogous to the <em>type</em> of a variable in a program).</li><li><strong>Physical schema:</strong> the overall physical structure of the database.</li><li><strong>Instance:</strong> the actual content of the database at a particular moment (analogous to the <em>value</em> of a variable).</li></ul>
+<h3>Physical Data Independence</h3>
+<p>The ability to modify the physical schema without changing the logical schema. Applications depend on the logical schema, so interfaces between levels should be well defined so that changes in one part do not seriously affect others.</p>
+<h2>Database Languages</h2>
+<h3>Data Definition Language (DDL)</h3>
+<p>Specifies the database schema. The DDL compiler stores the result in the <strong>data dictionary</strong>, which holds <strong>metadata</strong> (data about data): the schema, integrity constraints (e.g., primary keys) and authorization (who can access what).</p>
+<pre><code>CREATE TABLE instructor (
+    ID        CHAR(5),
+    name      VARCHAR(20),
+    dept_name VARCHAR(20),
+    salary    NUMERIC(8,2)
+);
+
+CREATE TABLE corporation (
+    corp_id SMALLINT,
+    name    VARCHAR(30),
+    CONSTRAINT pk_corporation PRIMARY KEY (corp_id)
+);</code></pre>
+<h3>Data Manipulation Language (DML)</h3>
+<p>Language for accessing and updating data. Also called a <em>query language</em> (the retrieval part).</p>
+<ul><li><strong>Procedural DML:</strong> the user specifies <em>what</em> data is needed and <em>how</em> to get it.</li><li><strong>Declarative (non-procedural) DML:</strong> the user specifies <em>what</em> data is needed without saying how. Easier to learn and use. <strong>SQL is declarative.</strong></li></ul>
+<pre><code>INSERT INTO corporation (corp_id, name)
+VALUES (27, &#x27;Acme Paper Corporation&#x27;);
+
+SELECT name FROM corporation WHERE corp_id = 27;</code></pre>
+<h3>SQL and Application Programs</h3>
+<p>A SQL query takes one or more tables as input and always returns a <strong>single table</strong>.</p>
+<pre><code>SELECT name FROM instructor WHERE dept_name = &#x27;Comp. Sci.&#x27;;</code></pre>
+<p>SQL cannot read user input, draw on a display, or use the network. Those actions are written in a <strong>host language</strong> (C/C++, Java, Python) with embedded SQL, using either language extensions or an API such as <strong>ODBC/JDBC</strong>.</p>
+<h2>Database Design</h2>
+<ul><li><strong>Logical design:</strong> decide on the schema. <em>Business decision:</em> which attributes to record. <em>Computer science decision:</em> which relation schemas to create and how to distribute attributes among them.</li><li><strong>Physical design:</strong> decide on the physical layout of the database.</li></ul>
+<h2>Database Engine (Architecture)</h2>
+<p>A database system is split into three functional components:</p>
+<h3>1. Storage Manager</h3>
+<p>The interface between low-level stored data and application programs/queries. Responsibilities: interaction with the OS file manager, efficient storing, retrieving and updating of data. Components: authorization and integrity manager, transaction manager, file manager, buffer manager.</p>
+<p>Data structures it implements: <strong>data files</strong> (the database itself), <strong>data dictionary</strong> (metadata), <strong>indices</strong> (pointers for fast access to values).</p>
+<h3>2. Query Processor</h3>
+<ul><li><strong>DDL interpreter:</strong> interprets DDL statements and records definitions in the data dictionary.</li><li><strong>DML compiler:</strong> translates DML into an evaluation plan of low-level instructions; performs <strong>query optimization</strong> (picks the lowest-cost plan).</li><li><strong>Query evaluation engine:</strong> executes the low-level instructions.</li></ul>
+<p>Query processing steps: <strong>1) parsing and translation → 2) optimization → 3) evaluation</strong>.</p>
+<h3>3. Transaction Management</h3>
+<p>A <strong>transaction</strong> is a collection of operations that performs a single logical function. The transaction manager keeps the database consistent despite power failures, OS crashes and transaction failures; the <strong>concurrency-control manager</strong> controls interaction between concurrent transactions.</p>
+<pre><code>BEGIN;
+UPDATE accounts SET balance = balance - 100.00 WHERE name = &#x27;Alice&#x27;;
+-- ... other statements ...
+COMMIT;      -- or ROLLBACK; to undo everything</code></pre>
+<h2>DBMS Products</h2>
+<p>MySQL, MS SQL Server (Microsoft), Oracle DB (Oracle), DB2 (IBM), PostgreSQL.</p>
+<h2>Why PostgreSQL?</h2>
+<p>PostgreSQL is an enterprise-class relational DBMS, on par with the best proprietary systems.</p>
+<ul><li>Open source with a large community</li><li>Cross-platform and fast</li><li>Stored procedures and functions in many languages (C, SQL, Python, JS, Ruby, etc.)</li><li>Many built-in data types, and you can define your own</li><li>NoSQL features (JSON, hstore)</li></ul>
+<p><strong>Management tools:</strong> <code>psql</code>, DataGrip, phpPgAdmin, pgAdmin. <strong>Download:</strong> postgresql.org/download and jetbrains.com/datagrip (free for students).</p>
+<h2>Conclusion</h2>
+<p>A DBMS replaces ad-hoc file processing with a system that provides abstraction, integrity, atomicity, concurrency control and security, organized as a storage manager, a query processor and a transaction manager.</p>
+<hr>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

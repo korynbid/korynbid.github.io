@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 3. SQL, Data Definition Language (DDL), Data Manipulation Language (DML) and Data Types | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 3. SQL, Data Definition Language (DDL), Data Manipulation Language (DML) and Data Types | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 3. SQL, Data Definition Language (DDL), Data Manipulation Language (DML) and Data Types</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>SQL (Structured Query Language)</strong> is the standard language for creating and manipulating databases. All RDBMSs (MySQL, MS Access, Oracle, Sybase, PostgreSQL, SQL Server) use SQL as their standard database language.</p>
+<h2>History of SQL</h2>
+<ul><li><strong>1970:</strong> Dr. E. F. &quot;Ted&quot; Codd of IBM, the father of relational databases, describes the relational model.</li><li><strong>1974:</strong> Structured Query Language appears.</li><li><strong>1978:</strong> IBM develops Codd&#x27;s ideas and releases <strong>System/R</strong>.</li><li><strong>1986:</strong> IBM develops the first relational prototype; SQL is standardized by <strong>ANSI</strong>. The first commercial relational database comes from Relational Software, later <strong>Oracle</strong>.</li></ul>
+<h2>SQL Rules and Process</h2>
+<ul><li>SQL is <strong>not case sensitive</strong>; keywords are conventionally written in uppercase.</li><li>A statement can span one or several text lines.</li><li>SQL is based on tuple relational calculus and relational algebra.</li><li>When a command runs, the RDBMS determines the best way to carry it out. The components involved include the optimization engine, query engine and query dispatcher.</li></ul>
+<h2>Why Use SQL? Advantages</h2>
+<ul><li>Access data in an RDBMS, describe data, define and manipulate data.</li><li>Create and drop databases and tables; create views, functions and stored procedures.</li><li>Set permissions on tables, procedures and views.</li><li><strong>Advantages:</strong> high speed, well-defined standards, portability, interactive language, multiple data views.</li></ul>
+<h2>Types of SQL</h2>
+<table><thead><tr><th>Type</th><th>Name</th><th>Purpose</th></tr></thead><tbody><tr><td>DDL</td><td>Data Definition Language</td><td>Create and change structures (CREATE, ALTER, DROP, TRUNCATE)</td></tr><tr><td>DML</td><td>Data Manipulation Language</td><td>Change data (INSERT, UPDATE, DELETE)</td></tr><tr><td>DCL</td><td>Data Control Language</td><td>Permissions (GRANT, REVOKE)</td></tr><tr><td>TCL</td><td>Transaction Control Language</td><td>Transactions (BEGIN, COMMIT, ROLLBACK)</td></tr><tr><td>DQL</td><td>Data Query Language</td><td>Retrieve data (SELECT)</td></tr></tbody></table>
+<hr>
+<h2>Part I: Data Definition Language (DDL)</h2>
+<p>DDL commands create, modify and drop database objects: <code>CREATE</code>, <code>DROP</code>, <code>ALTER</code>, <code>TRUNCATE</code>.</p>
+<h3>CREATE TABLE</h3>
+<pre><code>CREATE TABLE account (
+    user_id    serial PRIMARY KEY,
+    username   VARCHAR(50)  UNIQUE NOT NULL,
+    password   VARCHAR(50)  NOT NULL,
+    email      VARCHAR(355) UNIQUE NOT NULL,
+    created_on TIMESTAMP    NOT NULL,
+    last_login TIMESTAMP
+);
+
+CREATE TABLE role (
+    role_id   serial PRIMARY KEY,
+    role_name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE account_role (
+    user_id    integer NOT NULL,
+    role_id    integer NOT NULL,
+    grant_date timestamp,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (role_id) REFERENCES role (role_id),
+    FOREIGN KEY (user_id) REFERENCES account (user_id)
+);</code></pre>
+<h3>Column Constraints</h3>
+<ul><li><code>NOT NULL</code>: the value cannot be NULL.</li><li><code>UNIQUE</code>: values must be unique across the table. In PostgreSQL a column may still hold many NULLs, because each NULL is treated as distinct.</li><li><code>PRIMARY KEY</code>: combination of NOT NULL and UNIQUE. One column can use a column-level constraint; multiple columns require a table-level constraint.</li><li><code>REFERENCES</code>: the value must exist in a column of another table (foreign key).</li></ul>
+<h3>Table Constraints</h3>
+<ul><li><code>UNIQUE (column_list)</code></li><li><code>PRIMARY KEY (column_list)</code></li><li><code>FOREIGN KEY (...) REFERENCES ...</code></li></ul>
+<h3>ALTER TABLE</h3>
+<p>Changes the structure of an existing table. Supported actions include adding, dropping and renaming a column, changing a column&#x27;s data type, setting a default value, and renaming the table.</p>
+<pre><code>-- Add a foreign key that was forgotten
+ALTER TABLE account_role
+ADD CONSTRAINT constraint_fkey
+FOREIGN KEY (user_id) REFERENCES account (user_id);
+
+-- Drop a column
+ALTER TABLE account DROP COLUMN email;</code></pre>
+<h3>DROP TABLE</h3>
+<p>Removes the table and its data completely.</p>
+<pre><code>DROP TABLE [IF EXISTS] table_name [CASCADE | RESTRICT];</code></pre>
+<h3>TRUNCATE TABLE</h3>
+<p>Removes <strong>all rows</strong> quickly. <code>DELETE</code> without a condition is inefficient on large tables.</p>
+<pre><code>TRUNCATE TABLE table_name;
+TRUNCATE TABLE table_name1, table_name2;  -- several tables at once</code></pre>
+<hr>
+<h2>Part II: PostgreSQL Data Types</h2>
+<ul><li><strong>Boolean:</strong> <code>true</code>, <code>false</code>, <code>NULL</code> (keyword <code>boolean</code> or <code>bool</code>)</li><li><strong>Character:</strong> <code>char</code>, <code>varchar</code>, <code>text</code></li><li><strong>Numeric:</strong> integers and floating-point numbers</li><li><strong>Temporal:</strong> <code>date</code>, <code>time</code>, <code>timestamp</code>, <code>timestamptz</code>, <code>interval</code></li><li><strong>UUID:</strong> universally unique identifiers</li><li><strong>Array:</strong> arrays of strings, numbers, etc.</li><li><strong>JSON:</strong> JSON data; <strong>hstore:</strong> key-value pairs</li><li><strong>Special types:</strong> network addresses, geometric data</li></ul>
+<h3>Numeric Types</h3>
+<ul><li><strong>Integers:</strong> <code>smallint</code>, <code>integer</code>, <code>bigint</code> (plus auto-incrementing <code>serial</code> types).</li><li><strong>Floating point:</strong></li><li><code>float(n)</code>: precision at least <em>n</em>, up to 8 bytes</li><li><code>real</code> / <code>float4</code>: 4-byte floating-point number; <code>float8</code>: 8-byte</li><li><code>numeric(p, s)</code>: <strong>exact</strong> number with <em>p</em> digits, <em>s</em> of them after the decimal point</li></ul>
+<pre><code>CREATE TABLE products (
+    id    serial PRIMARY KEY,
+    price numeric(5, 2)   -- up to 999.99
+);</code></pre>
+<h3>Temporal Types</h3>
+<table><thead><tr><th>Type</th><th>Stores</th></tr></thead><tbody><tr><td><code>DATE</code></td><td>Date only</td></tr><tr><td><code>TIME</code></td><td>Time of day</td></tr><tr><td><code>TIMESTAMP</code></td><td>Date and time</td></tr><tr><td><code>TIMESTAMPTZ</code></td><td>Timestamp with time zone</td></tr><tr><td><code>INTERVAL</code></td><td>A period of time</td></tr></tbody></table>
+<hr>
+<h2>Part III: Data Manipulation Language (DML)</h2>
+<p>The primary DML commands are <code>INSERT</code>, <code>UPDATE</code> and <code>DELETE</code>.</p>
+<h3>INSERT</h3>
+<pre><code>INSERT INTO table_name (column1, column2, ...)
+VALUES (value1, value2, ...);
+
+-- Multiple rows in one statement
+INSERT INTO table_name (column_list)
+VALUES (value_list_1),
+       (value_list_2),
+       (value_list_n);
+
+-- Return the inserted rows
+INSERT INTO table_name (column_list)
+VALUES (...), (...)
+RETURNING *;</code></pre>
+<h3>UPDATE</h3>
+<pre><code>UPDATE table_name
+SET column1 = value1,
+    column2 = value2
+WHERE condition;</code></pre>
+<p>Without <code>WHERE</code>, <strong>all rows</strong> are updated.</p>
+<h3>DELETE</h3>
+<pre><code>DELETE FROM table_name WHERE condition;               -- selected rows
+DELETE FROM table_name WHERE condition RETURNING *;   -- return deleted rows
+DELETE FROM table_name;                               -- all rows</code></pre>
+<h2>Conclusion</h2>
+<p>DDL defines the structure of the database, DML changes its data, and PostgreSQL&#x27;s rich set of data types and constraints keeps that data valid.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

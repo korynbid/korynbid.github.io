@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 7. Joins | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 7. Joins | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 7. Joins</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>JOIN</strong> combines data from two or more tables using related columns (usually foreign keys). When related data is spread across several tables, joins let you retrieve it as one result.</p>
+<pre><code>SELECT column_name(s)
+FROM table1
+JOIN table2 ON table1.column_name = table2.column_name;</code></pre>
+<ul><li><code>SELECT</code>: columns to retrieve; <code>FROM</code>: the primary table; <code>JOIN</code>: the table to combine; <code>ON</code>: the matching condition (e.g., <code>passenger_id</code> in both tables).</li></ul>
+<h2>Part I: INNER and OUTER Joins</h2>
+<h3>INNER JOIN</h3>
+<p>Returns only the rows that have <strong>matching values in both tables</strong>.</p>
+<pre><code>SELECT p.first_name, b.flight_id
+FROM passengers p
+INNER JOIN booking b ON p.passenger_id = b.passenger_id;</code></pre>
+<p>Joining several tables:</p>
+<pre><code>SELECT column1, column2
+FROM table1
+INNER JOIN table2 ON condition_1
+INNER JOIN table3 ON condition_2;</code></pre>
+<h3>OUTER JOINS</h3>
+<p>Return rows even when there is no counterpart in the other table.</p>
+<table><thead><tr><th>Join</th><th>Returns</th></tr></thead><tbody><tr><td><code>LEFT JOIN</code> (LEFT OUTER)</td><td><strong>All rows of the left table</strong>, plus matching rows from the right (NULL where no match)</td></tr><tr><td><code>RIGHT JOIN</code> (RIGHT OUTER)</td><td><strong>All rows of the right table</strong>, plus matching rows from the left (NULL where no match)</td></tr><tr><td><code>FULL JOIN</code> (FULL OUTER)</td><td><strong>All rows from both tables</strong>, with NULL filled in where there is no match on either side</td></tr></tbody></table>
+<pre><code>SELECT * FROM table1 LEFT  JOIN table2 ON table1.id = table2.id;
+SELECT * FROM table1 RIGHT JOIN table2 ON table1.id = table2.id;
+SELECT * FROM table1 FULL  JOIN table2 ON table1.id = table2.id;</code></pre>
+<h2>Part II: NATURAL, SELF and CROSS Joins</h2>
+<h3>NATURAL JOIN</h3>
+<p>Creates an implicit join on <strong>all columns with the same name</strong> in both tables.</p>
+<pre><code>SELECT select_list FROM T1 NATURAL [INNER | LEFT | RIGHT] JOIN T2;</code></pre>
+<p>Convenient when tables share several common columns, but can give unexpected results if column names coincide by accident.</p>
+<h3>SELF JOIN</h3>
+<p>A regular join of a table <strong>to itself</strong>, using aliases. Used for hierarchical data or for comparing rows within one table.</p>
+<pre><code>SELECT e.name AS employee, m.name AS manager
+FROM employee e
+INNER JOIN employee m ON e.manager_id = m.employee_id;</code></pre>
+<h3>CROSS JOIN</h3>
+<p>Produces the <strong>Cartesian product</strong> of the rows of two or more tables (every row of T1 combined with every row of T2).</p>
+<pre><code>SELECT select_list FROM T1 CROSS JOIN T2;</code></pre>
+<h2>Comparison</h2>
+<table><thead><tr><th>Join</th><th>Use when</th></tr></thead><tbody><tr><td>INNER</td><td>You only want rows matching in both tables</td></tr><tr><td>LEFT / RIGHT</td><td>You want all rows from one side regardless of a match</td></tr><tr><td>FULL OUTER</td><td>You want everything from both sides</td></tr><tr><td>NATURAL</td><td>Tables share identically named join columns (use with care)</td></tr><tr><td>SELF</td><td>A table references itself (hierarchies, comparing rows)</td></tr><tr><td>CROSS</td><td>You need every combination of rows</td></tr></tbody></table>
+<h2>Conclusion</h2>
+<p>Joins are the main tool for reassembling normalized data. Choosing the right join type determines which unmatched rows are kept or dropped.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

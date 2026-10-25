@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 4. Data Query Language (DQL): the SELECT Statement and Operators | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 4. Data Query Language (DQL): the SELECT Statement and Operators | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 4. Data Query Language (DQL): the SELECT Statement and Operators</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><code>SELECT</code> is one of the most complex PostgreSQL statements, with many clauses that form flexible queries. In its simplest form it retrieves data from a single table.</p>
+<pre><code>SELECT select_list
+FROM table_name;</code></pre>
+<h2>Basic SELECT Examples</h2>
+<pre><code>SELECT first_name FROM customer;                          -- one column
+SELECT first_name, last_name, email FROM customer;        -- several columns
+SELECT * FROM customer;                                   -- all columns
+SELECT first_name || &#x27; &#x27; || last_name, email FROM customer; -- expression
+SELECT 5 * 3;
+SELECT now();</code></pre>
+<p>If you do not name an output column, PostgreSQL picks a name automatically: the column name for a simple column reference, a function/type name in other cases, or a generated name such as <code>?column?</code>.</p>
+<h2>Aliases</h2>
+<p>A <strong>column alias</strong> gives a column or expression a temporary name for the duration of the query; a <strong>table alias</strong> does the same for a table.</p>
+<pre><code>SELECT column_name AS alias_name FROM table_name;
+SELECT first_name || &#x27; &#x27; || last_name AS full_name FROM customer AS c;</code></pre>
+<h2>SELECT DISTINCT</h2>
+<p>Removes duplicate rows from the result set.</p>
+<pre><code>SELECT DISTINCT column1 FROM table_name;</code></pre>
+<h2>Basic PostgreSQL Operators</h2>
+<ol><li><strong>Arithmetic:</strong> <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> (modulo)</li><li><strong>Comparison:</strong> <code>=</code>, <code>&lt;&gt;</code> or <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code> (return TRUE, FALSE or NULL)</li><li><strong>Logical:</strong> <code>AND</code> (all conditions true), <code>OR</code> (at least one true), <code>NOT</code> (inverts)</li><li><strong>Pattern matching:</strong></li><li><code>LIKE</code>: pattern search; <code>%</code> = zero or more characters, <code>_</code> = exactly one character</li><li><code>ILIKE</code>: case-insensitive <code>LIKE</code></li><li><code>~</code>: matches a POSIX regular expression</li><li><strong>NULL-related:</strong> <code>IS NULL</code>, <code>IS NOT NULL</code></li><li><strong>Other:</strong> <code>||</code> (concatenation), <code>BETWEEN</code> (inclusive range), <code>IN</code> (value in a list)</li></ol>
+<h2>Clauses of SELECT</h2>
+<pre><code>SELECT [DISTINCT] select_list
+FROM table_name
+[WHERE condition]
+[GROUP BY grouping_elements]
+[HAVING condition]
+[UNION | INTERSECT | EXCEPT select_statement]
+[ORDER BY expression [ASC | DESC] [NULLS FIRST | NULLS LAST]]
+[LIMIT count]
+[OFFSET start];</code></pre>
+<h3>WHERE</h3>
+<p><code>condition</code> is any expression evaluating to boolean. Any row that does not satisfy it is eliminated from the output.</p>
+<h3>GROUP BY</h3>
+<p>Condenses all selected rows that share the same values for the grouped expressions into a single row. A grouping expression can be an input column name, the name or ordinal number of an output column, or an arbitrary expression of input columns.</p>
+<h3>HAVING</h3>
+<p>Eliminates <strong>group rows</strong> that do not satisfy a condition.</p>
+<table><thead><tr><th>WHERE</th><th>HAVING</th></tr></thead><tbody><tr><td>Filters individual rows <strong>before</strong> GROUP BY</td><td>Filters groups <strong>created by</strong> GROUP BY</td></tr></tbody></table>
+<p>Each column in a HAVING condition must be a grouping column, unless it appears inside an aggregate function.</p>
+<h3>Set Operations: UNION, INTERSECT, EXCEPT</h3>
+<p>Each operand is a <code>SELECT</code> without <code>ORDER BY</code> or <code>LIMIT</code>. Both queries must return the <strong>same number of columns</strong> with <strong>compatible data types</strong>.</p>
+<table><thead><tr><th>Operator</th><th>Result</th><th>With <code>ALL</code></th></tr></thead><tbody><tr><td><code>UNION</code></td><td>Rows in at least one result set (no duplicates)</td><td><code>UNION ALL</code> keeps duplicates</td></tr><tr><td><code>INTERSECT</code></td><td>Rows in both result sets (no duplicates)</td><td>A row with <em>m</em> copies on the left and <em>n</em> on the right appears <code>min(m, n)</code> times</td></tr><tr><td><code>EXCEPT</code></td><td>Rows in the left result but not the right (no duplicates)</td><td>Appears <code>max(m − n, 0)</code> times</td></tr></tbody></table>
+<p>Precedence: <code>INTERSECT</code> binds more tightly than <code>UNION</code>, so <code>A UNION B INTERSECT C</code> is read as <code>A UNION (B INTERSECT C)</code>. <code>EXCEPT</code> binds at the same level as <code>UNION</code>; multiple <code>EXCEPT</code> operators are evaluated left to right unless parentheses say otherwise.</p>
+<h3>ORDER BY</h3>
+<p>Sorts result rows by one or more expressions. If two rows are equal on the leftmost expression, the next one is compared, and so on. If equal on all, the order is implementation-dependent.</p>
+<ul><li>Each expression may be an output column name, an ordinal number, or an arbitrary expression.</li><li><code>ASC</code> (default) or <code>DESC</code>.</li><li><code>NULLS FIRST</code> / <code>NULLS LAST</code> control where NULLs sort (by default NULLs sort last in ascending order).</li></ul>
+<h3>LIMIT and OFFSET</h3>
+<ul><li><code>LIMIT count</code>: maximum number of rows returned (<code>LIMIT NULL</code> = <code>LIMIT ALL</code>, no limit).</li><li><code>OFFSET start</code>: number of rows to skip before returning rows (<code>OFFSET NULL</code> = <code>OFFSET 0</code>).</li><li>Used together for <strong>pagination</strong>; the <code>start</code> rows are skipped before counting the <code>count</code> rows.</li></ul>
+<pre><code>SELECT * FROM film ORDER BY title LIMIT 10 OFFSET 20;  -- rows 21-30</code></pre>
+<h2>Conclusion</h2>
+<p>SELECT is built from composable clauses that filter (<code>WHERE</code>, <code>HAVING</code>), group (<code>GROUP BY</code>), combine (<code>UNION</code>, <code>INTERSECT</code>, <code>EXCEPT</code>), sort (<code>ORDER BY</code>) and page (<code>LIMIT</code>/<code>OFFSET</code>) the result.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

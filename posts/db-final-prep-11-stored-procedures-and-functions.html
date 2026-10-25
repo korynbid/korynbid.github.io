@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 11. Stored Procedures and Functions | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 11. Stored Procedures and Functions | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 11. Stored Procedures and Functions</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>stored procedure</strong> is a set of SQL statements stored and executed inside the DBMS. It encapsulates a sequence of database operations, allowing code reuse, better performance and improved security. Besides SQL it can contain procedural logic (loops, conditionals, error handling).</p>
+<h2>Advantages</h2>
+<ol><li><strong>Fewer round trips</strong> between application and database server: the application issues one call instead of many statements.</li><li><strong>Better performance:</strong> user-defined functions are pre-compiled and stored on the server.</li><li><strong>Reusability:</strong> write once, use in many applications.</li></ol>
+<h2>Disadvantages</h2>
+<ul><li>Slower software development; requires specialized skills.</li><li>Harder to version-manage and debug.</li><li>May not be portable to other DBMSs (MySQL, SQL Server).</li></ul>
+<h2>Procedural Languages</h2>
+<p>PostgreSQL supports <strong>SQL</strong>, <strong>PL/pgSQL</strong> and <strong>C</strong> by default. Others (Perl, Python, JavaScript, Ruby, Java, Tcl) can be added through extensions.</p>
+<h2>Key Characteristics</h2>
+<ul><li><strong>Precompiled:</strong> parsed and compiled once, not at each execution.</li><li><strong>Encapsulation:</strong> groups related statements into one logical unit.</li><li><strong>Parameterization:</strong> accepts input parameters and may return output parameters or result sets.</li><li><strong>Security:</strong> users can be granted permission to run a procedure without access to the underlying tables.</li><li><strong>Error handling:</strong> built-in exception handling.</li></ul>
+<h2>PL/pgSQL</h2>
+<p><strong>PL/pgSQL</strong> (Procedural Language/PostgreSQL) is a procedural extension that adds control-flow constructs to SQL.</p>
+<p><strong>Features:</strong> control structures (<code>IF</code>, <code>CASE</code>, <code>LOOP</code>, <code>WHILE</code>, <code>FOR</code>), error handling with <code>EXCEPTION</code> blocks, dynamic SQL, variables and parameters, seamless integration with SQL.</p>
+<h3>Basic Syntax</h3>
+<pre><code>CREATE [OR REPLACE] PROCEDURE procedure_name(parameter_list)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    -- variable declarations
+BEGIN
+    -- statements
+END;
+$$;
+
+CALL procedure_name(arguments);</code></pre>
+<ul><li><code>LANGUAGE plpgsql</code> specifies the procedural language.</li><li><code>$$</code> delimits the body.</li><li>The <code>DECLARE</code> section describes all variables.</li></ul>
+<h3>Control Structures and Error Handling</h3>
+<pre><code>DO $$
+DECLARE
+    v_count INT;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM customer;
+
+    IF v_count &gt; 100 THEN
+        RAISE NOTICE &#x27;Large table: %&#x27;, v_count;
+    ELSE
+        RAISE NOTICE &#x27;Small table: %&#x27;, v_count;
+    END IF;
+
+    FOR i IN 1..3 LOOP
+        RAISE NOTICE &#x27;Iteration %&#x27;, i;
+    END LOOP;
+EXCEPTION
+    WHEN division_by_zero THEN
+        RAISE NOTICE &#x27;Cannot divide by zero&#x27;;
+END;
+$$;</code></pre>
+<h2>Parameters</h2>
+<table><thead><tr><th>Mode</th><th>Purpose</th></tr></thead><tbody><tr><td><code>IN</code></td><td>Pass a value <strong>into</strong> the procedure (default)</td></tr><tr><td><code>OUT</code></td><td>Return a value <strong>from</strong> the procedure</td></tr><tr><td><code>INOUT</code></td><td>Pass a value in <strong>and</strong> return a value out</td></tr></tbody></table>
+<pre><code>-- IN
+CREATE PROCEDURE add_customer(IN p_first VARCHAR, IN p_last VARCHAR)
+LANGUAGE plpgsql AS $$
+BEGIN
+    INSERT INTO customer (first_name, last_name) VALUES (p_first, p_last);
+END;
+$$;
+
+-- OUT
+CREATE PROCEDURE get_total(OUT total BIGINT)
+LANGUAGE plpgsql AS $$
+BEGIN
+    SELECT COUNT(*) INTO total FROM customer;
+END;
+$$;
+
+-- INOUT
+CREATE PROCEDURE double_it(INOUT x INT)
+LANGUAGE plpgsql AS $$
+BEGIN
+    x := x * 2;
+END;
+$$;
+
+CALL double_it(5);   -- returns 10</code></pre>
+<h2>Functions</h2>
+<p>Functions encapsulate logic, perform calculations and <strong>return results</strong> (a scalar, record or table). They accept parameters and can handle errors with PL/pgSQL or SQL.</p>
+<pre><code>CREATE OR REPLACE FUNCTION add_numbers(a INT, b INT)
+RETURNS INT
+LANGUAGE plpgsql AS $$
+BEGIN
+    RETURN a + b;
+END;
+$$;
+
+SELECT add_numbers(2, 3);   -- 5</code></pre>
+<h2>Stored Procedures vs. Functions</h2>
+<table><thead><tr><th>Feature</th><th>Stored Procedures</th><th>Functions</th></tr></thead><tbody><tr><td>Introduced</td><td>PostgreSQL 11</td><td>Early PostgreSQL versions</td></tr><tr><td>Return value</td><td>Not by default (use <code>OUT</code>/<code>INOUT</code>)</td><td>Must return a value (scalar, record or table)</td></tr><tr><td>Transaction control</td><td>Supports <code>COMMIT</code>, <code>ROLLBACK</code>, savepoints</td><td>Cannot manage transactions</td></tr><tr><td>Syntax</td><td><code>CREATE PROCEDURE</code></td><td><code>CREATE FUNCTION</code></td></tr><tr><td>Invocation</td><td><code>CALL</code></td><td>Used inside SQL queries or expressions</td></tr><tr><td>Purpose</td><td>Workflows, automation, complex logic</td><td>Reusable calculations, data processing</td></tr><tr><td>Dynamic SQL</td><td>Fully supported with <code>EXECUTE</code></td><td>Limited</td></tr><tr><td>Typical use</td><td>ETL processes, data migrations, batch jobs</td><td>Data retrieval, calculations</td></tr></tbody></table>
+<p><strong>Choose a procedure</strong> when you need transaction control or a multi-step workflow. <strong>Choose a function</strong> when you need a returned value or want to embed logic in a SQL expression.</p>
+<h2>Procedure with Multiple Statements and a Transaction</h2>
+<pre><code>CREATE OR REPLACE PROCEDURE transfer(from_id INT, to_id INT, amount NUMERIC)
+LANGUAGE plpgsql AS $$
+BEGIN
+    UPDATE accounts SET balance = balance - amount WHERE id = from_id;
+    UPDATE accounts SET balance = balance + amount WHERE id = to_id;
+    COMMIT;   -- procedures can control transactions
+END;
+$$;
+
+CALL transfer(1, 2, 100);</code></pre>
+<h2>Dynamic SQL</h2>
+<p>Builds and executes SQL statements at runtime.</p>
+<pre><code>EXECUTE format(&#x27;SELECT COUNT(*) FROM %I&#x27;, table_name) INTO row_count;</code></pre>
+<p>Use <code>format()</code> with <code>%I</code> (identifier) and <code>%L</code> (literal) to avoid SQL injection.</p>
+<h2>Error Handling</h2>
+<p>An <code>EXCEPTION</code> block catches runtime errors so they are handled gracefully (e.g., log the error, roll back, or return a message).</p>
+<pre><code>BEGIN
+    -- risky statements
+EXCEPTION
+    WHEN unique_violation THEN
+        RAISE NOTICE &#x27;Duplicate value&#x27;;
+    WHEN OTHERS THEN
+        RAISE NOTICE &#x27;Error: %&#x27;, SQLERRM;
+END;</code></pre>
+<h2>Real-World Use Cases</h2>
+<ol><li><strong>Data transformation:</strong> preprocess data for analytics or reporting (e.g., aggregate sales by region and period).</li><li><strong>Business-logic encapsulation:</strong> keep rules in the database for consistency (e.g., automatic salary adjustments based on performance ratings).</li></ol>
+<h2>Conclusion</h2>
+<p>Stored procedures and functions move logic next to the data, reducing network traffic and centralizing business rules. Procedures add transaction control; functions return values usable inside queries.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

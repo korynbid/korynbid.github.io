@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 5. Functions, Conditional Expressions and Operators | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 5. Functions, Conditional Expressions and Operators | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 5. Functions, Conditional Expressions and Operators</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>PostgreSQL ships with a large library of built-in functions and operators. This lecture covers three groups: <strong>mathematical</strong> functions, <strong>string</strong> functions and <strong>conditional expressions</strong>.</p>
+<h2>Part I: Mathematical Functions and Operators</h2>
+<table><thead><tr><th>Function</th><th>Purpose</th><th>Example</th></tr></thead><tbody><tr><td><code>ABS(x)</code></td><td>Absolute value</td><td><code>ABS(-5)</code> → 5</td></tr><tr><td><code>CEIL(x)</code> / <code>FLOOR(x)</code></td><td>Round up / down to an integer</td><td><code>CEIL(4.2)</code> → 5</td></tr><tr><td><code>ROUND(x, n)</code></td><td>Round to <em>n</em> decimal places</td><td><code>ROUND(3.14159, 2)</code> → 3.14</td></tr><tr><td><code>TRUNC(x, n)</code></td><td>Truncate to <em>n</em> decimal places</td><td><code>TRUNC(3.789, 1)</code> → 3.7</td></tr><tr><td><code>MOD(x, y)</code> / <code>x % y</code></td><td>Remainder</td><td><code>MOD(10, 3)</code> → 1</td></tr><tr><td><code>POWER(x, y)</code></td><td>x raised to y</td><td><code>POWER(2, 3)</code> → 8</td></tr><tr><td><code>SQRT(x)</code></td><td>Square root</td><td><code>SQRT(16)</code> → 4</td></tr><tr><td><code>EXP(x)</code>, <code>LN(x)</code>, <code>LOG(x)</code></td><td>Exponential and logarithms</td><td></td></tr><tr><td><code>SIGN(x)</code></td><td>−1, 0 or 1</td><td></td></tr></tbody></table>
+<ul><li><strong>Random functions:</strong> <code>RANDOM()</code> returns a value between 0 and 1.</li><li><strong>Trigonometric functions:</strong> <code>SIN</code>, <code>COS</code>, <code>TAN</code>, <code>ASIN</code>, <code>ACOS</code>, <code>ATAN</code>, <code>DEGREES</code>, <code>RADIANS</code>, <code>PI()</code>.</li></ul>
+<h2>Part II: String Functions and Operators</h2>
+<table><thead><tr><th>Function</th><th>Purpose</th></tr></thead><tbody><tr><td><code>a || b</code></td><td>Concatenate strings</td></tr><tr><td><code>FORMAT(format_string [, args...])</code></td><td>Format arguments based on a format string</td></tr><tr><td><code>LOWER(s)</code>, <code>UPPER(s)</code>, <code>INITCAP(s)</code></td><td>Change letter case</td></tr><tr><td><code>LEFT(s, n)</code></td><td>First <em>n</em> characters</td></tr><tr><td><code>RIGHT(s, n)</code></td><td>Last <em>n</em> characters</td></tr><tr><td><code>LTRIM(s)</code>, <code>RTRIM(s)</code>, <code>BTRIM(s)</code></td><td>Remove characters (spaces by default) from the start, the end, or both</td></tr><tr><td><code>POSITION(substring IN string)</code></td><td>Location of a substring</td></tr><tr><td><code>REPLACE(source, old_text, new_text)</code></td><td>Replace all occurrences of a string</td></tr><tr><td><code>SUBSTRING(string, start_position, length)</code></td><td>Part of a string</td></tr><tr><td><code>LENGTH(s)</code></td><td>Number of characters</td></tr></tbody></table>
+<pre><code>SELECT FORMAT(&#x27;Hello, %s!&#x27;, &#x27;PostgreSQL&#x27;);          -- Hello, PostgreSQL!
+SELECT UPPER(&#x27;database&#x27;), INITCAP(&#x27;hello world&#x27;);   -- DATABASE, Hello World
+SELECT LEFT(&#x27;PostgreSQL&#x27;, 4), RIGHT(&#x27;PostgreSQL&#x27;, 3); -- Post, SQL
+SELECT POSITION(&#x27;SQL&#x27; IN &#x27;PostgreSQL&#x27;);             -- 8
+SELECT REPLACE(&#x27;2024-01-15&#x27;, &#x27;-&#x27;, &#x27;/&#x27;);             -- 2024/01/15
+SELECT SUBSTRING(&#x27;PostgreSQL&#x27;, 1, 4);               -- Post
+SELECT BTRIM(&#x27;  padded  &#x27;);                         -- padded</code></pre>
+<h2>Part III: Conditional Expressions</h2>
+<p>Conditional expressions run different logic depending on conditions. The most used are <code>CASE</code>, <code>COALESCE</code>, <code>NULLIF</code>, <code>GREATEST</code> and <code>LEAST</code>.</p>
+<h3>CASE</h3>
+<p>A generic conditional expression, similar to if/else in programming languages.</p>
+<pre><code>SELECT title,
+       CASE
+           WHEN rental_rate &lt; 1 THEN &#x27;Cheap&#x27;
+           WHEN rental_rate &lt; 3 THEN &#x27;Standard&#x27;
+           ELSE &#x27;Premium&#x27;
+       END AS price_category
+FROM film;</code></pre>
+<h3>COALESCE</h3>
+<p>Returns the <strong>first non-NULL</strong> argument. NULL is returned only if all arguments are NULL.</p>
+<pre><code>SELECT COALESCE(phone, email, &#x27;no contact&#x27;) FROM customer;</code></pre>
+<h3>NULLIF</h3>
+<p>Returns NULL if <code>value1 = value2</code>; otherwise returns <code>value1</code>. This is the inverse of the COALESCE pattern and is useful for avoiding division by zero.</p>
+<pre><code>SELECT total / NULLIF(count, 0) FROM stats;</code></pre>
+<h3>GREATEST and LEAST</h3>
+<p>Select the largest or smallest value from a list of any number of expressions.</p>
+<pre><code>SELECT GREATEST(1, 5, 3), LEAST(1, 5, 3);   -- 5, 1</code></pre>
+<h2>Conclusion</h2>
+<p>Built-in math, string and conditional tools let you compute, reformat and branch inside a query without any application code.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

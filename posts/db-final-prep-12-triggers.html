@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 12. Triggers | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 12. Triggers | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 12. Triggers</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>PostgreSQL trigger</strong> is a function invoked <strong>automatically</strong> whenever an event associated with a table occurs. Events: <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> or <code>TRUNCATE</code>. A trigger is a special user-defined function bound to a table: you first define a <strong>trigger function</strong>, then bind it to a table with <code>CREATE TRIGGER</code>.</p>
+<h2>Trigger Types</h2>
+<ul><li><strong>Row-level triggers:</strong> fire once <strong>for each row</strong> affected (<code>FOR EACH ROW</code>).</li><li><strong>Statement-level triggers:</strong> fire <strong>once per statement</strong>, regardless of how many rows are affected (<code>FOR EACH STATEMENT</code>).</li></ul>
+<p>They differ in how many times the trigger is invoked and at what time (<code>BEFORE</code> or <code>AFTER</code> the event).</p>
+<h2>When to Use Triggers</h2>
+<p>Triggers are useful when many applications access the database and you want cross-cutting behaviour to run automatically inside the database whenever data changes. Example: keep a <strong>history/audit</strong> of data changes without every application having to implement logic for each <code>INSERT</code> or <code>UPDATE</code>.</p>
+<h2>PostgreSQL vs. SQL-Standard Triggers</h2>
+<ul><li>PostgreSQL fires triggers for the <code>TRUNCATE</code> event.</li><li>PostgreSQL allows <strong>statement-level triggers on views</strong>.</li><li>PostgreSQL requires the action to be a <strong>user-defined function</strong>, while the SQL standard allows any SQL command.</li></ul>
+<h2>Creating a Trigger</h2>
+<h3>Step 1: Create the trigger function</h3>
+<pre><code>CREATE FUNCTION trigger_function()
+RETURNS TRIGGER
+LANGUAGE PLPGSQL
+AS $$
+BEGIN
+    -- trigger logic
+    RETURN NEW;
+END;
+$$;</code></pre>
+<p>Inside a row-level trigger function, <code>NEW</code> is the new row (INSERT/UPDATE) and <code>OLD</code> is the previous row (UPDATE/DELETE).</p>
+<h3>Step 2: Bind it with CREATE TRIGGER</h3>
+<pre><code>CREATE TRIGGER trigger_name
+    {BEFORE | AFTER} {event}
+    ON table_name
+    [FOR [EACH] {ROW | STATEMENT}]
+    EXECUTE PROCEDURE trigger_function();   -- or EXECUTE FUNCTION</code></pre>
+<h2>Complete Example: Auditing Last-Name Changes</h2>
+<pre><code>DROP TABLE IF EXISTS employees;
+CREATE TABLE employees (
+    id         INT GENERATED ALWAYS AS IDENTITY,
+    first_name VARCHAR(40) NOT NULL,
+    last_name  VARCHAR(40) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE employee_audits (
+    id          INT GENERATED ALWAYS AS IDENTITY,
+    employee_id INT NOT NULL,
+    last_name   VARCHAR(40) NOT NULL,
+    changed_on  TIMESTAMP(6) NOT NULL
+);
+
+-- 1) Trigger function
+CREATE OR REPLACE FUNCTION log_last_name_changes()
+RETURNS TRIGGER
+LANGUAGE PLPGSQL
+AS $$
+BEGIN
+    IF NEW.last_name &lt;&gt; OLD.last_name THEN
+        INSERT INTO employee_audits (employee_id, last_name, changed_on)
+        VALUES (OLD.id, OLD.last_name, now());
+    END IF;
+    RETURN NEW;
+END;
+$$;
+
+-- 2) Trigger
+CREATE TRIGGER last_name_changes
+    BEFORE UPDATE
+    ON employees
+    FOR EACH ROW
+    EXECUTE PROCEDURE log_last_name_changes();
+
+-- Test
+INSERT INTO employees (first_name, last_name) VALUES (&#x27;John&#x27;, &#x27;Doe&#x27;), (&#x27;Lily&#x27;, &#x27;Bush&#x27;);
+UPDATE employees SET last_name = &#x27;Brown&#x27; WHERE id = 2;
+SELECT * FROM employee_audits;   -- shows Lily&#x27;s old last name &#x27;Bush&#x27;</code></pre>
+<h2>Managing Triggers</h2>
+<pre><code>-- Remove a trigger
+DROP TRIGGER [IF EXISTS] trigger_name
+ON table_name [CASCADE | RESTRICT];
+
+DROP TRIGGER last_name_changes ON employees;
+
+-- Rename a trigger
+ALTER TRIGGER trigger_name
+ON table_name
+RENAME TO new_trigger_name;
+
+ALTER TRIGGER before_update_salary ON employees RENAME TO salary_before_update;</code></pre>
+<h2>Conclusion</h2>
+<p>Triggers automate reactions to data changes (auditing, validation, derived data) directly inside the database, independent of which application changes the data. Use them deliberately, since hidden automatic behaviour can make debugging harder.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

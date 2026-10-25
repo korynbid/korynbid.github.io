@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 6. Constraints | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 6. Constraints | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 6. Constraints</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Constraints</strong> are rules applied to table columns. They enforce data integrity and accuracy, prevent invalid or inconsistent data, and keep database structures reliable. If a user tries to store data that violates a constraint, an error is raised.</p>
+<h2>Agenda</h2>
+<ul><li>Types of constraints</li><li>Defining and modifying constraints</li><li>Best practices</li></ul>
+<h2>Types of Constraints</h2>
+<p><code>CHECK</code>, <code>DEFAULT</code>, <code>NOT NULL</code>, <code>UNIQUE</code>, <code>PRIMARY KEY</code> (including composite), <code>FOREIGN KEY</code>.</p>
+<h2>CHECK</h2>
+<p>Ensures that data in a column meets a particular condition. It enforces <strong>domain integrity</strong> and can define value ranges, formats, or logical relationships between columns. A condition must be true for each row.</p>
+<pre><code>-- Numeric range
+CREATE TABLE employees (
+    id     serial PRIMARY KEY,
+    age    INT CHECK (age BETWEEN 18 AND 65),
+    salary NUMERIC CHECK (salary &gt; 0)
+);
+
+-- String pattern (e-mail format)
+ALTER TABLE users ADD CONSTRAINT email_format
+CHECK (email ~ &#x27;^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$&#x27;);</code></pre>
+<p>Regular expression parts: <code>^[A-Za-z0-9._%+-]+</code> allowed local-part characters; <code>@</code> separator; <code>[A-Za-z0-9.-]+</code> domain name; <code>[A-Za-z]{2,}$</code> top-level domain with at least two letters.</p>
+<pre><code>-- Multiple-column constraint
+CREATE TABLE bookings (
+    start_date DATE,
+    end_date   DATE,
+    CONSTRAINT valid_period CHECK (end_date &gt; start_date)
+);
+
+-- Function inside a constraint
+ALTER TABLE products ADD CONSTRAINT name_not_blank CHECK (LENGTH(TRIM(name)) &gt; 0);
+
+-- Add / remove a CHECK on an existing table
+ALTER TABLE employees ADD CONSTRAINT age_check CHECK (age &gt;= 18);
+ALTER TABLE employees DROP CONSTRAINT age_check;</code></pre>
+<p>A table can have <strong>multiple constraints</strong> at once (e.g., NOT NULL, CHECK and UNIQUE on the same column).</p>
+<h2>DEFAULT</h2>
+<p>Specifies a value used when none is supplied on <code>INSERT</code>.</p>
+<ul><li><strong>Automatic assignment:</strong> if no value is given, the default is inserted.</li><li><strong>Optional:</strong> without a default, the column is NULL (if nulls are allowed).</li><li><strong>Flexible:</strong> the default can be a constant, an expression or a function (e.g., <code>CURRENT_TIMESTAMP</code>).</li></ul>
+<pre><code>CREATE TABLE orders (
+    id         serial PRIMARY KEY,
+    status     VARCHAR(20) DEFAULT &#x27;new&#x27;,
+    created_at TIMESTAMP   DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+<h2>NULL and NOT NULL</h2>
+<ul><li>By default, columns <strong>allow NULL</strong> unless defined <code>NOT NULL</code>.</li><li><code>NULL</code> means the absence of a value; it is different from an empty string or zero.</li><li><code>NOT NULL</code> requires a value to always be present.</li></ul>
+<pre><code>ALTER TABLE employees ALTER COLUMN first_name SET NOT NULL;   -- add
+ALTER TABLE employees ALTER COLUMN first_name DROP NOT NULL;  -- remove</code></pre>
+<h2>UNIQUE</h2>
+<p>Ensures all values in a column (or group of columns) are distinct.</p>
+<pre><code>CREATE TABLE users (id serial PRIMARY KEY, email VARCHAR(255) UNIQUE);
+ALTER TABLE users ADD CONSTRAINT unique_email UNIQUE (email);  -- existing table</code></pre>
+<ul><li>UNIQUE allows NULLs, and each NULL is treated as distinct, so multiple NULLs are allowed.</li><li>Unlike PRIMARY KEY, a table can have <strong>several</strong> UNIQUE constraints.</li></ul>
+<h2>PRIMARY KEY and Composite Primary Key</h2>
+<p>A primary key is NOT NULL + UNIQUE. A <strong>composite primary key</strong> spans more than one column and uniquely identifies rows by the <em>combination</em> of values.</p>
+<pre><code>CREATE TABLE enrollment (
+    student_id INT,
+    course_id  INT,
+    PRIMARY KEY (student_id, course_id)
+);</code></pre>
+<h2>FOREIGN KEY</h2>
+<p>Establishes a relationship between two tables by referencing the primary key of another table.</p>
+<ul><li><strong>Referential integrity:</strong> prevents inserting child rows that do not exist in the parent table.</li><li><strong>Links tables:</strong> creates the parent–child relationship.</li><li><strong>Cascade options</strong> control what happens when the parent changes.</li></ul>
+<pre><code>CREATE TABLE orders (
+    order_id    serial PRIMARY KEY,
+    customer_id INT REFERENCES customers (customer_id) ON DELETE CASCADE
+);</code></pre>
+<table><thead><tr><th>Option</th><th>Behaviour</th></tr></thead><tbody><tr><td><code>ON DELETE CASCADE</code></td><td>Deleting a parent row deletes the related child rows</td></tr><tr><td><code>ON UPDATE CASCADE</code></td><td>Updating the referenced key updates the foreign key in child rows</td></tr><tr><td><code>ON DELETE SET NULL</code></td><td>Sets the child foreign key to NULL when the parent is deleted</td></tr><tr><td><code>ON DELETE RESTRICT</code></td><td>Prevents deleting a parent row that is still referenced</td></tr></tbody></table>
+<h2>Best Practices</h2>
+<ul><li>Name constraints explicitly (<code>CONSTRAINT name ...</code>) so they are easy to drop or alter.</li><li>Enforce rules in the database, not only in application code.</li><li>Use <code>NOT NULL</code> for required fields, <code>CHECK</code> for domain rules, and foreign keys for relationships.</li><li>Choose cascade behaviour deliberately, since <code>CASCADE</code> can delete large amounts of data.</li></ul>
+<h2>Conclusion</h2>
+<p>Constraints are the database&#x27;s built-in guards: they make invalid data impossible to store and keep relationships between tables consistent.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

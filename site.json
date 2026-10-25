@@ -241,5 +241,113 @@
     "author": "Archiveskk",
     "reference": "https://t.me/c/2310214877/1713/1733",
     "date": "2026-10-24"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 2. Normalization",
+    "category": "Databases",
+    "slug": "db-final-prep-2-normalization",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\2_normalization.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 1. Introduction to Databases",
+    "category": "Databases",
+    "slug": "db-final-prep-1-introduction-to-databases",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\introduction_to_databases.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 3. SQL, Data Definition Language (DDL), Data Manipulation Language (DML) and Data Types",
+    "category": "Databases",
+    "slug": "db-final-prep-3-sql-data-definition-language-ddl-data-manipulation-language-dml-and-data-types",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\3_sql-ddl-dml.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 4. Data Query Language (DQL): the SELECT Statement and Operators",
+    "category": "Databases",
+    "slug": "db-final-prep-4-data-query-language-dql-the-select-statement-and-operators",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\4_data_query_language.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 5. Functions, Conditional Expressions and Operators",
+    "category": "Databases",
+    "slug": "db-final-prep-5-functions-conditional-expressions-and-operators",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\5_functions_condexp.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 6. Constraints",
+    "category": "Databases",
+    "slug": "db-final-prep-6-constraints",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\6_constraints.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 7. Joins",
+    "category": "Databases",
+    "slug": "db-final-prep-7-joins",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\7_joins.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 8. Aggregate Functions, Window Functions and Indexes",
+    "category": "Databases",
+    "slug": "db-final-prep-8-aggregate-functions-window-functions-and-indexes",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\8_aggregate_functions.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 9. Views and Roles",
+    "category": "Databases",
+    "slug": "db-final-prep-9-views-and-roles",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\9_views_roles.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 10. Transactions",
+    "category": "Databases",
+    "slug": "db-final-prep-10-transactions",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\10_transactions.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 11. Stored Procedures and Functions",
+    "category": "Databases",
+    "slug": "db-final-prep-11-stored-procedures-and-functions",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\11_stored_procedures.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[DB-FINAL-PREP] 12. Triggers",
+    "category": "Databases",
+    "slug": "db-final-prep-12-triggers",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\12_triggers.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/372/640",
+    "date": "2026-10-25"
   }
 ]

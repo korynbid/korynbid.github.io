@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 10. Transactions | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 10. Transactions | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 10. Transactions</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>database transaction</strong> is a single unit of work made up of one or more SQL operations treated as one. You <code>BEGIN</code>, run queries, then end the transaction. PostgreSQL transactions follow the <strong>ACID</strong> principles to manage concurrent access and prevent data corruption.</p>
+<h2>When to Use Transactions</h2>
+<ul><li>Financial applications (banking, e-commerce)</li><li>Inventory management systems</li><li>Reservation systems (airlines, hotels)</li><li>Any application where many users share data</li></ul>
+<h2>ACID Properties</h2>
+<table><thead><tr><th>Property</th><th>Meaning</th></tr></thead><tbody><tr><td><strong>Atomicity</strong></td><td>All-or-nothing. If any operation fails, the entire transaction is rolled back and nothing is committed</td></tr><tr><td><strong>Consistency</strong></td><td>The transaction moves the database from one valid state to another, obeying all schema rules (unique keys, foreign keys, CHECK constraints)</td></tr><tr><td><strong>Isolation</strong></td><td>Concurrent transactions do not interfere; each runs as if it were alone. The degree of isolation is set by the isolation level and affects which read phenomena can occur</td></tr><tr><td><strong>Durability</strong></td><td>Once committed, changes are permanent and survive crashes or power loss (changes are persisted to non-volatile storage)</td></tr></tbody></table>
+<h2>Transaction Lifecycle</h2>
+<ol><li><strong>Begin:</strong> start the transaction.</li><li><strong>Execute:</strong> perform reads, writes or updates.</li><li><strong>Commit:</strong> confirm and save changes if all operations succeed.</li><li><strong>Rollback:</strong> revert changes if an error occurs, keeping data integrity.</li></ol>
+<h2>Transaction Control Statements</h2>
+<pre><code>BEGIN;                    -- also: BEGIN TRANSACTION;  BEGIN WORK;
+COMMIT;                   -- also: COMMIT TRANSACTION; COMMIT WORK;
+ROLLBACK;                 -- also: ROLLBACK TRANSACTION; ROLLBACK WORK;</code></pre>
+<p>If an error occurs at any point, call <code>ROLLBACK</code> instead of <code>COMMIT</code>.</p>
+<pre><code>BEGIN;
+UPDATE accounts SET balance = balance - 100 WHERE name = &#x27;Alice&#x27;;
+UPDATE accounts SET balance = balance + 100 WHERE name = &#x27;Bob&#x27;;
+COMMIT;</code></pre>
+<h2>Isolation Levels</h2>
+<table><thead><tr><th>Level</th><th>Behaviour</th></tr></thead><tbody><tr><td><strong>Read Uncommitted</strong></td><td>Allows reading uncommitted changes (in PostgreSQL it behaves like Read Committed)</td></tr><tr><td><strong>Read Committed</strong> (default)</td><td>Only reads committed data</td></tr><tr><td><strong>Repeatable Read</strong></td><td>Consistent data for the whole transaction, even if other transactions modify it</td></tr><tr><td><strong>Serializable</strong></td><td>Strictest: transactions behave as if executed one after another</td></tr></tbody></table>
+<pre><code>BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+-- or
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;</code></pre>
+<h2>Savepoints</h2>
+<p>A <strong>savepoint</strong> is a checkpoint inside a transaction that you can roll back to without undoing the entire transaction.</p>
+<pre><code>BEGIN;
+INSERT INTO booking VALUES (...);
+SAVEPOINT after_booking;
+UPDATE flights SET status = &#x27;full&#x27; WHERE flight_no = &#x27;UK-KS&#x27;;
+ROLLBACK TO SAVEPOINT after_booking;   -- undo only the update
+COMMIT;</code></pre>
+<p><strong>Benefits:</strong></p>
+<ul><li><strong>Flexibility:</strong> partial rollbacks instead of full ones.</li><li><strong>Error management:</strong> isolate and handle errors in sections, retry or skip steps.</li><li><strong>Modularity:</strong> break a large transaction into parts that are easier to understand, test and debug (financial processing, booking systems).</li></ul>
+<h2>Example: Booking a Flight</h2>
+<pre><code>BEGIN;
+
+SELECT status FROM flights WHERE flight_no = &#x27;UK-KS&#x27;;   -- &#x27;available&#x27;
+
+UPDATE flights SET status = &#x27;full&#x27; WHERE flight_no = &#x27;UK-KS&#x27;;
+INSERT INTO booking (passenger_id, flight_no) VALUES (1, &#x27;UK-KS&#x27;);   -- Zere&#x27;s ticket
+
+COMMIT;</code></pre>
+<p>Walkthrough: the transaction starts with <code>BEGIN</code>; the flight status is checked and is <code>available</code>; after Zere books her ticket the status is updated to <code>full</code>; a record for Zere is inserted into <code>booking</code>; <code>COMMIT</code> saves all changes. Cancelling a booking is done the same way: delete the booking row and set the flight status back, inside one transaction.</p>
+<h2>Advantages</h2>
+<ul><li><strong>ACID guarantees</strong> for reliable data.</li><li><strong>Error handling and rollback:</strong> failures return data to its initial state, preventing corrupt or partial entries.</li><li><strong>Concurrency control:</strong> isolation lets many users work at once without breaking consistency.</li></ul>
+<h2>Disadvantages</h2>
+<ul><li><strong>Complexity and overhead:</strong> managing transactions and isolation levels complicates design and costs computation.</li><li><strong>Reduced concurrency due to locking:</strong> stricter isolation may block access to data until the transaction ends.</li><li><strong>Resource consumption:</strong> long or complex transactions use significant resources.</li><li><strong>Harder debugging:</strong> errors can be difficult to diagnose because of dependencies between operations.</li></ul>
+<h2>Conclusion</h2>
+<p>Transactions guarantee that groups of operations succeed or fail together, which is essential wherever data correctness matters (money, inventory, bookings).</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

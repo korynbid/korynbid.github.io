@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 9. Views and Roles | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 9. Views and Roles | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 9. Views and Roles</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Part I: Views</h2>
+<h3>Description</h3>
+<p>A <strong>view</strong> is a named, stored query that presents data from one or more underlying tables. It can be accessed like a <strong>virtual table</strong>: a logical table defined by a <code>SELECT</code> statement, which stores no data of its own (except materialized views).</p>
+<h3>Syntax</h3>
+<pre><code>CREATE [OR REPLACE] [TEMP | TEMPORARY] VIEW view_name AS
+query
+[WITH [CASCADED | LOCAL] CHECK OPTION];</code></pre>
+<table><thead><tr><th>Parameter</th><th>Meaning</th></tr></thead><tbody><tr><td><code>OR REPLACE</code></td><td>If a view with the same name exists, it is replaced</td></tr><tr><td><code>TEMP</code> / <code>TEMPORARY</code></td><td>The view is dropped automatically at the end of the session</td></tr><tr><td><code>query</code></td><td>A <code>SELECT</code> or <code>VALUES</code> command providing the columns and rows</td></tr><tr><td><code>WITH CHECK OPTION</code></td><td>For automatically updatable views: <code>INSERT</code>/<code>UPDATE</code> through the view are checked so new rows satisfy the view&#x27;s defining condition</td></tr><tr><td><code>LOCAL</code></td><td>Check only the conditions of this view (not base views, unless they have their own CHECK OPTION)</td></tr><tr><td><code>CASCADED</code></td><td>Check the conditions of this view <strong>and all underlying views</strong> (default if neither is given)</td></tr></tbody></table>
+<h3>Advantages</h3>
+<ul><li><strong>Simplicity:</strong> hides complex queries behind a simple name.</li><li><strong>Security:</strong> restricts access to specific columns or rows.</li><li><strong>Consistency:</strong> the same data presentation across all applications.</li></ul>
+<h3>Types of Views</h3>
+<ul><li><strong>Simple views:</strong> based on a single table, with no functions, grouping or aggregation.</li><li><strong>Complex views:</strong> include joins, subqueries and aggregations.</li><li><strong>Materialized views:</strong> physically store the result set; faster for large datasets or expensive queries, but must be refreshed manually or on a schedule.</li></ul>
+<h3>Working with Views</h3>
+<pre><code>-- Create
+CREATE VIEW customer_master AS
+SELECT customer_id, first_name || &#x27; &#x27; || last_name AS name, email
+FROM customer;
+
+-- Query it like a table
+SELECT * FROM customer_master WHERE name LIKE &#x27;A%&#x27;;
+
+-- Change the defining query
+CREATE OR REPLACE VIEW customer_master AS
+SELECT customer_id, first_name, last_name, email FROM customer;
+
+-- Rename
+ALTER VIEW customer_master RENAME TO customer_info;
+
+-- Drop (one or several)
+DROP VIEW [IF EXISTS] view_name [CASCADE | RESTRICT];
+DROP VIEW IF EXISTS view_name1, view_name2;</code></pre>
+<h3>Materialized Views</h3>
+<p>A materialized view <strong>caches the result</strong> of a complex, expensive query and lets you refresh it periodically. Common in data warehouses and business-intelligence applications.</p>
+<pre><code>CREATE MATERIALIZED VIEW view_name AS
+query
+WITH [NO] DATA;
+
+REFRESH MATERIALIZED VIEW view_name;
+DROP MATERIALIZED VIEW view_name;</code></pre>
+<ul><li><code>WITH DATA</code> loads data at creation time.</li><li><code>WITH NO DATA</code> flags the view as <strong>unreadable</strong> until it is loaded with <code>REFRESH MATERIALIZED VIEW</code>.</li></ul>
+<hr>
+<h2>Part II: Roles</h2>
+<h3>Description</h3>
+<p>PostgreSQL manages access permissions through <strong>roles</strong>. A role can be a <strong>database user</strong> or a <strong>group of users</strong>, depending on how it is set up. Roles can own objects (tables, functions) and grant privileges on them to other roles.</p>
+<ul><li>Database roles are completely separate from operating-system users.</li><li>Roles are <strong>global across the database cluster</strong>, not per database.</li></ul>
+<pre><code>CREATE ROLE name;
+SELECT rolname FROM pg_roles;     -- list existing roles</code></pre>
+<h3>Role Attributes</h3>
+<table><thead><tr><th>Attribute</th><th>Meaning</th><th>Example</th></tr></thead><tbody><tr><td><code>LOGIN</code></td><td>Role can be used to connect (equivalent to a &quot;user&quot;)</td><td><code>CREATE ROLE name LOGIN;</code> or <code>CREATE USER name;</code></td></tr><tr><td><code>SUPERUSER</code></td><td>Bypasses all permission checks except the right to log in. Dangerous; do most work as a non-superuser. Only a superuser can create one</td><td><code>CREATE ROLE name SUPERUSER;</code></td></tr><tr><td><code>CREATEDB</code></td><td>May create databases</td><td><code>CREATE ROLE name CREATEDB;</code></td></tr><tr><td><code>CREATEROLE</code></td><td>May create, alter and drop other roles and manage membership (but not superuser roles)</td><td><code>CREATE ROLE name CREATEROLE;</code></td></tr><tr><td><code>REPLICATION</code></td><td>May initiate streaming replication (must also have LOGIN)</td><td><code>CREATE ROLE name REPLICATION LOGIN;</code></td></tr><tr><td><code>PASSWORD</code></td><td>Password used when the authentication method requires it (<code>password</code>, <code>md5</code>); separate from OS passwords</td><td><code>CREATE ROLE name PASSWORD &#x27;string&#x27;;</code></td></tr></tbody></table>
+<p>Attributes can be changed later:</p>
+<pre><code>ALTER ROLE name WITH CREATEDB;
+ALTER ROLE name WITH PASSWORD &#x27;new_password&#x27;;</code></pre>
+<h3>Role Membership (Groups)</h3>
+<p>Group users into a role so privileges can be granted or revoked for the whole group.</p>
+<pre><code>CREATE ROLE staff;
+GRANT  staff TO alice, bob;       -- add members
+REVOKE staff FROM bob;            -- remove a member</code></pre>
+<ul><li>Group roles can be members of other group roles.</li><li>The database does not allow circular membership loops.</li></ul>
+<h3>Dropping Roles and Ownership</h3>
+<pre><code>DROP ROLE name;
+ALTER TABLE bobs_table OWNER TO alice;     -- transfer one object
+
+-- Reassign everything owned by a role before dropping it
+REASSIGN OWNED BY doomed_role TO successor_role;
+DROP OWNED BY doomed_role;
+DROP ROLE doomed_role;</code></pre>
+<h3>Example: Airport Database</h3>
+<p>Add a new table to the airport database, create users and assign them roles:</p>
+<pre><code>CREATE ROLE manager LOGIN PASSWORD &#x27;secret&#x27;;
+CREATE ROLE clerk   LOGIN PASSWORD &#x27;secret2&#x27;;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON booking TO manager;
+GRANT SELECT ON booking TO clerk;</code></pre>
+<h2>Conclusion</h2>
+<p>Views simplify and protect data access; roles decide who may see and change which objects. Used together (for example, granting a role access to a view but not to the base table) they provide a flexible security layer.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

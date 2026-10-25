@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 2. Normalization | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 2. Normalization | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 2. Normalization</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Normalization</strong> is a database design technique that organizes tables to reduce redundancy and dependency of data. It divides larger tables into smaller ones and links them using relationships. Its purpose is to eliminate redundant (useless) data and ensure data is stored logically.</p>
+<h2>Benefits of Normalization</h2>
+<ul><li>Improved data integrity (no redundant data)</li><li>Smaller databases</li><li>Better performance</li><li>Fewer indexes</li><li>Less management</li><li>Prevents data modification anomalies (insert, update, delete)</li></ul>
+<h2>Hierarchy of Normal Forms</h2>
+<p>1NF is the weakest, 2NF is stronger than 1NF, 3NF is stronger than 2NF, and <strong>BCNF</strong> is the strongest. Every relation in BCNF is in 3NF; every relation in 3NF is in 2NF; every relation in 2NF is in 1NF.</p>
+<h2>Running Example</h2>
+<p>A learner table where one person holds several certifications:</p>
+<table><thead><tr><th>Name</th><th>Birth_date</th><th>Certifications</th><th>Cert 1</th><th>Cert 2</th><th>Cert 3</th></tr></thead><tbody><tr><td>John</td><td>1990/02/12</td><td>PBI, MCSA, MTA</td><td>PBI</td><td>MCSA</td><td>MTA</td></tr><tr><td>Kelly</td><td>1988/10/01</td><td>Excel</td><td>Excel</td><td>NULL</td><td>NULL</td></tr><tr><td>Bryan</td><td>1991/01/15</td><td>PBI, Excel</td><td>PBI</td><td>Excel</td><td>NULL</td></tr><tr><td>Rob</td><td>1986/08/07</td><td>PBI</td><td>PBI</td><td>NULL</td><td>NULL</td></tr></tbody></table>
+<h2>Steps</h2>
+<h3>Step 1: First Normal Form (1NF)</h3>
+<p>A relation is in 1NF if all values are <strong>single-valued and atomic</strong>. Remove repeating groups and repeating columns, and add a primary key.</p>
+<p>Result: one row per learner–certification pair (key = Learner_ID + Certification_ID).</p>
+<table><thead><tr><th>Learner_ID</th><th>Name</th><th>Birth_date</th><th>Certification_ID</th><th>Certification_name</th><th>Vendor_name</th><th>Date_acquired</th></tr></thead><tbody><tr><td>1</td><td>John</td><td>1990/02/12</td><td>1</td><td>PBI</td><td>Microsoft</td><td>2017/01/08</td></tr><tr><td>1</td><td>John</td><td>1990/02/12</td><td>2</td><td>MCSA</td><td>Microsoft</td><td>2020/04/16</td></tr><tr><td>1</td><td>John</td><td>1990/02/12</td><td>3</td><td>MTA</td><td>Microsoft</td><td>2021/05/12</td></tr><tr><td>2</td><td>Kelly</td><td>1988/10/01</td><td>4</td><td>Excel</td><td>Microsoft</td><td>2018/06/03</td></tr><tr><td>3</td><td>Bryan</td><td>1991/01/15</td><td>1</td><td>PBI</td><td>Microsoft</td><td>2019/12/11</td></tr><tr><td>3</td><td>Bryan</td><td>1991/01/15</td><td>4</td><td>Excel</td><td>Microsoft</td><td>2020/04/07</td></tr><tr><td>4</td><td>Rob</td><td>1986/08/07</td><td>1</td><td>PBI</td><td>Microsoft</td><td>2022/01/15</td></tr></tbody></table>
+<p>An outer join reproduces the original information without loss.</p>
+<h3>Step 2: Second Normal Form (2NF)</h3>
+<ul><li>The relation is in 1NF, <strong>and</strong></li><li>every non-key attribute is <strong>fully functionally dependent on the whole primary key</strong> (no partial dependencies).</li><li>Create separate tables for sets of values that apply to multiple records and relate them with a foreign key.</li><li>If the primary key is a single column, the table is already in 2NF.</li></ul>
+<p>Result: three tables.</p>
+<ul><li><strong>Learner</strong>(Learner_ID, Name, Birth_date)</li><li><strong>Certification</strong>(Certification_ID, Certification_name, Vendor_name)</li><li><strong>Learner_Certification</strong>(Learner_ID, Certification_ID, Date_acquired)</li></ul>
+<h3>Step 3: Third Normal Form (3NF)</h3>
+<ul><li>The relation satisfies 2NF, <strong>and</strong></li><li>it has <strong>no transitive dependencies</strong> (a non-key attribute depending on another non-key attribute).</li></ul>
+<p>Here <code>Vendor_name</code> depends on the vendor, not on the certification, so it is moved to its own table:</p>
+<ul><li><strong>Vendor</strong>(Vendor_ID, Vendor_name)</li><li><strong>Certification</strong>(Certification_ID, Certification_name, Vendor_ID)</li></ul>
+<p>Final 3NF schema: Learner, Certification, Vendor, Learner_Certification.</p>
+<h3>Step 4: Boyce-Codd Normal Form (BCNF)</h3>
+<p>The strongest of the four forms: every determinant (an attribute that determines others) must be a candidate key. Any relation in BCNF is also in 3NF.</p>
+<h2>Summary Table</h2>
+<table><thead><tr><th>Normal Form</th><th>Requirement</th></tr></thead><tbody><tr><td>1NF</td><td>Atomic values, no repeating groups, has a primary key</td></tr><tr><td>2NF</td><td>1NF + no partial dependency on part of a composite key</td></tr><tr><td>3NF</td><td>2NF + no transitive dependency among non-key attributes</td></tr><tr><td>BCNF</td><td>Every determinant is a candidate key</td></tr></tbody></table>
+<h2>Conclusion</h2>
+<p>Normalization removes redundancy and anomalies by decomposing tables without losing information; related tables are reconnected using primary and foreign keys.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

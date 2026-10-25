@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DB-FINAL-PREP] 8. Aggregate Functions, Window Functions and Indexes | korynbid</title>
+  <meta name="description" content="[DB-FINAL-PREP] 8. Aggregate Functions, Window Functions and Indexes | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">[DB-FINAL-PREP] 8. Aggregate Functions, Window Functions and Indexes</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; Databases &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/372/640" rel="noopener">https://t.me/kbtukbtu/372/640</a></p>
+      </header>
+      <div class="post-content">
+<h2>Part I: Aggregate Functions</h2>
+<h3>Description</h3>
+<p>Aggregate functions perform a calculation on a <strong>set of rows and return a single row</strong>. They are often used with <code>GROUP BY</code>, which splits the result into groups so the calculation is done per group. Aggregates can be used as expressions <strong>only in the <code>SELECT</code> and <code>HAVING</code> clauses</strong> (a <code>WHERE</code> condition can use them only inside a subquery).</p>
+<table><thead><tr><th>Function</th><th>Returns</th></tr></thead><tbody><tr><td><code>AVG()</code></td><td>Average value</td></tr><tr><td><code>COUNT()</code></td><td>Number of values/rows</td></tr><tr><td><code>MAX()</code></td><td>Maximum value</td></tr><tr><td><code>MIN()</code></td><td>Minimum value</td></tr><tr><td><code>SUM()</code></td><td>Sum of all or distinct values</td></tr></tbody></table>
+<h3>AVG</h3>
+<pre><code>SELECT AVG(amount) FROM payment;
+SELECT AVG(DISTINCT amount)::numeric(10,2) FROM payment;
+SELECT AVG(amount)::numeric(10,2), SUM(amount)::numeric(10,2) FROM payment;
+
+-- Per customer, with HAVING
+SELECT customer_id, first_name, last_name, AVG(amount)::NUMERIC(10,2)
+FROM payment
+INNER JOIN customer USING (customer_id)
+GROUP BY customer_id
+HAVING AVG(amount) &gt; 5
+ORDER BY customer_id;</code></pre>
+<p><strong>NULL handling:</strong> <code>AVG</code> ignores NULLs. For values 10, NULL, 30 the average is 20, not 13.33.</p>
+<h3>COUNT</h3>
+<pre><code>SELECT COUNT(*) FROM payment;                         -- all rows
+
+SELECT customer_id, COUNT(customer_id)
+FROM payment
+GROUP BY customer_id
+HAVING COUNT(customer_id) &gt; 40;</code></pre>
+<p><code>COUNT(*)</code> counts rows; <code>COUNT(column)</code> counts non-NULL values.</p>
+<h3>SUM</h3>
+<pre><code>SELECT SUM(amount) AS total FROM payment WHERE customer_id = 2000;
+
+SELECT customer_id, SUM(amount) AS total
+FROM payment GROUP BY customer_id ORDER BY total;
+
+SELECT SUM(return_date - rental_date) FROM rental;   -- SUM over an expression</code></pre>
+<h3>MAX and MIN</h3>
+<p><code>MAX</code> can be used in <code>SELECT</code>, <code>WHERE</code> (via subquery) and <code>HAVING</code>. <code>DISTINCT</code> has no effect on <code>MIN</code>/<code>MAX</code>.</p>
+<pre><code>SELECT MAX(amount) FROM payment;
+
+-- Rows with the highest amount
+SELECT * FROM payment
+WHERE amount = (SELECT MAX(amount) FROM payment);
+
+-- Minimum per category
+SELECT name AS category, MIN(replacement_cost) AS replacement_cost
+FROM category
+INNER JOIN film_category USING (category_id)
+INNER JOIN film USING (film_id)
+GROUP BY name
+ORDER BY name;</code></pre>
+<hr>
+<h2>Part II: Window Functions</h2>
+<h3>Description</h3>
+<p>A <strong>window function</strong> performs a calculation across a set of rows related to the current row, <strong>without collapsing them into one row</strong> (unlike <code>GROUP BY</code>).</p>
+<p>Sample tables used in the lecture:</p>
+<pre><code>CREATE TABLE product_groups (
+    group_id   serial PRIMARY KEY,
+    group_name VARCHAR(255) NOT NULL
+);
+CREATE TABLE products (
+    product_id   serial PRIMARY KEY,
+    product_name VARCHAR(255) NOT NULL,
+    price        DECIMAL(11, 2),
+    group_id     INT NOT NULL REFERENCES product_groups (group_id)
+);</code></pre>
+<p>Grouping gives one row per group:</p>
+<pre><code>SELECT group_name, AVG(price)
+FROM products INNER JOIN product_groups USING (group_id)
+GROUP BY group_name;</code></pre>
+<p>A window function keeps every product row <strong>and</strong> shows the group average beside it:</p>
+<pre><code>SELECT product_name, price, group_name,
+       AVG(price) OVER (PARTITION BY group_name) AS group_avg
+FROM products INNER JOIN product_groups USING (group_id);</code></pre>
+<h3>Syntax</h3>
+<pre><code>window_function(arg1, arg2, ...) OVER (
+    [PARTITION BY partition_expression]
+    [ORDER BY sort_expression [ASC | DESC] [NULLS {FIRST | LAST}]]
+)</code></pre>
+<h3>Ranking Functions</h3>
+<table><thead><tr><th>Function</th><th>Behaviour</th></tr></thead><tbody><tr><td><code>ROW_NUMBER()</code></td><td>Sequential number for each row within the partition</td></tr><tr><td><code>RANK()</code></td><td>Same rank for equal values; the following ranks are <strong>skipped</strong> (1, 1, 3)</td></tr><tr><td><code>DENSE_RANK()</code></td><td>Same rank for equal values; <strong>no gaps</strong> (1, 1, 2)</td></tr></tbody></table>
+<pre><code>SELECT product_name, group_name, price,
+       ROW_NUMBER() OVER (PARTITION BY group_name ORDER BY price) AS rn,
+       RANK()       OVER (PARTITION BY group_name ORDER BY price) AS rnk,
+       DENSE_RANK() OVER (PARTITION BY group_name ORDER BY price) AS drnk
+FROM products INNER JOIN product_groups USING (group_id);</code></pre>
+<h3>Value Functions</h3>
+<ul><li><code>FIRST_VALUE(expr)</code>: value from the first row of the partition.</li><li><code>LAST_VALUE(expr)</code>: value from the last row of the partition.</li></ul>
+<pre><code>SELECT product_name, group_name, price,
+       FIRST_VALUE(price) OVER (PARTITION BY group_name ORDER BY price) AS lowest_price_per_group,
+       LAST_VALUE(price)  OVER (PARTITION BY group_name ORDER BY price
+            RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS highest_price_per_group
+FROM products INNER JOIN product_groups USING (group_id);</code></pre>
+<blockquote><p><strong>Note:</strong> with <code>ORDER BY</code>, the default window frame ends at the current row, so <code>LAST_VALUE</code> needs the explicit frame shown above to return the true last value of the partition.</p></blockquote>
+<h3>LAG and LEAD</h3>
+<p><code>LAG</code> reads the <strong>previous</strong> row; <code>LEAD</code> reads the <strong>next</strong> row.</p>
+<pre><code>LAG  (expression [, offset] [, default]) OVER (...)
+LEAD (expression [, offset] [, default]) OVER (...)</code></pre>
+<ul><li><code>offset</code>: how many rows back/forward (default 1).</li><li><code>default</code>: value returned when the offset goes beyond the window (default NULL).</li></ul>
+<pre><code>SELECT product_name, group_name, price,
+       LAG(price, 1)  OVER (PARTITION BY group_name ORDER BY price) AS prev_price,
+       price - LAG(price, 1)  OVER (PARTITION BY group_name ORDER BY price) AS cur_prev_diff,
+       LEAD(price, 1) OVER (PARTITION BY group_name ORDER BY price) AS next_price,
+       price - LEAD(price, 1) OVER (PARTITION BY group_name ORDER BY price) AS cur_next_diff
+FROM products INNER JOIN product_groups USING (group_id);</code></pre>
+<hr>
+<h2>Part III: Indexes</h2>
+<h3>Description</h3>
+<p>An <strong>index</strong> is a common way to enhance performance. It lets the database find and retrieve specific rows much faster than scanning the whole table. Indexes also add overhead, so use them sensibly.</p>
+<p><strong>Analogy:</strong> the alphabetical index at the end of a non-fiction book. Readers scan the index and jump to the right pages instead of reading the whole book. The database designer must foresee which indexes will be useful.</p>
+<h3>Why They Help</h3>
+<p>Without an index, a query such as <code>SELECT content FROM test1 WHERE id = constant;</code> forces a <strong>sequential scan</strong> of every row. With an index on <code>id</code>, the system uses a more efficient lookup.</p>
+<pre><code>CREATE INDEX test1_id_index ON test1 (id);
+DROP INDEX test1_id_index;</code></pre>
+<ul><li>Name the index so you remember what it is for.</li><li>Indexes can be added and removed at any time.</li><li>Once created, the system maintains the index automatically and uses it when it thinks that is faster than a sequential scan. Run <code>ANALYZE</code> regularly so the query planner has up-to-date statistics.</li><li>Indexes also help <code>UPDATE</code>/<code>DELETE</code> with search conditions and <strong>join</strong> conditions.</li><li><strong>Cost:</strong> the index must be kept in sync after every data change, so indexes that are seldom or never used should be removed.</li></ul>
+<h3>Index Types</h3>
+<table><thead><tr><th>Type</th><th>Best for</th></tr></thead><tbody><tr><td><strong>B-tree</strong> (default)</td><td>Equality and range queries (<code>&lt;</code>, <code>&lt;=</code>, <code>=</code>, <code>&gt;=</code>, <code>&gt;</code>) on sortable data; can return rows in sorted order</td></tr><tr><td><strong>Hash</strong></td><td>Simple equality comparisons (<code>=</code>) only</td></tr><tr><td><strong>GiST</strong></td><td>Infrastructure for many strategies (geometric data, full-text search); operators depend on the operator class (<code>&lt;&lt;</code>, <code>&amp;&lt;</code>, <code>@&gt;</code>, <code>&lt;@</code>, <code>&amp;&amp;</code>, ...)</td></tr><tr><td><strong>SP-GiST</strong></td><td>Space-partitioned structures (non-balanced trees)</td></tr><tr><td><strong>GIN</strong></td><td>Composite values such as arrays, JSONB and full-text search</td></tr><tr><td><strong>BRIN</strong></td><td>Very large tables where values correlate with physical row order</td></tr></tbody></table>
+<pre><code>CREATE INDEX idx_hash ON table_name USING HASH (column_name);
+CREATE INDEX idx_gin  ON table_name USING GIN  (column_name);</code></pre>
+<h3>Multicolumn Indexes</h3>
+<p>An index can cover more than one column (up to 32 by default).</p>
+<pre><code>CREATE TABLE test2 (major int, minor int, name varchar);
+CREATE INDEX test2_mm_idx ON test2 (major, minor);</code></pre>
+<p>Useful for queries that filter on <code>major</code> and <code>minor</code> together.</p>
+<h3>Indexes and ORDER BY</h3>
+<ul><li>Only <strong>B-tree</strong> indexes can produce sorted output.</li><li>By default, entries are stored ascending with NULLs last.</li><li>Adjust with <code>ASC</code>, <code>DESC</code>, <code>NULLS FIRST</code>, <code>NULLS LAST</code>:</li></ul>
+<pre><code>CREATE INDEX test2_info_nulls_low ON test2 (info NULLS FIRST);
+CREATE INDEX test3_desc_index ON test3 (id DESC NULLS LAST);</code></pre>
+<h3>Unique Indexes</h3>
+<ul><li>Enforce uniqueness of a column or combination of columns. Currently only <strong>B-tree</strong> indexes can be unique.</li><li>NULLs are not considered equal; a multicolumn unique index rejects only rows where <strong>all</strong> indexed columns are equal.</li><li>PostgreSQL <strong>automatically creates a unique index</strong> for each <code>UNIQUE</code> constraint and <code>PRIMARY KEY</code>.</li></ul>
+<pre><code>CREATE UNIQUE INDEX name ON table (column [, ...]);</code></pre>
+<h3>Indexes on Expressions</h3>
+<p>An index column can be a function or scalar expression computed from columns, giving fast access based on computed results.</p>
+<pre><code>-- Case-insensitive search
+SELECT * FROM test1 WHERE lower(col1) = &#x27;value&#x27;;
+CREATE INDEX test1_lower_col1_idx ON test1 (lower(col1));</code></pre>
+<h3>Practical Examples</h3>
+<ul><li><strong>B-tree for flight search:</strong> index columns used in <code>WHERE</code> (e.g., departure airport, date) so queries avoid a full table scan.</li><li><strong>Show all indexes of a database:</strong> <code>SELECT indexname, indexdef FROM pg_indexes WHERE schemaname = &#x27;public&#x27;;</code></li><li><strong>Show indexes of one table:</strong> add <code>AND tablename = &#x27;table_name&#x27;</code> (or <code>\d table_name</code> in <code>psql</code>).</li><li><strong>Monitor index usage:</strong> query <code>pg_stat_user_indexes</code> (columns such as <code>idx_scan</code>) to find indexes that are never scanned.</li></ul>
+<h2>Conclusion</h2>
+<p>Aggregates summarize groups, window functions add per-row analytics without collapsing rows, and indexes speed up access at the cost of extra storage and write overhead.</p>
+      </div>
+      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid</p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
