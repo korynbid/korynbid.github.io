@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 11. Advanced ILP: Superscalar, VLIW, Loop Unrolling, Multithreading | korynbid</title>
+  <meta name="description" content="[COMPARCH] 11. Advanced ILP: Superscalar, VLIW, Loop Unrolling, Multithreading | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">11. Advanced ILP: Superscalar, VLIW, Loop Unrolling, Multithreading</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Superscalar</strong> processors issue <strong>several instructions per cycle</strong> using multiple execution units. The hardware finds independent instructions at run time (dynamic multiple issue, usually with out-of-order execution).</p>
+<p><strong>VLIW</strong> (Very Long Instruction Word) moves that job to the <strong>compiler</strong>: it packs independent operations into one long instruction (a <em>bundle</em>) with fixed slots (e.g. integer, memory, floating point). The hardware is simple, but code gets bloated with NOPs when slots cannot be filled, and the binary depends on the exact hardware. Intel&#x27;s Itanium (EPIC) is the well-known VLIW-style design and was commercially unsuccessful.</p>
+<table><thead><tr><th></th><th>Superscalar</th><th>VLIW</th></tr></thead><tbody><tr><td>Who finds parallelism</td><td>Hardware (run time)</td><td>Compiler (compile time)</td></tr><tr><td>Hardware complexity</td><td>High</td><td>Lower</td></tr><tr><td>Code compatibility</td><td>Same binary across generations</td><td>Tied to hardware layout</td></tr><tr><td>Unpredictable events (cache misses)</td><td>Handled dynamically</td><td>Stalls the whole bundle</td></tr><tr><td>Code size</td><td>Normal</td><td>Larger (NOPs)</td></tr></tbody></table>
+<p><strong>Software techniques that expose ILP:</strong></p>
+<ul><li><strong>Loop unrolling:</strong> replicate the loop body several times to cut branch/counter overhead and give the scheduler more independent instructions (needs extra registers; works when iterations are independent).</li><li><strong>Instruction scheduling:</strong> reorder instructions to hide latencies.</li><li><strong>Software pipelining</strong> and <strong>trace scheduling</strong> (compiler techniques for VLIW).</li></ul>
+<p><strong>Multithreading</strong> fills idle issue slots with work from another thread:</p>
+<ul><li><strong>Fine-grained:</strong> switch threads every cycle.</li><li><strong>Coarse-grained:</strong> switch only on long stalls.</li><li><strong>SMT</strong> (simultaneous multithreading, &quot;hyper-threading&quot; on Intel): issue from several threads in the same cycle on one core, sharing the execution units.</li></ul>
+<p><strong>Limits of ILP:</strong> true dependences, branch mispredictions, cache misses and the power cost of wide issue windows give <strong>diminishing returns</strong>, which is why performance growth moved to multicore (TLP), SIMD (DLP) and specialization.</p>
+<p><strong>Maximizing processor performance:</strong> balance clock speed (power/heat), ILP, the memory hierarchy and energy efficiency.</p>
+<h2>Key Formulas</h2>
+<pre><code>IPC = 1 / CPI                        Peak IPC = issue width
+Efficiency = achieved IPC / peak IPC
+
+Loop unrolling by k:  loop overhead per element drops from (overhead) to (overhead / k)
+
+CPU time = IC × CPI / f              (ILP lowers CPI; wider issue can push CPI below 1)</code></pre>
+<h2>Steps</h2>
+<p><strong>Unroll and schedule a loop:</strong> (1) check iterations are independent, (2) replicate the body k times, (3) rename registers for each copy, (4) combine counter/branch updates into one, (5) reorder so loads come early and stores late to hide latency.</p>
+<p><strong>Pack a VLIW bundle:</strong> (1) build the dependence graph, (2) place independent operations in slots of the same bundle, (3) fill unused slots with NOPs.</p>
+<h2>Worked Example</h2>
+<p><strong>A. IPC.</strong> 4-issue core, achieved IPC = 1.6: CPI = 1/1.6 = <strong>0.625</strong>, efficiency = 1.6 / 4 = <strong>40%</strong> of peak.</p>
+<p><strong>B. Unrolling a loop</strong> <code>for (i...) x[i] = x[i] + s;</code> on a single-issue in-order core. Assumed latencies: load→FP op needs 1 stall, FP op→store needs 2 stalls, branch has no stall.</p>
+<pre><code>Loop: fld    f0, 0(x1)         # load x[i]
+      fadd.d f4, f0, f2        # + s
+      fsd    f4, 0(x1)         # store
+      addi   x1, x1, -8
+      bne    x1, x2, Loop</code></pre>
+<table><thead><tr><th>Version</th><th>Cycles per iteration</th><th>Cycles per element</th></tr></thead><tbody><tr><td>Original (with 3 stalls: 1 after load, 2 after fadd)</td><td>8</td><td><strong>8</strong></td></tr><tr><td>Rescheduled (addi moved into a stall slot, store offset adjusted)</td><td>7</td><td><strong>7</strong></td></tr><tr><td>Unrolled ×4 and scheduled</td><td>14</td><td><strong>3.5</strong></td></tr></tbody></table>
+<p>Unrolled ×4 and scheduled, no stalls:</p>
+<pre><code>Loop: fld    f0,  0(x1)
+      fld    f6, -8(x1)
+      fld    f8, -16(x1)
+      fld    f10,-24(x1)
+      fadd.d f4,  f0,  f2
+      fadd.d f12, f6,  f2
+      fadd.d f14, f8,  f2
+      fadd.d f16, f10, f2
+      fsd    f4,  0(x1)
+      fsd    f12,-8(x1)
+      fsd    f14,-16(x1)
+      fsd    f16,-24(x1)
+      addi   x1, x1, -32
+      bne    x1, x2, Loop</code></pre>
+<p>14 instructions, 0 stalls → 3.5 cycles per element, a 2.3× improvement over the original 8. It uses more registers and makes the code longer.</p>
+<p><strong>C. Issue width and scheduling.</strong> Five instructions: i1: a = load (latency 2); i2: b = load (2); i3: c = a + b (1); i4: d = e × f (3); i5: g = d + c (1). Results can be used <code>latency</code> cycles after issue.</p>
+<table><thead><tr><th>Machine</th><th>Cycles to finish</th></tr></thead><tbody><tr><td>1-wide, in order</td><td><strong>8</strong></td></tr><tr><td>2-wide, in order</td><td><strong>6</strong></td></tr><tr><td>2-wide, out of order</td><td><strong>5</strong> (i4 issues early while i3 waits for loads)</td></tr></tbody></table>
+<p><strong>D. VLIW bundle.</strong> Slots [integer | memory | FP]. <code>fld f0,0(x1)</code> (mem) and <code>addi x3,x3,4</code> (int) and an independent <code>fadd.d</code> (FP) fit in one bundle; if no FP op is ready the slot becomes a NOP, wasting space.</p>
+<p><strong>E. Loop-carried dependence.</strong> <code>a[i] = a[i-1] + 1</code> cannot be unrolled for parallelism: each iteration needs the previous result (a true RAW across iterations).</p>
+<p><strong>F. SMT.</strong> One thread on a 4-wide core might reach IPC ≈ 1.2 because of stalls; two SMT threads fill idle slots and raise total throughput, but typically by well under 2× because they share caches and execution units.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def schedule(instrs, width, ooo):
+    &quot;&quot;&quot;instrs: (name, dest, [srcs], latency); returns issue cycles and total cycles&quot;&quot;&quot;
+    ready, done, pending, cycle = {}, [None]*len(instrs), list(range(len(instrs))), 0
+    while pending:
+        cycle += 1; n = 0
+        for idx in list(pending):
+            name, dest, srcs, lat = instrs[idx]
+            if n &lt; width and all(ready.get(s, 0) &lt; cycle for s in srcs):
+                ready[dest] = cycle + lat - 1
+                done[idx] = cycle; pending.remove(idx); n += 1
+            elif not ooo:
+                break                      # in-order: a stalled instruction blocks the rest
+    return done, max(done[i] + instrs[i][3] - 1 for i in range(len(instrs)))
+
+prog = [(&quot;i1&quot;,&quot;a&quot;,[],2), (&quot;i2&quot;,&quot;b&quot;,[],2), (&quot;i3&quot;,&quot;c&quot;,[&quot;a&quot;,&quot;b&quot;],1),
+        (&quot;i4&quot;,&quot;d&quot;,[&quot;e&quot;,&quot;f&quot;],3), (&quot;i5&quot;,&quot;g&quot;,[&quot;d&quot;,&quot;c&quot;],1)]
+print(schedule(prog, 1, False)[1],   # 8
+      schedule(prog, 2, False)[1],   # 6
+      schedule(prog, 2, True)[1])    # 5</code></pre>
+<p>(The unrolled RISC-V loop above is the assembly example for this topic.)</p>
+<h2>Notes</h2>
+<ul><li><strong>Itanium:</strong> the compiler combines instructions, and Itanium called its variant <strong>EPIC</strong> (explicitly parallel instruction computing).</li><li>Loop unrolling reduces branching overhead and increases ILP; the cost is code size and register pressure.</li><li>Hyper-threading is Intel&#x27;s name for SMT; it shares one core&#x27;s execution resources between two hardware threads.</li><li>ILP hardware is transparent to programmers; SIMD and threads require explicit software support.</li><li>Quick facts: superscalar executes several instructions per cycle; hyper-threading lets one core run several threads; clock speed raises performance but also power and heat; VLIW has the compiler pack instructions.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 3 (3.2 loop unrolling, 3.7 multiple issue/VLIW, 3.10 limits of ILP, 3.11 multithreading); [PH-RV] Ch. 4 (4.10-4.11);</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

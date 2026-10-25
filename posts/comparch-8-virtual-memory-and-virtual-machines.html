@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 8. Virtual Memory and Virtual Machines | korynbid</title>
+  <meta name="description" content="[COMPARCH] 8. Virtual Memory and Virtual Machines | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">8. Virtual Memory and Virtual Machines</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Virtual memory</strong> gives each process the illusion of its own large, contiguous address space, backed by physical RAM and disk. Benefits: <strong>isolation and protection</strong> between processes, simpler programming, efficient sharing, and the ability to run programs larger than RAM.</p>
+<p><strong>Paging:</strong> memory is divided into fixed-size <strong>pages</strong> (commonly 4 KB) mapped to physical <strong>frames</strong>. Only the pages in use need to be resident (<strong>demand paging</strong>). A <strong>page fault</strong> occurs when a needed page is not in memory; the OS loads it from storage.</p>
+<p><strong>Page table:</strong> per-process structure mapping <strong>virtual page number (VPN)</strong> to <strong>physical frame number</strong>, plus bits for valid, read/write/execute, user/supervisor, dirty, accessed. Large address spaces use <strong>multi-level page tables</strong> so unused regions need no entries.</p>
+<p><strong>TLB</strong> (Translation Lookaside Buffer): a small cache of recent translations. Without it every memory access would need extra memory accesses for the page walk.</p>
+<p><strong>Segmentation:</strong> divides memory into variable-sized logical segments (code, data, stack). It maps well to program structure but suffers from external fragmentation; modern systems rely mainly on paging (early x86 used segmentation heavily).</p>
+<p><strong>Protection:</strong> hardware checks permissions on every access; violations raise exceptions (e.g. a <em>segmentation fault</em>). User/kernel modes protect the OS.</p>
+<p><strong>Virtual machines (VMs):</strong> a <strong>hypervisor</strong> (virtual machine monitor) lets several operating systems share one machine securely.</p>
+<table><thead><tr><th></th><th>Type 1 (bare-metal)</th><th>Type 2 (hosted)</th></tr></thead><tbody><tr><td>Runs on</td><td>Directly on hardware</td><td>On top of a host OS</td></tr><tr><td>Examples</td><td>Xen, VMware ESXi (KVM is a kernel-integrated hypervisor often grouped here)</td><td>VirtualBox, VMware Workstation</td></tr><tr><td>Typical use</td><td>Data centers, cloud</td><td>Desktops, testing</td></tr></tbody></table>
+<p><strong>Nested (two-dimensional) page tables</strong> (Intel EPT, AMD NPT): hardware translates guest-virtual → guest-physical → host-physical, so the hypervisor does not have to trap on every guest page-table update.</p>
+<h2>Key Formulas</h2>
+<pre><code>Virtual address = | Virtual page number (VPN) | Page offset |
+offset bits = log2(page size);   VPN bits = address bits − offset bits
+
+Single-level page table size = 2^(VPN bits) × PTE size
+
+EAT (with TLB, 1 memory access per walk level n):
+  EAT = h · (t_TLB + t_mem) + (1 − h) · (t_TLB + n · t_mem + t_mem)
+  (n = page-walk levels; single-level: n = 1)
+
+Demand paging:  EAT = (1 − p) · t_mem + p · t_fault      (p = page-fault rate)
+
+Nested paging worst case (g guest levels, h host levels): (g + 1)(h + 1) − 1 memory references</code></pre>
+<h2>Steps</h2>
+<p><strong>Address translation:</strong> (1) split VA into VPN and offset, (2) look up VPN in the TLB, (3) on a miss walk the page table, (4) if the valid bit is 0 → page fault, OS loads the page and updates the table, (5) check permissions, (6) physical address = frame number concatenated with offset.</p>
+<p><strong>Page fault handling:</strong> (1) trap to OS, (2) find a free frame or evict a victim (write back if dirty), (3) read the page from disk, (4) update the page table and TLB, (5) restart the instruction.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Translation.</strong> 4 KB pages (offset 12 bits). VA = <code>0x12345</code> → VPN = <code>0x12</code>, offset = <code>0x345</code>. If the page table maps VPN <code>0x12</code> to frame <code>0x80</code>, PA = <code>0x80345</code>.</p>
+<p><strong>B. Page table size.</strong> 32-bit VA, 4 KB pages: VPN = 20 bits → 2²⁰ entries × 4 B = <strong>4 MB per process</strong>, which is why multi-level tables exist. Two-level split: 10 + 10 + 12. x86-64 uses four levels: 9 + 9 + 9 + 9 + 12 = <strong>48-bit</strong> virtual addresses.</p>
+<p><strong>C. EAT with TLB.</strong> t_TLB = 1 ns, t_mem = 100 ns, single-level table, hit ratio 98%. Hit: 1 + 100 = 101 ns. Miss: 1 + 100 + 100 = 201 ns. EAT = 0.98 × 101 + 0.02 × 201 = 98.98 + 4.02 = <strong>103 ns</strong> (only 3% overhead because of the TLB).</p>
+<p><strong>D. Page faults are expensive.</strong> t_mem = 100 ns, fault service 8 ms = 8,000,000 ns. EAT = (1 − p) × 100 + p × 8,000,000. To keep slowdown under 10% (EAT ≤ 110 ns): 100 + 7,999,900 p ≤ 110 → <strong>p ≤ about 1.25 × 10⁻⁶</strong> (fewer than 1 fault per 800,000 accesses).</p>
+<p><strong>E. Nested paging.</strong> Guest and host both 4-level: worst case (4 + 1)(4 + 1) − 1 = <strong>24 memory references</strong> for one translation. Hence large TLBs and walk caches matter even more for virtualized workloads.</p>
+<p><strong>F. Protection.</strong> A process writes to a read-only page (e.g. code): the MMU raises a protection fault, the OS delivers a segmentation fault to the process.</p>
+<h2>Python / Assembly</h2>
+<pre><code>PAGE_BITS = 12
+page_table = {0x12: 0x80, 0x13: 0x81}          # VPN -&gt; frame
+tlb = {}                                        # VPN -&gt; frame
+
+def translate(va):
+    vpn, off = va &gt;&gt; PAGE_BITS, va &amp; ((1 &lt;&lt; PAGE_BITS) - 1)
+    if vpn in tlb:
+        frame = tlb[vpn]
+    elif vpn in page_table:
+        frame = page_table[vpn]; tlb[vpn] = frame     # TLB fill
+    else:
+        raise RuntimeError(&quot;page fault at VPN 0x%x&quot; % vpn)
+    return (frame &lt;&lt; PAGE_BITS) | off
+
+print(hex(translate(0x12345)))     # 0x80345
+
+def eat_tlb(h, t_tlb, t_mem, levels=1):
+    return h*(t_tlb + t_mem) + (1-h)*(t_tlb + levels*t_mem + t_mem)
+print(eat_tlb(0.98, 1, 100))       # 103.0</code></pre>
+<p>Enabling paging in RISC-V supervisor mode (Sv39) and flushing stale translations:</p>
+<pre><code>    la    t0, root_page_table     # physical address of top-level table
+    srli  t0, t0, 12              # PPN field
+    li    t1, 8 &lt;&lt; 60             # MODE = 8 (Sv39) in satp[63:60]
+    or    t0, t0, t1
+    csrw  satp, t0                # turn translation on
+    sfence.vma                    # flush TLB / ordering fence for address translation</code></pre>
+<h2>Notes</h2>
+<ul><li>Page size trade-off: larger pages shrink page tables and raise TLB reach but waste memory (internal fragmentation) and cost more per fault.</li><li>TLB misses are far cheaper than page faults; the TLB miss rate must be tiny to keep EAT near memory speed.</li><li>Virtual memory is the foundation of multitasking OSes and process isolation; VMs extend isolation to whole operating systems and underpin the cloud.</li><li>Overhead: VMs run slightly slower than native hardware; hardware assists (nested paging, virtualization extensions) shrink the gap.</li><li>Quick facts: virtual memory extends physical memory using disk; the page table maps virtual to physical addresses; a page fault means the page must be fetched from storage; demand paging loads pages only when needed.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 2 (2.4 virtual memory and virtual machines), Appendix B (B.4); [PH-RV] Ch. 5 (5.7); [RV-Spec] Vol. II (supervisor-level memory management); </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

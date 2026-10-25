@@ -30,8 +30,8 @@
   <div class="wrapper">
     <article class="post">
       <header class="post-header">
-        <h1 class="post-title">[ADS-FINAL-PREP] 13. Quick Sort</h1>
-        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+        <h1 class="post-title">13. Quick Sort</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; ADS-FINAL-PREP &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
       </header>
       <div class="post-content">
 <h2>Description</h2>
@@ -52,30 +52,6 @@
 <ol><li>Select a pivot element.</li></ol>
 <ol><li>Partition the array into two parts based on comparisons with the pivot element.</li></ol>
 <ol><li>Recursively sort both parts of the array.</li></ol>
-<pre><code>class QuickSort:
-    def __init__(self):
-        self.array = []
-
-    def partition(self, low, high):
-        pivot = self.array[high]
-        i = low - 1
-        for j in range(low, high):
-            if self.array[j] &lt; pivot:
-                i += 1
-                self.array[i], self.array[j] = self.array[j], self.array[i]
-        self.array[i + 1], self.array[high] = self.array[high], self.array[i + 1]
-        return i + 1
-
-    def quicksort(self, low, high):
-        if low &lt; high:
-            pi = self.partition(low, high)
-            self.quicksort(low, pi - 1)
-            self.quicksort(pi + 1, high)
-
-    def sort(self, arr):
-        self.array = arr
-        self.quicksort(0, len(arr) - 1)
-        return self.array</code></pre>
 <h2>Code Structure &amp; Logic</h2>
 <ol><li><strong><code>partition</code> method:</strong></li><li>Selects a pivot element (typically the last element of the active subarray).</li><li>Iterates through array elements and rearranges them depending on whether each element is smaller than the pivot.</li><li>Returns the final index position where the pivot belongs.</li></ol>
 <ol><li><strong><code>quicksort</code> method:</strong></li><li>Recursively sorts the left and right partitions relative to the pivot index returned by <code>partition</code>.</li></ol>
@@ -94,7 +70,8 @@
 <h2>Conclusion</h2>
 <p>Quick Sort is one of the fastest and most widely adopted sorting algorithms for handling large datasets. It performs efficiently in most practical scenarios; however, proper pivot selection strategies and optimizations should be applied to prevent worst-case performance scenarios.</p>
       </div>
-      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
       <section class="comments">
@@ -120,7 +97,8 @@
 
 <footer class="site-footer">
   <div class="wrapper">
-    <p class="text">&copy; 2026 korynbid</p>
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

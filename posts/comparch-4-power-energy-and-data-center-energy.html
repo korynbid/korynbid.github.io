@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 4. Power, Energy and Data-Center Energy | korynbid</title>
+  <meta name="description" content="[COMPARCH] 4. Power, Energy and Data-Center Energy | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">4. Power, Energy and Data-Center Energy</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Power</strong> is the <em>rate</em> of energy use (watts = joules per second). <strong>Energy</strong> is the <em>total</em> used over time (joules, or watt-hours). A processor rated at 65 W draws 65 J every second; running it for an hour uses 65 Wh.</p>
+<p>Why architects care: battery life in mobile devices, heat removal (thermal design power, TDP), electricity cost and carbon footprint in data centers, and the fact that power now limits how fast chips can be clocked.</p>
+<p><strong>Dynamic power</strong> comes from transistors switching (charging and discharging capacitance). <strong>Static power</strong> comes from leakage current even when idle, and it grows as transistors shrink.</p>
+<p>Techniques to save energy:</p>
+<table><thead><tr><th>Technique</th><th>Idea</th></tr></thead><tbody><tr><td><strong>DVFS</strong> (dynamic voltage and frequency scaling)</td><td>Lower V and f when full speed is not needed</td></tr><tr><td>Clock gating</td><td>Stop the clock to idle blocks (cuts switching)</td></tr><tr><td>Power gating</td><td>Cut the supply to idle blocks (cuts leakage)</td></tr><tr><td>Race to halt</td><td>Finish fast, then sleep deeply</td></tr><tr><td>Multicore at lower f</td><td>Many slower cores beat one fast core per watt</td></tr><tr><td>Domain-specific hardware</td><td>Do the same work with far less energy (Topic 15)</td></tr><tr><td>Low-power DRAM, ARM-class servers</td><td>Lower the energy of memory and cores</td></tr></tbody></table>
+<p><strong>Data centers</strong> and warehouse-scale computers spend energy on servers (processors, memory, storage, network) and on <strong>cooling and power delivery</strong>. <strong>PUE</strong> (Power Usage Effectiveness) measures overhead.</p>
+<h2>Key Formulas</h2>
+<pre><code>Energy per transition       E  = ½ · C · V²
+Dynamic power               P_dyn = α · C · V² · f          (α = activity factor, switching fraction)
+                            (or P = C · V² · f with α folded in)
+Static power                P_static = I_leak · V
+Energy over time            E = P · t                      (1 W · 1 h = 1 Wh)
+Energy for a fixed task     E_task = P_avg · t_task
+
+PUE = Total facility power / IT equipment power            (ideal = 1.0)</code></pre>
+<p>Scaling rules of thumb: P_dyn ∝ V² · f. Since f is usually reduced together with V, power falls roughly with the <strong>cube</strong> of the scaling factor, while energy per task falls with <strong>V²</strong> (frequency cancels because the task runs longer).</p>
+<h2>Steps</h2>
+<p><strong>Dynamic power:</strong> (1) estimate α, C, V, f, (2) multiply α·C·V²·f.</p>
+<p><strong>DVFS evaluation:</strong> (1) compute the power ratio (V₂/V₁)² · (f₂/f₁), (2) compute the time ratio f₁/f₂ for a compute-bound task, (3) energy ratio = power ratio × time ratio.</p>
+<p><strong>PUE:</strong> (1) measure total facility power, (2) measure IT power, (3) divide.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Power vs energy.</strong> A 65 W CPU runs for 2 h: E = 65 × 2 = <strong>130 Wh</strong> = 0.13 kWh = 65 × 7200 = <strong>468,000 J</strong>.</p>
+<p><strong>B. Dynamic power.</strong> α = 0.2, C = 1 nF, V = 1.0 V, f = 3 GHz: P = 0.2 × 10⁻⁹ × 1² × 3 × 10⁹ = <strong>0.6 W</strong>.</p>
+<p><strong>C. DVFS.</strong> Cut both voltage and frequency by 20% (to 0.8×).</p>
+<ul><li>Power ratio = 0.8² × 0.8 = <strong>0.512</strong> (48.8% less power).</li><li>Task takes 1/0.8 = <strong>1.25×</strong> as long.</li><li>Energy ratio = 0.512 × 1.25 = <strong>0.64</strong> (36% less energy), which equals V² = 0.64.</li></ul>
+<p>Lowering voltage saves energy per task even though it costs time.</p>
+<p><strong>D. PUE.</strong> Facility draws 1.5 MW, IT load is 1.0 MW: PUE = <strong>1.5</strong> (0.5 MW goes to cooling and distribution). If upgrades reach PUE 1.1, the same IT load needs 1.1 MW, saving 0.4 MW, which over a year is 0.4 × 8760 = <strong>3504 MWh</strong>.</p>
+<p><strong>E. Electricity cost.</strong> 1.5 MW × 8760 h = 13,140 MWh = 13,140,000 kWh. At $0.08/kWh that is about <strong>$1.05 million per year</strong>.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def dyn_power(alpha, C, V, f):
+    return alpha * C * V**2 * f
+
+def dvfs(v_ratio, f_ratio):
+    p = v_ratio**2 * f_ratio       # power ratio
+    t = 1 / f_ratio                # time ratio (compute-bound)
+    return p, t, p * t             # power, time, energy ratios
+
+print(round(dyn_power(0.2, 1e-9, 1.0, 3e9), 2))   # 0.6
+print(tuple(round(x, 3) for x in dvfs(0.8, 0.8)))   # (0.512, 1.25, 0.64)
+
+def pue(total_kw, it_kw):
+    return total_kw / it_kw
+print(pue(1500, 1000))                  # 1.5</code></pre>
+<p>Putting a core to sleep in RISC-V (wait for interrupt; hardware may gate clocks):</p>
+<pre><code>idle_loop:
+    wfi                 # wait for interrupt: core can enter a low-power state
+    j    idle_loop</code></pre>
+<h2>Notes</h2>
+<ul><li><strong>Common mistake:</strong> power falls <strong>quadratically</strong> with voltage (P ∝ V²), not exponentially.</li><li>Some sources say servers and cooling account for &quot;about 86%&quot; of data-center energy. Treat that as a rough figure; published breakdowns vary by facility, and modern hyperscale sites report PUE near 1.1-1.2, meaning cooling and distribution overhead is only 10-20% of IT power.</li><li>Why ARM servers help: simpler cores deliver more work per watt.</li><li>Lower voltage has a floor: transistors need enough voltage to switch reliably, and leakage grows, so DVFS has limits.</li><li>Quick facts: dynamic power = α·C·V²·f; clock gating disables unused circuit parts; AI can optimize workloads and cooling; PUE measures data-center energy efficiency.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 1 (1.5-1.6) and Ch. 6 (6.4-6.5); [PH-RV] Ch. 1 (1.7 &quot;The Power Wall&quot;); Barroso, Clidaras &amp; Hölzle, <em>The Datacenter as a Computer</em>, 3rd ed., 2018; </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -349,5 +349,165 @@
     "author": "Algo-holics",
     "reference": "https://t.me/kbtukbtu/372/640",
     "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 1. Fundamentals: Moore's Law, Quantitative Design and Performance",
+    "category": "Computer Architecture",
+    "slug": "comparch-1-fundamentals-moore-s-law-quantitative-design-and-performance",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\1_fundamentals.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 2. Instruction Set Architecture (ISA): CISC, RISC, RISC-V",
+    "category": "Computer Architecture",
+    "slug": "comparch-2-instruction-set-architecture-isa-cisc-risc-risc-v",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\2_instruction_set_architecture.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 3. Types of Parallelism (DLP, ILP, TLP) and Flynn's Taxonomy",
+    "category": "Computer Architecture",
+    "slug": "comparch-3-types-of-parallelism-dlp-ilp-tlp-and-flynn-s-taxonomy",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\3_types_of_parallelism.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 4. Power, Energy and Data-Center Energy",
+    "category": "Computer Architecture",
+    "slug": "comparch-4-power-energy-and-data-center-energy",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\4_power_energy_datacenter_energy.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 5. Memory Technologies, Optimization and Dependability",
+    "category": "Computer Architecture",
+    "slug": "comparch-5-memory-technologies-optimization-and-dependability",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\5_memory_technologies.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 6. Memory Hierarchy and Cache Basics",
+    "category": "Computer Architecture",
+    "slug": "comparch-6-memory-hierarchy-and-cache-basics",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\6_memory_hierarchy.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 7. Ten Advanced Cache Optimizations",
+    "category": "Computer Architecture",
+    "slug": "comparch-7-ten-advanced-cache-optimizations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\7_ten_advanced_cache_optimizations.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 8. Virtual Memory and Virtual Machines",
+    "category": "Computer Architecture",
+    "slug": "comparch-8-virtual-memory-and-virtual-machines",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\8_virtual_memory.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 9. Pipelining and Hazards",
+    "category": "Computer Architecture",
+    "slug": "comparch-9-pipelining-and-hazards",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\9_pipelining_and_hazards.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 10. Dynamic Scheduling, Branch Prediction and Speculation",
+    "category": "Computer Architecture",
+    "slug": "comparch-10-dynamic-scheduling-branch-prediction-and-speculation",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\10_dynamic_scheduling.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 11. Advanced ILP: Superscalar, VLIW, Loop Unrolling, Multithreading",
+    "category": "Computer Architecture",
+    "slug": "comparch-11-advanced-ilp-superscalar-vliw-loop-unrolling-multithreading",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\11_advanced_ilp.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 12. Data-Level Parallelism: Vector, SIMD, GPUs and CUDA",
+    "category": "Computer Architecture",
+    "slug": "comparch-12-data-level-parallelism-vector-simd-gpus-and-cuda",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\12_data_level_parallelism.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 13. Thread-Level Parallelism: Multicore, Synchronization, Coherence, Consistency",
+    "category": "Computer Architecture",
+    "slug": "comparch-13-thread-level-parallelism-multicore-synchronization-coherence-consistency",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\13_thread_level_parallelism.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 14. Warehouse-Scale Computers (WSC)",
+    "category": "Computer Architecture",
+    "slug": "comparch-14-warehouse-scale-computers-wsc",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\14_warehouse_scale_computers.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 15. Domain-Specific Architectures and AI Hardware",
+    "category": "Computer Architecture",
+    "slug": "comparch-15-domain-specific-architectures-and-ai-hardware",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\15_domain_specific_architectures.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
+  },
+  {
+    "title": "[COMPARCH] 16. Fallacies and Pitfalls",
+    "category": "Computer Architecture",
+    "slug": "comparch-16-fallacies-and-pitfalls",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\16_fallacies_and_pitfalls.md",
+    "author": "Algo-holics",
+    "reference": "https://t.me/kbtukbtu/583",
+    "license": "",
+    "date": "2026-10-25"
   }
 ]

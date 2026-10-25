@@ -30,8 +30,8 @@
   <div class="wrapper">
     <article class="post">
       <header class="post-header">
-        <h1 class="post-title">[ADS-FINAL-PREP] 14. Merge Sort</h1>
-        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+        <h1 class="post-title">14. Merge Sort</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; ADS-FINAL-PREP &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
       </header>
       <div class="post-content">
 <h2>Description</h2>
@@ -49,37 +49,6 @@
 <ol><li>Divide the array into two halves.</li></ol>
 <ol><li>Recursively apply Merge Sort to each half.</li></ol>
 <ol><li>Merge the sorted halves into a single sorted array.</li></ol>
-<pre><code>class MergeSort:
-    def __init__(self):
-        self.array = []
-
-    def merge(self, left, right):
-        result = []
-        i = j = 0
-        while i &lt; len(left) and j &lt; len(right):
-            if left[i] &lt; right[j]:
-                result.append(left[i])
-                i += 1
-            else:
-                result.append(right[j])
-                j += 1
-        result.extend(left[i:])
-        result.extend(right[j:])
-        return result
-
-    def mergesort(self, arr):
-        if len(arr) &lt;= 1:
-            return arr
-        mid = len(arr) // 2
-        left = arr[:mid]
-        right = arr[mid:]
-        left = self.mergesort(left)
-        right = self.mergesort(right)
-        return self.merge(left, right)
-
-    def sort(self, arr):
-        self.array = arr
-        return self.mergesort(arr)</code></pre>
 <h2>Code Explanation</h2>
 <ol><li><strong><code>merge</code> Method:</strong></li></ol>
 <ul><li>Accepts two sorted arrays (<code>left</code> and <code>right</code>) and merges them into a single sorted array.</li></ul>
@@ -102,7 +71,8 @@
 <h2>Conclusion</h2>
 <p>Merge Sort is a stable and efficient sorting algorithm that guarantees O(n log n) runtime performance in all scenarios. It is especially useful when dealing with large volumes of data where predictable execution time and element stability are required. However, its auxiliary space requirement makes it less suited for memory-restricted systems.</p>
       </div>
-      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
       <section class="comments">
@@ -128,7 +98,8 @@
 
 <footer class="site-footer">
   <div class="wrapper">
-    <p class="text">&copy; 2026 korynbid</p>
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

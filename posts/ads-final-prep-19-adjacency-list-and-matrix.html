@@ -30,8 +30,8 @@
   <div class="wrapper">
     <article class="post">
       <header class="post-header">
-        <h1 class="post-title">[ADS-FINAL-PREP] 19. Adjacency List and Matrix</h1>
-        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+        <h1 class="post-title">19. Adjacency List and Matrix</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; ADS-FINAL-PREP &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
       </header>
       <div class="post-content">
 <h2>Description</h2>
@@ -90,7 +90,7 @@
 <ul><li><strong>Finding all neighbors of vertex v:</strong> O(n), where n is the total number of vertices in the graph (since the entire row or column must be scanned).</li><li><strong>Checking for an edge between vertices u and v:</strong> O(1), as it involves direct matrix array lookup.</li><li><strong>Adding an edge:</strong> O(1).</li></ul>
 <hr>
 <h2>Comparison of Adjacency List and Adjacency Matrix</h2>
-<p>| Feature | Adjacency List | Adjacency Matrix | | :--- | :--- | :--- | | <strong>Memory</strong> | O(n + e), where n = vertices, e = edges | O(n^2) | | <strong>Edge Lookup</strong> | O(k), where k = degree of vertex u | O(1) | | <strong>Find All Neighbors</strong> | O(k) | O(n) | | <strong>Add Edge</strong> | O(1) | O(1) | | <strong>Remove Edge</strong> | O(k) | O(1) |</p>
+<table><thead><tr><th style="text-align:left">Feature</th><th style="text-align:left">Adjacency List</th><th style="text-align:left">Adjacency Matrix</th></tr></thead><tbody><tr><td style="text-align:left"><strong>Memory</strong></td><td style="text-align:left">O(n + e), where n = vertices, e = edges</td><td style="text-align:left">O(n^2)</td></tr><tr><td style="text-align:left"><strong>Edge Lookup</strong></td><td style="text-align:left">O(k), where k = degree of vertex u</td><td style="text-align:left">O(1)</td></tr><tr><td style="text-align:left"><strong>Find All Neighbors</strong></td><td style="text-align:left">O(k)</td><td style="text-align:left">O(n)</td></tr><tr><td style="text-align:left"><strong>Add Edge</strong></td><td style="text-align:left">O(1)</td><td style="text-align:left">O(1)</td></tr><tr><td style="text-align:left"><strong>Remove Edge</strong></td><td style="text-align:left">O(k)</td><td style="text-align:left">O(1)</td></tr></tbody></table>
 <hr>
 <h2>When to Use an Adjacency List</h2>
 <ul><li>For <strong>sparse graphs</strong> (where the number of edges is much less than <code>n^2</code>).</li><li>When memory conservation is important while primarily operating on a vertex&#x27;s immediate neighbors.</li><li>For <strong>dynamic graphs</strong> where edges are frequently added or removed.</li></ul>
@@ -100,7 +100,8 @@
 <h2>Conclusion</h2>
 <p>Choosing between an adjacency list and an adjacency matrix depends on the specific problem, graph density, and required operations. Adjacency lists are preferred for sparse graphs and dynamic graph modifications, whereas adjacency matrices excel in dense graphs and scenarios requiring constant-time edge lookups.</p>
       </div>
-      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
       <section class="comments">
@@ -126,7 +127,8 @@
 
 <footer class="site-footer">
   <div class="wrapper">
-    <p class="text">&copy; 2026 korynbid</p>
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

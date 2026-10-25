@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 16. Fallacies and Pitfalls | korynbid</title>
+  <meta name="description" content="[COMPARCH] 16. Fallacies and Pitfalls | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">16. Fallacies and Pitfalls</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>fallacy</strong> is a widely believed idea that is false; a <strong>pitfall</strong> is an easily made mistake. Recognizing them is a core skill when judging architecture claims.</p>
+<table><thead><tr><th>Type</th><th>Statement</th><th>Why it is wrong / the correct view</th></tr></thead><tbody><tr><td>Fallacy</td><td>&quot;A higher clock rate means a faster computer.&quot;</td><td>Performance = IC × CPI × T. Clock alone ignores CPI, instruction count, memory and power.</td></tr><tr><td>Pitfall</td><td>Using <strong>MIPS</strong> to compare machines</td><td>Ignores what each instruction does; use execution time on real workloads.</td></tr><tr><td>Pitfall</td><td>Ignoring <strong>Amdahl&#x27;s Law</strong></td><td>Speeding up a small fraction gives a small total gain; serial fractions cap parallel speedup.</td></tr><tr><td>Fallacy</td><td>&quot;Adding cores gives linear speedup.&quot;</td><td>Synchronization, bandwidth and serial code limit scaling.</td></tr><tr><td>Fallacy</td><td>&quot;Peak performance is what programs get.&quot;</td><td>Real code reaches a fraction of peak (memory-bound, imbalance). Use the roofline.</td></tr><tr><td>Fallacy</td><td>&quot;A performance improvement also improves energy efficiency.&quot;</td><td>Faster techniques (e.g. wider speculation) can cost more energy per task.</td></tr><tr><td>Fallacy</td><td>&quot;Bigger caches/more associativity are always better.&quot;</td><td>They raise hit time, energy and area; there is an optimum.</td></tr><tr><td>Pitfall</td><td>Forgetting <strong>false sharing</strong> and data alignment</td><td>Silent slowdowns on multicore and SIMD code.</td></tr><tr><td>Fallacy</td><td>&quot;Disks fail at the rate implied by the MTTF.&quot;</td><td>Field failure rates are often higher than the datasheet suggests.</td></tr><tr><td>Fallacy</td><td>&quot;ARM and x86 both use weak memory models.&quot;</td><td>x86 is TSO (strong); ARM/RISC-V are relaxed.</td></tr><tr><td>Pitfall</td><td>Treating <strong>speculation</strong> as free</td><td>Wrong paths waste energy and can leak data (Spectre).</td></tr><tr><td>Pitfall</td><td>Ignoring <strong>tail latency</strong> in large services</td><td>Fan-out makes rare slow events common (Topic 14).</td></tr><tr><td>Fallacy</td><td>&quot;One big server can handle a WSC-scale job.&quot;</td><td>Network latency, memory and failure rates force scale-out designs.</td></tr><tr><td>Pitfall</td><td>Under-provisioned cooling and power for new servers</td><td>Capacity, not just hardware, limits a data center.</td></tr><tr><td>Fallacy</td><td>&quot;Benchmarks stay valid forever.&quot;</td><td>Workloads change; benchmarks must be updated and representative.</td></tr><tr><td>Fallacy</td><td>&quot;Domain-specific chips will replace CPUs.&quot;</td><td>They accelerate fixed kernels; general-purpose CPUs still run everything else.</td></tr><tr><td>Pitfall</td><td>Assuming VLIW compilers can always find enough parallelism</td><td>Unpredictable cache misses and branches defeat static scheduling (Itanium).</td></tr></tbody></table>
+<h2>Key Formulas</h2>
+<p>None new. Re-check the formulas in Topics 1, 4, 6 and 13 against each statement above.</p>
+<h2>Steps</h2>
+<p><strong>To test a claim:</strong> (1) identify the metric (time, energy, throughput), (2) write the relevant equation, (3) look for the hidden variable the claim ignores (CPI, serial fraction, miss penalty, power), (4) answer with numbers if possible.</p>
+<h2>Worked Example</h2>
+<p><em>Claim:</em> &quot;Machine A runs at 4 GHz, machine B at 3 GHz, so A is faster.&quot; Same program: A has CPI 2.4 → time per instruction 2.4 / 4 = 0.60 ns; B has CPI 1.5 → 1.5 / 3 = 0.50 ns. <strong>B is faster (1.2×)</strong> despite the lower clock.</p>
+<p><em>Claim:</em> &quot;Doubling cores doubles speed.&quot; For f = 0.9: 4 cores → 1/(0.1 + 0.225) = 3.08; 8 cores → 1/(0.1 + 0.1125) = <strong>4.71</strong>, not 6.15 or 8.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def time_per_instr_ns(cpi, ghz):
+    return cpi / ghz
+
+print(time_per_instr_ns(2.4, 4.0), time_per_instr_ns(1.5, 3.0))    # 0.6 0.5
+amdahl = lambda f, n: 1 / ((1 - f) + f / n)
+print(round(amdahl(0.9, 4), 2), round(amdahl(0.9, 8), 2))         # 3.08 4.71</code></pre>
+<h2>Notes</h2>
+<ul><li>Treat each claim as &quot;True/False: explain&quot;; always give the reason, not only the verdict.</li><li>WSC fallacies: expecting high single-server performance without counting network delay; pitfalls: scaling difficulty and excess power use, such as insufficient cooling.</li></ul>
+<p><strong>References:</strong> [HP6] &quot;Fallacies and Pitfalls&quot; section at the end of every chapter; [PH-RV] same sections; Schroeder &amp; Gibson, &quot;Disk Failures in the Real World,&quot; FAST 2007; </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

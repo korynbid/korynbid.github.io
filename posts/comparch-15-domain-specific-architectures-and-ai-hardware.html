@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 15. Domain-Specific Architectures and AI Hardware | korynbid</title>
+  <meta name="description" content="[COMPARCH] 15. Domain-Specific Architectures and AI Hardware | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">15. Domain-Specific Architectures and AI Hardware</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>With Moore&#x27;s Law slowing and Dennard scaling over, general-purpose cores improve slowly. <strong>Domain-Specific Architectures (DSAs)</strong> tailor hardware to one class of problems and win large factors in performance and energy efficiency (for example Google&#x27;s TPU for machine learning).</p>
+<p><strong>Five design guidelines</strong> (Hennessy &amp; Patterson):</p>
+<ol><li>Use <strong>dedicated memories</strong> to minimize data movement (software-managed scratchpads instead of big caches).</li><li>Spend resources on <strong>more arithmetic units or bigger memories</strong> rather than on advanced microarchitecture (no big out-of-order machinery).</li><li>Use the <strong>easiest form of parallelism</strong> that matches the domain (e.g. SIMD or systolic arrays).</li><li>Use <strong>smaller data types</strong> (8-bit integers instead of 32-bit floats when accuracy allows).</li><li>Use a <strong>domain-specific programming language</strong> (TensorFlow, Halide) so compilers can map software to the hardware.</li></ol>
+<p><strong>AI background:</strong></p>
+<ul><li><strong>Neural network:</strong> layers of neurons; each computes <code>y = f(Σ wᵢxᵢ + b)</code> with an activation f (ReLU, sigmoid). Training adjusts weights (forward pass, backpropagation, gradient descent); <strong>inference</strong> just runs the forward pass with fixed weights.</li><li><strong>Convolutional neural networks (CNNs):</strong> small filters slide over images, sharing weights; used for image classification (e.g. photo search and classification in Google Photos).</li><li><strong>Recurrent neural networks (RNNs, LSTMs):</strong> keep a hidden state across a sequence; used for text, speech and translation (e.g. next-word prediction). Transformers have largely replaced them in many language tasks.</li><li>The core operation everywhere is <strong>matrix multiply / multiply-accumulate (MAC)</strong>, which is why DSAs focus on it.</li></ul>
+<p><strong>Hardware examples:</strong></p>
+<table><thead><tr><th>System</th><th>What it is</th><th>Key ideas</th></tr></thead><tbody><tr><td><strong>TPU v1</strong> (Google)</td><td>Inference accelerator in data centers</td><td>256 × 256 <strong>systolic array</strong> of 8-bit MACs (65,536 MACs, 700 MHz, ≈92 TOPS), large software-managed on-chip buffer, runs TensorFlow models</td></tr><tr><td><strong>TPU v2/v3 and later</strong></td><td>Training and inference; pods of many chips</td><td>Floating-point (bfloat16) support, HBM, fast chip-to-chip network</td></tr><tr><td><strong>Project Brainwave</strong> (Microsoft Azure)</td><td>FPGA-based real-time DNN serving</td><td>Very low latency at batch size 1; hardware microservices; serves requests in real time</td></tr><tr><td><strong>Catapult</strong> (Microsoft)</td><td>FPGAs attached to data-center servers</td><td>Accelerates tasks such as <strong>Bing search ranking</strong> with reconfigurable hardware</td></tr><tr><td><strong>Pixel Visual Core</strong> (Google Pixel phones)</td><td>Image-processing co-processor</td><td>Low-power image pipeline for <strong>HDR+</strong> photos, programmed with Halide/TensorFlow</td></tr><tr><td><strong>GPUs / tensor cores</strong></td><td>General massively parallel accelerators</td><td>High memory bandwidth plus dedicated matrix units</td></tr></tbody></table>
+<p><strong>Systolic array idea:</strong> data flow rhythmically through a grid of simple MAC units; each operand is reused many times as it moves, so very little memory traffic per operation.</p>
+<p><strong>FPGA vs ASIC:</strong> FPGAs are reconfigurable (flexible, slower, less efficient); ASICs (like TPU) are fixed-function (fastest and most efficient, but costly and inflexible).</p>
+<h2>Key Formulas</h2>
+<pre><code>Dense layer MACs          = inputs × outputs           (FLOPs = 2 × MACs)
+Convolution layer MACs    = H_out × W_out × C_out × (K × K × C_in)
+Convolution parameters    = K × K × C_in × C_out  (+ C_out biases)
+
+Peak ops/s of an N × N MAC array = N² × 2 × f          (a MAC = 2 operations)
+
+Arithmetic intensity of a fully connected layer with batch B, 1-byte weights:
+   AI ≈ (2 × in × out × B) / (in × out) = 2B  ops per byte of weights
+Memory footprint = parameters × bytes per parameter</code></pre>
+<h2>Steps</h2>
+<p><strong>Count the work of a CNN layer:</strong> (1) get output size H×W and channels, (2) multiply by kernel volume K×K×C_in, (3) double for FLOPs.</p>
+<p><strong>Quantize weights to 8 bits:</strong> (1) find max |w|, (2) scale = max/127, (3) q = round(w / scale), (4) store q as int8, keep the scale for dequantization.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Dense layer.</strong> 1000 inputs × 1000 outputs = 1,000,000 MACs = <strong>2 MFLOP</strong> per input vector.</p>
+<p><strong>B. Convolution layer.</strong> Output 56 × 56 × 64, kernel 3 × 3 over 64 input channels: MACs = 56 × 56 × 64 × (3 × 3 × 64) = 3136 × 64 × 576 = <strong>115,605,504 MACs</strong> (≈ 0.23 GFLOP); parameters = 3 × 3 × 64 × 64 = <strong>36,864</strong> (+64 biases). Few parameters but many operations, so convolutions reuse weights heavily and are compute-dense.</p>
+<p><strong>C. TPU v1 peak.</strong> 65,536 MACs × 2 ops × 0.7 × 10⁹ Hz = <strong>91.75 × 10¹²</strong> ≈ <strong>92 TOPS</strong>.</p>
+<p><strong>D. Memory footprint.</strong> 100 million parameters: 32-bit float = 400 MB; 8-bit = <strong>100 MB</strong> (4× smaller, 4× less memory traffic). Horowitz&#x27;s 45 nm estimates put an 8-bit integer multiply at about 0.2 pJ versus 3.7 pJ for a 32-bit float multiply, so small data types also save energy.</p>
+<p><strong>E. Batch size and the roofline.</strong> Fully connected layer with 8-bit weights: batch 1 → AI = 2 ops/byte (almost certainly <strong>memory-bound</strong>); batch 64 → AI = 128 ops/byte, which can approach the compute ceiling. Real-time services (Brainwave) need low latency at batch size 1, so they must solve the memory problem with on-chip weights.</p>
+<p><strong>F. Quantization.</strong> Weights [0.5, −1.27, 0.03, 0.9]: max |w| = 1.27, scale = 0.01 → int8 values [50, −127, 3, 90], recovered exactly here.</p>
+<p><strong>G. Why DSAs win.</strong> A CPU spends most of its energy on fetching, decoding, scheduling and cache access; a systolic MAC array spends it on arithmetic. Specialized, simple, parallel hardware with small data types is therefore far more efficient for fixed workloads like matrix multiply.</p>
+<h2>Python / Assembly</h2>
+<pre><code>import numpy as np
+
+def dense_macs(n_in, n_out):
+    return n_in * n_out
+
+def conv_macs(h, w, c_out, k, c_in):
+    return h * w * c_out * k * k * c_in
+
+print(dense_macs(1000, 1000))            # 1000000
+print(conv_macs(56, 56, 64, 3, 64))      # 115605504
+print(round(65536 * 2 * 0.7e9 / 1e12, 2))   # 91.75  (TOPS)
+
+# One fully connected layer + ReLU
+def forward(x, W, b):
+    return np.maximum(0, x @ W + b)
+
+# Symmetric int8 quantization
+w = np.array([0.5, -1.27, 0.03, 0.9])
+scale = np.abs(w).max() / 127
+q = np.round(w / scale).astype(np.int8)
+print(scale, q, q * scale)               # 0.01 [  50 -127    3   90] [ 0.5 -1.27 0.03 0.9 ]</code></pre>
+<p>The multiply-accumulate loop that a DSA replicates tens of thousands of times in hardware:</p>
+<pre><code># dot product of two double vectors: a0 = &amp;x, a1 = &amp;y, a2 = n, result in fa0
+dot:
+    fmv.d.x fa0, zero
+loop:
+    fld     ft0, 0(a0)
+    fld     ft1, 0(a1)
+    fmadd.d fa0, ft0, ft1, fa0     # fa0 += ft0 * ft1   (one MAC)
+    addi    a0, a0, 8
+    addi    a1, a1, 8
+    addi    a2, a2, -1
+    bnez    a2, loop
+    ret</code></pre>
+<h2>Notes</h2>
+<ul><li><strong>Common mistake:</strong> TPUs were not used &quot;to train ChatGPT.&quot; Google&#x27;s TPUs train and serve Google&#x27;s own models; OpenAI&#x27;s public descriptions of ChatGPT training mention large NVIDIA GPU clusters. A safe statement is: &quot;TPUs are specialized processors for training and inference of neural networks.&quot;</li><li>AI raises productivity by automating tasks and learning from data, which is why it shapes hardware design.</li><li>FPGA accelerators (Catapult, Brainwave) trade peak efficiency for flexibility: the same chips can be reprogrammed as workloads change.</li><li>DSAs complement CPUs; they do not replace them. The CPU runs the OS and general code and offloads the hot kernels.</li><li>Quick facts: a DSA is hardware optimized for a specific task (e.g. Google TPU); CNNs process images; RNNs process sequences; TPUs speed up AI in data centers; Brainwave and Catapult use FPGAs; Pixel Visual Core accelerates image processing.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 7 (7.1-7.9); Jouppi et al., &quot;In-Datacenter Performance Analysis of a Tensor Processing Unit,&quot; ISCA 2017; Putnam et al., &quot;A Reconfigurable Fabric for Accelerating Large-Scale Datacenter Services,&quot; ISCA 2014 (Catapult); Fowers et al., &quot;A Configurable Cloud-Scale DNN Processor for Real-Time AI,&quot; ISCA 2018 (Brainwave); Horowitz, &quot;Computing&#x27;s Energy Problem (and what we can do about it),&quot; ISSCC 2014; Hennessy &amp; Patterson, &quot;A New Golden Age for Computer Architecture,&quot; <em>CACM</em>, 2019;</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

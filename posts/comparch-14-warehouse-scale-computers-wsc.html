@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 14. Warehouse-Scale Computers (WSC) | korynbid</title>
+  <meta name="description" content="[COMPARCH] 14. Warehouse-Scale Computers (WSC) | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">14. Warehouse-Scale Computers (WSC)</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>warehouse-scale computer</strong> is a huge data center (tens of thousands of servers) built to run a few large internet services and cloud workloads (search, video, email, cloud rentals) as <strong>one giant computer</strong>. Examples: Google, Amazon (AWS), Microsoft (Azure) data centers.</p>
+<p><strong>Key characteristics:</strong></p>
+<ul><li><strong>Scalability:</strong> serve millions of users by adding servers.</li><li><strong>Request-level and data-level parallelism:</strong> independent requests run in parallel (RLP) and big datasets are processed in parallel (DLP).</li><li><strong>Cost-performance and energy efficiency:</strong> at this scale electricity, cooling and hardware purchase dominate cost.</li><li><strong>Dependability through software:</strong> with so many components, failures are constant; software replicates data and retries tasks instead of relying on perfect hardware.</li><li><strong>Network I/O and interactive latency:</strong> services must answer quickly; <strong>tail latency</strong> (the slowest responses) matters.</li></ul>
+<p><strong>Architecture:</strong></p>
+<table><thead><tr><th>Layer</th><th>Role</th></tr></thead><tbody><tr><td><strong>Server</strong></td><td>CPU, DRAM, local disk/SSD, commodity parts</td></tr><tr><td><strong>Rack</strong></td><td>~40-80 servers + <strong>top-of-rack (ToR) switch</strong></td></tr><tr><td><strong>Array / cluster</strong></td><td>Racks joined by <strong>aggregation (array) switches</strong></td></tr><tr><td><strong>Core network</strong></td><td>Connects arrays and the outside world</td></tr><tr><td><strong>Storage</strong></td><td>Distributed file systems (e.g. Google File System) with replication; SSD, HDD, NVMe</td></tr><tr><td><strong>Memory hierarchy view</strong></td><td>Local DRAM → rack DRAM → array DRAM → disk, each level adding latency; Fibre Channel/array switches connect storage</td></tr></tbody></table>
+<p><strong>Programming models and workloads:</strong></p>
+<ul><li><strong>MapReduce:</strong> <em>map</em> applies a function to input pieces in parallel, a <em>shuffle</em> groups results by key, <em>reduce</em> combines each group. Example: counting words in a huge text corpus.</li><li><strong>MPI (Message Passing Interface):</strong> explicit communication between nodes; typical in scientific simulation and HPC.</li><li><strong>Workloads:</strong> video streaming, search, storage, big-data analysis, machine learning.</li></ul>
+<p><strong>Power, cooling and efficiency:</strong> servers → power distribution (transformers, <strong>UPS</strong> batteries, generators) → cooling (air, chilled water, <strong>liquid cooling</strong>). <strong>PUE = total facility power / IT power</strong>; Google reports about 1.1 for its data centers.</p>
+<p><strong>Cloud computing:</strong> renting compute, storage and services over the Internet (IaaS, PaaS, SaaS), enabled by WSC economies of scale and virtualization (Topic 8). Example: renting virtual machines on AWS.</p>
+<h2>Key Formulas</h2>
+<pre><code>PUE = Total facility power / IT equipment power
+
+Availability  = uptime / total time;     downtime/year = (1 − availability) × 525,600 min
+
+Oversubscription ratio = (total downlink bandwidth) / (uplink bandwidth)
+
+Tail-latency amplification (fan-out N, each server slow with prob. p):
+   P(at least one slow) = 1 − (1 − p)^N
+
+Replication:  usable capacity = raw capacity / replication factor
+
+Annual energy cost = power (kW) × 8760 h × price ($/kWh)</code></pre>
+<h2>Steps</h2>
+<p><strong>Estimate WSC electricity:</strong> (1) IT power per server × servers, (2) multiply by PUE, (3) × 8760 h, (4) × price.</p>
+<p><strong>Run a MapReduce job:</strong> (1) split input into chunks, (2) run <em>map</em> tasks on chunks in parallel, (3) <em>shuffle</em> by key, (4) run <em>reduce</em> tasks, (5) re-execute failed or slow tasks elsewhere.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Downtime.</strong> 99.99% availability → 0.0001 × 525,600 = <strong>52.6 minutes per year</strong>; 99.9% → 526 minutes (8.8 hours).</p>
+<p><strong>B. Tail latency.</strong> A search request fans out to 100 servers; each is slow (e.g. a garbage-collection pause) 1% of the time: P(at least one slow) = 1 − 0.99¹⁰⁰ = <strong>63.4%</strong>. So the user sees the slow case more often than any single server does.</p>
+<p><strong>C. Oversubscription.</strong> Rack with 40 servers × 10 Gb/s = 400 Gb/s down; 4 × 40 Gb/s = 160 Gb/s up → <strong>2.5:1</strong>. Traffic between racks is limited to 40% of rack capacity, so schedulers keep communicating tasks inside the same rack when possible.</p>
+<p><strong>D. Server energy cost.</strong> 300 W server, PUE 1.2: 360 W at the wall → 360 × 8760 / 1000 = 3153.6 kWh per year × $0.08 = <strong>about $252 per year</strong>. A $5,000 server amortized over 4 years costs $1,250 per year, so power is roughly <strong>17%</strong> of that server&#x27;s running cost, not negligible but not dominant either.</p>
+<p><strong>E. PUE.</strong> At PUE 1.1, 10 MW of IT load needs 11 MW; at PUE 1.5 it needs 15 MW. The 4 MW difference over a year is 4 × 8760 = <strong>35,040 MWh</strong>.</p>
+<p><strong>F. Replication.</strong> 30 PB raw with 3× replication → <strong>10 PB usable</strong>. Replication makes data survive disk, server and even rack failures.</p>
+<p><strong>G. MapReduce word count.</strong> Input: &quot;to be or not to be&quot;. Map → (to,1), (be,1), (or,1), (not,1), (to,1), (be,1). Shuffle groups by word. Reduce → to:2, be:2, or:1, not:1.</p>
+<h2>Python / Assembly</h2>
+<pre><code>from collections import defaultdict
+
+def map_fn(line):
+    for w in line.lower().split():
+        yield (w, 1)
+
+def reduce_fn(word, counts):
+    return (word, sum(counts))
+
+def mapreduce(lines):
+    groups = defaultdict(list)                 # &quot;shuffle&quot;
+    for line in lines:
+        for k, v in map_fn(line):
+            groups[k].append(v)
+    return dict(reduce_fn(k, vs) for k, vs in groups.items())
+
+print(mapreduce([&quot;to be or not to be&quot;]))       # {&#x27;to&#x27;: 2, &#x27;be&#x27;: 2, &#x27;or&#x27;: 1, &#x27;not&#x27;: 1}
+
+def downtime_min_per_year(avail):
+    return (1 - avail) * 525_600
+print(round(downtime_min_per_year(0.9999), 1))     # 52.6
+print(round(1 - 0.99**100, 3))                     # 0.634</code></pre>
+<p>(No assembly for this topic: WSC design is a systems-level subject.)</p>
+<h2>Notes</h2>
+<ul><li><strong>Data-center energy:</strong> some sources state that servers and cooling use about 86% of energy (see Topic 4 note); the safest view is PUE-based: overhead beyond IT is typically 10-50% depending on facility efficiency.</li><li>WSC fallacies: overestimating what a single server can do for big jobs (ignoring network latency), scaling problems, and under-built cooling for new servers.</li><li>WSC vs HPC: WSCs favor independent requests on commodity hardware and software fault tolerance; supercomputers use tightly coupled nodes and fast interconnects (MPI).</li><li>Slow-node mitigation (backup tasks in MapReduce, hedged requests) fights the tail.</li><li>Quick facts: PUE measures data-center energy efficiency; strategies include virtualization, cooling optimization and renewables; AI can optimize workloads and cooling.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 6 (6.1-6.8); Barroso, Clidaras &amp; Hölzle, <em>The Datacenter as a Computer</em>, 3rd ed., 2018; Dean &amp; Ghemawat, &quot;MapReduce: Simplified Data Processing on Large Clusters,&quot; OSDI 2004; Dean &amp; Barroso, &quot;The Tail at Scale,&quot; <em>CACM</em>, 2013; Ghemawat, Gobioff &amp; Leung, &quot;The Google File System,&quot; SOSP 2003;</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

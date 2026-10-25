@@ -30,8 +30,8 @@
   <div class="wrapper">
     <article class="post">
       <header class="post-header">
-        <h1 class="post-title">[ADS-FINAL-PREP] 2. Prime Factorization</h1>
-        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+        <h1 class="post-title">2. Prime Factorization</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; ADS-FINAL-PREP &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
       </header>
       <div class="post-content">
 <p>Prime factorization is the process of representing a number as a product of prime numbers. Prime numbers are numbers greater than 1 that are divisible only by themselves and 1 (for example, 2, 3, 5, 7).</p>
@@ -59,39 +59,9 @@
 <hr>
 <h3>5. Lenstra Elliptic-Curve Factorization</h3>
 <ul><li><strong>Description:</strong> A modern factorization method using elliptic curves. It is especially efficient for finding small prime factors of large composite numbers.</li><li><strong>Complexity:</strong> Depends on the choice of the curve and the size of the prime factor.</li></ul>
-<pre><code>def sieve_of_eratosthenes(limit):
-    primes = []
-    is_prime = [True] * (limit + 1)
-    is_prime[0] = is_prime[1] = False
-
-    for i in range(2, int(limit**0.5) + 1):
-        if is_prime[i]:
-            for multiple in range(i * i, limit + 1, i):
-                is_prime[multiple] = False
-
-    for i in range(2, limit + 1):
-        if is_prime[i]:
-            primes.append(i)
-
-    return primes
-
-def prime_factorization(n):
-    limit = int(n**0.5) + 1
-    primes = sieve_of_eratosthenes(limit)
-    factors = []
-
-    for prime in primes:
-        while n % prime == 0:
-            factors.append(prime)
-            n //= prime
-        if n == 1:
-            break
-    if n &gt; 1:
-        factors.append(n)
-
-    return factors</code></pre>
-</div>
-      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
       <section class="comments">
@@ -117,7 +87,8 @@ def prime_factorization(n):
 
 <footer class="site-footer">
   <div class="wrapper">
-    <p class="text">&copy; 2026 korynbid</p>
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

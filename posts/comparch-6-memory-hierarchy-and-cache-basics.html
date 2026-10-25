@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 6. Memory Hierarchy and Cache Basics | korynbid</title>
+  <meta name="description" content="[COMPARCH] 6. Memory Hierarchy and Cache Basics | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">6. Memory Hierarchy and Cache Basics</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Fast memory is small and expensive; large memory is slow and cheap. A <strong>memory hierarchy</strong> stacks levels so most accesses hit the fast ones:</p>
+<p><code>Registers → L1 → L2 → L3 → DRAM → SSD → HDD</code></p>
+<p>It works because of the <strong>principle of locality</strong>:</p>
+<ul><li><strong>Temporal locality:</strong> recently used data is likely to be used again soon.</li><li><strong>Spatial locality:</strong> data near recently used data is likely to be used soon.</li></ul>
+<p>A <strong>cache</strong> is a small, fast memory between the CPU and main memory that holds copies of recently used blocks.</p>
+<p><strong>Terms:</strong> <em>hit</em> (data found), <em>miss</em> (not found), <em>block/line</em> (unit of transfer, e.g. 64 B), <em>set</em> (group of places a block may go), <em>tag</em> (identifies which block is stored), <em>valid bit</em>, <em>dirty bit</em>.</p>
+<p><strong>Placement (mapping):</strong></p>
+<table><thead><tr><th>Type</th><th>Rule</th><th>Trade-off</th></tr></thead><tbody><tr><td><strong>Direct-mapped</strong></td><td>Each block goes to exactly one line (index = block address mod lines)</td><td>Fast, simple, most conflicts</td></tr><tr><td><strong>Set-associative (n-way)</strong></td><td>Block can go to any of n lines in one set</td><td>Balanced; common in practice</td></tr><tr><td><strong>Fully associative</strong></td><td>Block can go anywhere</td><td>Fewest conflicts, costly comparators</td></tr></tbody></table>
+<p><strong>Replacement:</strong> LRU (least recently used), random, FIFO.</p>
+<p><strong>Write policies:</strong></p>
+<ul><li><strong>Write-through:</strong> write to cache and memory immediately (simple, more memory traffic; often used with a write buffer).</li><li><strong>Write-back:</strong> write only to cache, mark the line <strong>dirty</strong>, write to memory on eviction (less traffic, more complex).</li><li><strong>Write-allocate</strong> (fetch the block on a write miss, usual with write-back) vs <strong>no-write-allocate</strong> (write straight to memory, usual with write-through).</li></ul>
+<p><strong>Three Cs of misses</strong> (a fourth, <em>coherence</em>, appears in multiprocessors):</p>
+<ul><li><strong>Compulsory:</strong> first access to a block (cold start).</li><li><strong>Capacity:</strong> the cache cannot hold the working set.</li><li><strong>Conflict:</strong> too many blocks map to the same set.</li></ul>
+<h2>Key Formulas</h2>
+<pre><code>AMAT = Hit time + Miss rate × Miss penalty
+
+Two-level:  AMAT = HitTime_L1 + MissRate_L1 × (HitTime_L2 + LocalMissRate_L2 × MissPenalty_L2)
+
+Memory-stall cycles per instruction
+  = (memory accesses / instruction) × miss rate × miss penalty
+CPU time = IC × (CPI_base + stall cycles/instr) × T
+
+Address split (byte address):
+  | Tag | Index | Block offset |
+  offset bits = log2(block size)
+  index bits  = log2(number of sets)
+  tag bits    = address bits − index bits − offset bits
+
+Number of blocks = cache size / block size
+Number of sets   = blocks / associativity</code></pre>
+<h2>Steps</h2>
+<p><strong>To split an address:</strong> (1) offset = log₂(block size), (2) sets = (cache size ÷ block size) ÷ associativity, (3) index = log₂(sets), (4) tag = remaining bits.</p>
+<p><strong>To simulate a cache lookup:</strong> (1) compute set index, (2) compare the tag with all valid lines in the set, (3) match → hit (update LRU), (4) no match → miss: fetch block, evict LRU (write back if dirty).</p>
+<p><strong>To compute AMAT:</strong> (1) identify hit time, miss rate, miss penalty at each level, (2) work from the lowest level upward.</p>
+<h2>Worked Example</h2>
+<p><strong>A. AMAT.</strong> Hit time 1 cycle, miss rate 5%, miss penalty 100 cycles: AMAT = 1 + 0.05 × 100 = <strong>6 cycles</strong>.</p>
+<p><strong>B. Two-level AMAT.</strong> L1 hit 1 cycle, L1 miss rate 5%; L2 hit 10 cycles, L2 <em>local</em> miss rate 40%; memory 100 cycles. AMAT = 1 + 0.05 × (10 + 0.4 × 100) = 1 + 0.05 × 50 = <strong>3.5 cycles</strong>.</p>
+<p><strong>C. Address split, 4-way.</strong> 32-bit address, 32 KB cache, 64 B blocks, 4-way. Blocks = 32768/64 = 512; sets = 512/4 = 128 → offset = 6 bits, index = 7 bits, tag = 32 − 7 − 6 = <strong>19 bits</strong>.</p>
+<p><strong>D. Address split, direct-mapped.</strong> 4 KB cache, 16 B blocks: 256 lines → offset 4, index 8, tag <strong>20 bits</strong>.</p>
+<p><strong>E. Effect on CPI.</strong> Base CPI 1.0; instruction miss rate 2%, data miss rate 4%, 36% of instructions access data, miss penalty 100 cycles. Stalls = 0.02 × 100 + 0.36 × 0.04 × 100 = 2 + 1.44 = 3.44. <strong>CPI = 4.44</strong>, so the memory system makes the machine 4.4× slower than the ideal.</p>
+<p><strong>F. Mapping comparison.</strong> Block-address stream 0, 8, 0, 6, 8 in a cache with 4 blocks (LRU).</p>
+<table><thead><tr><th>Organization</th><th>Result</th><th>Misses</th></tr></thead><tbody><tr><td>Direct-mapped (index = addr mod 4)</td><td>0 miss, 8 miss (evicts 0), 0 miss, 6 miss, 8 miss</td><td><strong>5</strong></td></tr><tr><td>2-way (2 sets, index = addr mod 2)</td><td>0 miss, 8 miss, 0 <strong>hit</strong>, 6 miss (evicts 8), 8 miss</td><td><strong>4</strong></td></tr><tr><td>Fully associative</td><td>0 miss, 8 miss, 0 <strong>hit</strong>, 6 miss, 8 <strong>hit</strong></td><td><strong>3</strong></td></tr></tbody></table>
+<p>More associativity removes conflict misses.</p>
+<p><strong>G. Spatial locality.</strong> Summing an array sequentially with 4-byte words and 64 B blocks: one miss per 16 accesses → <strong>6.25%</strong> miss rate (compulsory only).</p>
+<h2>Python / Assembly</h2>
+<pre><code>def simulate(addrs, num_blocks, assoc):
+    sets = num_blocks // assoc
+    cache = [[] for _ in range(sets)]          # each set: list, LRU at index 0
+    misses = 0
+    for a in addrs:
+        s = a % sets
+        if a in cache[s]:
+            cache[s].remove(a); cache[s].append(a)      # hit: move to MRU
+        else:
+            misses += 1
+            if len(cache[s]) == assoc:
+                cache[s].pop(0)                          # evict LRU
+            cache[s].append(a)
+    return misses
+
+stream = [0, 8, 0, 6, 8]
+print([simulate(stream, 4, w) for w in (1, 2, 4)])      # [5, 4, 3]
+
+def amat(hit, miss_rate, penalty):
+    return hit + miss_rate * penalty
+print(amat(1, 0.05, 100))                               # 6.0</code></pre>
+<p>Sequential array sum (good spatial locality):</p>
+<pre><code>        li   t0, 0              # sum
+        la   a0, A              # base address
+        li   a1, 1000           # element count
+loop:   lw   t1, 0(a0)          # one miss per cache block, then hits
+        add  t0, t0, t1
+        addi a0, a0, 4
+        addi a1, a1, -1
+        bnez a1, loop</code></pre>
+<h2>Notes</h2>
+<ul><li>Use the <strong>local</strong> miss rate for L2 in the two-level formula; global miss rate = L1 miss rate × L2 local miss rate.</li><li>Bigger caches cut capacity misses but raise hit time; higher associativity cuts conflict misses but raises hit time and energy.</li><li>Bigger blocks use spatial locality but raise miss penalty and can cause pollution.</li><li>A browser cache is an analogy, but the same idea (keep what you reuse; evict the least recently used) applies.</li><li>Quick facts: cache mapping types are direct, associative and set-associative; a miss forces a fetch from slower memory; larger cache reduces misses.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 2 (2.1-2.2), Appendix B (B.1-B.3); [PH-RV] Ch. 5 (5.1-5.4); </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

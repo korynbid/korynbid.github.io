@@ -30,8 +30,8 @@
   <div class="wrapper">
     <article class="post">
       <header class="post-header">
-        <h1 class="post-title">[ADS-FINAL-PREP] 3. Stack</h1>
-        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+        <h1 class="post-title">3. Stack</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; ADS-FINAL-PREP &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
       </header>
       <div class="post-content">
 <p>A Stack is a data structure operating on the LIFO (Last In, First Out) principle, meaning the last element added to the stack is the first one to be removed. Imagine a stack of plates: you can only pick up the plate at the top.</p>
@@ -44,33 +44,9 @@
 <ul><li><strong>Simplicity:</strong> Straightforward implementation.</li><li><strong>High Performance:</strong> All basic operations execute in O(1) time complexity.</li></ul>
 <h2>Disadvantages of a Stack</h2>
 <ul><li><strong>Restricted Access:</strong> You can only access the topmost element.</li><li><strong>Size Limitations:</strong> Can be fixed in size if implemented using a static array.</li></ul>
-<pre><code>class Stack:
-    def __init__(self):
-        self.stack = []
-
-    def push(self, item):
-        self.stack.append(item)
-
-    def pop(self):
-        if not self.is_empty():
-            return self.stack.pop()
-        raise IndexError("Attempt to extract an element from an empty stack")
-
-    def peek(self):
-        if not self.is_empty():
-            return self.stack[-1]
-        raise IndexError("Attempt to retrieve the top element from an empty stack")
-
-    def is_empty(self):
-        return len(self.stack) == 0
-
-    def size(self):
-        return len(self.stack)
-
-    def display(self):
-        print("Current stack:", self.stack)</code></pre>
-</div>
-      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
       <section class="comments">
@@ -96,7 +72,8 @@
 
 <footer class="site-footer">
   <div class="wrapper">
-    <p class="text">&copy; 2026 korynbid</p>
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

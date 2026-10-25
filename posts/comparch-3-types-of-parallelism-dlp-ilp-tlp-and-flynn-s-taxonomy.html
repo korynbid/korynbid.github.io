@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 3. Types of Parallelism (DLP, ILP, TLP) and Flynn&#x27;s Taxonomy | korynbid</title>
+  <meta name="description" content="[COMPARCH] 3. Types of Parallelism (DLP, ILP, TLP) and Flynn&#x27;s Taxonomy | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">3. Types of Parallelism (DLP, ILP, TLP) and Flynn&#x27;s Taxonomy</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Parallelism</strong> means doing multiple operations at once to raise throughput and cut run time. Architects exploit it at different levels:</p>
+<table><thead><tr><th>Level</th><th>Full name</th><th>What runs in parallel</th><th>Typical hardware</th></tr></thead><tbody><tr><td><strong>DLP</strong></td><td>Data-Level Parallelism</td><td>Same operation on many data items</td><td>SIMD units, vector processors, GPUs</td></tr><tr><td><strong>ILP</strong></td><td>Instruction-Level Parallelism</td><td>Independent instructions from one thread</td><td>Pipelines, superscalar, out-of-order cores</td></tr><tr><td><strong>TLP</strong></td><td>Thread-Level Parallelism</td><td>Multiple threads/processes</td><td>Multicore CPUs, SMT (hyper-threading)</td></tr><tr><td><strong>RLP</strong></td><td>Request-Level Parallelism</td><td>Independent user requests</td><td>Warehouse-scale computers</td></tr></tbody></table>
+<p>Strengths and drawbacks:</p>
+<ul><li><strong>DLP:</strong> high throughput, energy efficient for regular numeric work; suffers from irregular data and control divergence (branches in GPU threads).</li><li><strong>ILP:</strong> speeds up single-thread code with no programmer effort; diminishing returns from dependences and mispredicted branches, and complex hardware.</li><li><strong>TLP:</strong> scales with cores; costs synchronization, shared-resource contention (caches, memory bandwidth) and harder software.</li></ul>
+<p><strong>Flynn&#x27;s Taxonomy</strong> (Michael Flynn, 1966) classifies machines by the number of <strong>instruction streams</strong> and <strong>data streams</strong>:</p>
+<table><thead><tr><th>Model</th><th>Instruction streams</th><th>Data streams</th><th>Example</th></tr></thead><tbody><tr><td><strong>SISD</strong></td><td>1</td><td>1</td><td>Simple sequential CPU, early PCs</td></tr><tr><td><strong>SIMD</strong></td><td>1</td><td>Many</td><td>Vector units, AVX/SSE/NEON, GPUs</td></tr><tr><td><strong>MISD</strong></td><td>Many</td><td>1</td><td>Rare; redundant fault-tolerant systems</td></tr><tr><td><strong>MIMD</strong></td><td>Many</td><td>Many</td><td>Multicore CPUs, clusters, cloud servers</td></tr></tbody></table>
+<p>Modern multicore CPUs are <strong>MIMD</strong>, and each core may also contain SIMD units and ILP hardware, so one chip uses all levels at once.</p>
+<h2>Key Formulas</h2>
+<pre><code>Parallel speedup (Amdahl):      S(n) = 1 / [ (1 − f) + f / n ]
+Parallel efficiency:            E(n) = S(n) / n
+Ideal pipeline speedup:         ≈ number of pipeline stages
+Vector/SIMD speedup (ideal):    ≈ number of lanes</code></pre>
+<h2>Steps</h2>
+<p><strong>To classify a machine with Flynn:</strong> (1) count independent instruction streams, (2) count independent data streams, (3) pick the cell: 1/1 SISD, 1/many SIMD, many/1 MISD, many/many MIMD.</p>
+<p><strong>To pick the right parallelism for a workload:</strong> (1) same op on big arrays → DLP; (2) independent instructions in a loop body → ILP; (3) independent tasks/requests → TLP/RLP.</p>
+<h2>Worked Example</h2>
+<ol><li>Adding two 1,000,000-element arrays element by element → <strong>DLP</strong> (SIMD). With 8 lanes the ideal speedup is ~8×.</li><li><code>a = b + c; d = e * f;</code> have no dependence, so a superscalar core issues both in one cycle → <strong>ILP</strong>.</li><li>A web server serving 32 clients on 16 cores → <strong>TLP</strong> (MIMD).</li><li>Efficiency: 8 cores give speedup 5.93 (95% parallel) → E = 5.93/8 ≈ <strong>74%</strong>; 64 cores give 15.4/64 ≈ <strong>24%</strong>. More cores, diminishing returns.</li><li>Classify: GPU shader running one program on many pixels → SIMD (more precisely SIMT); lock-step triple-redundant flight computer comparing results → MISD in concept.</li></ol>
+<h2>Python / Assembly</h2>
+<pre><code>import numpy as np
+from concurrent.futures import ProcessPoolExecutor
+
+# DLP: one vectorized operation over all elements (NumPy uses SIMD underneath)
+a = np.arange(1_000_000, dtype=np.float64)
+b = np.arange(1_000_000, dtype=np.float64)
+c = a + b                          # replaces a Python loop
+
+# TLP: CPU-bound work needs processes (Python threads share the GIL)
+def work(n):
+    return sum(i * i for i in range(n))
+
+if __name__ == &quot;__main__&quot;:
+    with ProcessPoolExecutor() as pool:
+        print(list(pool.map(work, [10**6] * 4)))</code></pre>
+<p>ILP in assembly: independent instructions can issue together; dependent ones cannot.</p>
+<pre><code>add  x5, x1, x2     # independent of the next line
+mul  x6, x3, x4     # can execute in the same cycle on a superscalar core
+add  x7, x5, x6     # depends on both, must wait (RAW)</code></pre>
+<h2>Notes</h2>
+<ul><li>SIMD vs SIMT: GPUs run thousands of <em>threads</em> in groups (warps) that execute one instruction together; programmers write per-thread code, hardware does the SIMD grouping.</li><li>Python threads do not speed up CPU-bound code because of the Global Interpreter Lock; use processes or native code.</li><li>Quick facts: multicore processors are MIMD; DLP uses one instruction on many data, ILP runs many instructions in parallel.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 1 (1.2, 1.4), Ch. 3-5 intros; Flynn, &quot;Very High-Speed Computing Systems,&quot; <em>Proc. IEEE</em>, 1966; [PH-RV] Ch. 6; </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

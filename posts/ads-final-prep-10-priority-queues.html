@@ -30,8 +30,8 @@
   <div class="wrapper">
     <article class="post">
       <header class="post-header">
-        <h1 class="post-title">[ADS-FINAL-PREP] 10. Priority Queues</h1>
-        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+        <h1 class="post-title">10. Priority Queues</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; ADS-FINAL-PREP &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
       </header>
       <div class="post-content">
 <p><strong>Description:</strong> A Priority Queue is a data structure where each element has an associated priority. Elements with higher priority are dequeued before elements with lower priority, regardless of their insertion order. </p>
@@ -55,56 +55,6 @@
 <ol><li><strong>Max-Priority Queue (Max-Heap):</strong> The element with the highest numerical priority value is kept at the root and retrieved first. Used when tasks with the largest values require immediate processing.</li></ol>
 <ol><li><strong>Min-Priority Queue (Min-Heap):</strong> The element with the lowest numerical priority value resides at the root. Frequently used in shortest-path algorithms like Dijkstra&#x27;s algorithm.</li></ol>
 <ol><li><strong>Sorted Queue:</strong> Elements are maintained in a strictly ordered list, making retrieval O(1) at the expense of slower O(n) insertions.</li></ol>
-<pre><code>class PriorityQueue:
-    def __init__(self):
-        self.queue = []
-
-    def enqueue(self, priority, item):
-        self.queue.append((priority, item))
-        self._heapify_up(len(self.queue) - 1)
-
-    def dequeue(self):
-        if self.is_empty():
-            raise IndexError("dequeue from an empty priority queue")
-        self._swap(0, len(self.queue) - 1)
-        item = self.queue.pop()
-        self._heapify_down(0)
-        return item[1]
-
-    def peek(self):
-        if self.is_empty():
-            raise IndexError("peek from an empty priority queue")
-        return self.queue[0][1]
-
-    def is_empty(self):
-        return len(self.queue) == 0
-
-    def _heapify_up(self, index):
-        while index &gt; 0:
-            parent_index = (index - 1) // 2
-            if self.queue[index][0] &lt; self.queue[parent_index][0]:
-                self._swap(index, parent_index)
-                index = parent_index
-            else:
-                break
-
-    def _heapify_down(self, index):
-        while 2 * index + 1 &lt; len(self.queue):
-            left_child_index = 2 * index + 1
-            right_child_index = 2 * index + 2
-            smallest = index
-            if left_child_index &lt; len(self.queue) and self.queue[left_child_index][0] &lt; self.queue[smallest][0]:
-                smallest = left_child_index
-            if right_child_index &lt; len(self.queue) and self.queue[right_child_index][0] &lt; self.queue[smallest][0]:
-                smallest = right_child_index
-            if smallest != index:
-                self._swap(index, smallest)
-                index = smallest
-            else:
-                break
-
-    def _swap(self, i, j):
-        self.queue[i], self.queue[j] = self.queue[j], self.queue[i]</code></pre>
 <h2>Applications</h2>
 <ol><li><strong>Dijkstra’s Algorithm:</strong> Priority queues track vertices ordered by their tentative distance from the source vertex to find the shortest path in non-negatively weighted graphs.</li></ol>
 <ol><li><strong>Operating System Task Scheduling:</strong> Manages process execution queues where high-priority processes preempt lower-priority ones.</li></ol>
@@ -118,7 +68,8 @@
 <hr>
 <p><em>Priority queues are a powerful tool for optimizing problems where operation execution order depends on relative importance or urgency.</em></p>
       </div>
-      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
       <section class="comments">
@@ -144,7 +95,8 @@
 
 <footer class="site-footer">
   <div class="wrapper">
-    <p class="text">&copy; 2026 korynbid</p>
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

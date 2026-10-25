@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 7. Ten Advanced Cache Optimizations | korynbid</title>
+  <meta name="description" content="[COMPARCH] 7. Ten Advanced Cache Optimizations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">7. Ten Advanced Cache Optimizations</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>AMAT = hit time + miss rate × miss penalty, so every optimization attacks one of four targets: <strong>reduce hit time</strong>, <strong>increase bandwidth</strong>, <strong>reduce miss penalty</strong>, or <strong>reduce miss rate</strong> (some also save power).</p>
+<table><thead><tr><th>#</th><th>Optimization</th><th>Primary goal</th><th>Idea</th></tr></thead><tbody><tr><td>1</td><td><strong>Small and simple L1 caches</strong></td><td>Hit time, power</td><td>Small, low-associativity L1 keeps the critical path short; L1 is the smallest, fastest cache closest to the CPU</td></tr><tr><td>2</td><td><strong>Way prediction</strong></td><td>Hit time</td><td>Predict which way of a set will hit and read only that way first; a wrong guess costs an extra cycle</td></tr><tr><td>3</td><td><strong>Pipelined cache access</strong></td><td>Bandwidth</td><td>Spread an L1 access over several stages so the clock stays fast and accesses overlap</td></tr><tr><td>4</td><td><strong>Non-blocking cache</strong></td><td>Miss penalty, bandwidth</td><td>Let hits (and further misses) proceed while a miss is outstanding (&quot;hit under miss&quot;, &quot;miss under miss&quot;); tracked in MSHRs</td></tr><tr><td>5</td><td><strong>Multibanked cache</strong></td><td>Bandwidth</td><td>Split the cache into banks (often interleaved by block address) so several accesses proceed in parallel</td></tr><tr><td>6</td><td><strong>Critical word first / early restart</strong></td><td>Miss penalty</td><td>Fetch the needed word first and restart the CPU as soon as it arrives, finishing the block fill in the background</td></tr><tr><td>7</td><td><strong>Merging write buffer</strong></td><td>Miss penalty</td><td>Combine writes to the same block in the write buffer into one wider write</td></tr><tr><td>8</td><td><strong>Compiler optimizations</strong></td><td>Miss rate</td><td>Loop interchange, loop blocking (tiling), loop fusion to improve locality</td></tr><tr><td>9</td><td><strong>Hardware prefetching</strong></td><td>Miss penalty / rate</td><td>Hardware detects streams (e.g. sequential or strided) and fetches blocks ahead of use</td></tr><tr><td>10</td><td><strong>Compiler-controlled prefetching</strong></td><td>Miss penalty / rate</td><td>Compiler inserts prefetch instructions ahead of loads</td></tr></tbody></table>
+<p>Other techniques:</p>
+<ul><li><strong>Split cache:</strong> separate instruction and data caches (parallel access, no structural conflict).</li><li><strong>Victim cache:</strong> tiny cache holding recently evicted blocks to catch conflict misses (Jouppi 1990).</li><li><strong>Higher associativity:</strong> cuts conflict misses.</li><li><strong>Multi-level caching:</strong> L1/L2/L3 balance speed and cost.</li><li><strong>Cache bypassing:</strong> skip the cache for streaming data to avoid pollution.</li><li><strong>HBM / L4:</strong> high-bandwidth stacked DRAM acts as a large, fast cache between on-chip caches and DRAM.</li></ul>
+<h2>Key Formulas</h2>
+<pre><code>AMAT = Hit time + Miss rate × Miss penalty
+
+Bank selection:         bank = (block address) mod (number of banks)
+
+Loop blocking:          need 3 · B² · (element size) ≤ cache size
+                        → B ≤ sqrt( cache size / (3 · element size) )
+Matrix multiply, words moved:   naive ≈ 2N³ + N²,    blocked ≈ 2N³/B + N²
+
+Prefetch usefulness:    accuracy = useful prefetches / prefetches issued
+                        coverage = misses removed / misses without prefetching</code></pre>
+<h2>Steps</h2>
+<p><strong>Loop interchange:</strong> (1) identify the inner loop&#x27;s access stride, (2) if it jumps across rows in a row-major array, swap the loop order so the inner loop walks consecutive addresses.</p>
+<p><strong>Loop blocking:</strong> (1) pick tile size B so the working tiles fit in cache, (2) add outer loops over tiles, (3) compute within each tile.</p>
+<p><strong>Critical word first:</strong> (1) miss occurs, (2) memory returns the requested word first, (3) CPU resumes (early restart), (4) the rest of the block fills in.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Loop interchange.</strong> Array <code>x[N][N]</code> of 4-byte ints in C (row-major), cache 4 KB direct-mapped, 64 B blocks, N = 64 (the array is 16 KB).</p>
+<ul><li>Row-order inner loop (<code>x[i][j]</code>, j inner): <strong>256 misses</strong> (16 ints per block → 4096 / 16).</li><li>Column-order inner loop (<code>x[i][j]</code>, i inner): <strong>4096 misses</strong>, every access misses.</li></ul>
+<p>Interchange gives <strong>16× fewer misses</strong> with no change in results.</p>
+<p><strong>B. Tile size.</strong> 32 KB cache, 8-byte doubles: B ≤ sqrt(32768 / (3 × 8)) = sqrt(1365) ≈ 36.9 → choose <strong>B = 32</strong>.</p>
+<p><strong>C. Blocked matrix multiply traffic.</strong> N = 1024, B = 32: naive ≈ 2N³ words; blocked ≈ 2N³/32, a <strong>32× reduction</strong> in words moved between memory and cache (ignoring the N² term).</p>
+<p><strong>D. Critical word first.</strong> 64 B block = 8 words. First word arrives after 50 ns, then one word every 10 ns.</p>
+<ul><li>Wait for whole block: 50 + 7 × 10 = <strong>120 ns</strong>.</li><li>Critical word first + early restart: <strong>50 ns</strong> (CPU continues while the rest arrives), saving 70 ns.</li></ul>
+<p><strong>E. Banking.</strong> 4 banks, block-interleaved: blocks 0, 1, 2, 3 go to banks 0, 1, 2, 3 and can be accessed simultaneously, while blocks 0 and 4 collide on bank 0.</p>
+<p><strong>F. Write buffer merging.</strong> Four 8-byte writes to consecutive addresses of one 32 B block: without merging use four buffer entries and four memory writes; with merging <strong>one entry, one write</strong>.</p>
+<p><strong>G. Victim cache.</strong> Direct-mapped cache, two blocks A and B alternately accessed that map to the same line. Without a victim cache every access misses; with a one-entry victim cache they swap and <strong>hit</strong> after the first two misses.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def misses(addrs, cache_bytes, block, assoc):
+    sets = (cache_bytes // block) // assoc
+    cache = [[] for _ in range(sets)]
+    m = 0
+    for a in addrs:
+        b = a // block; s = b % sets
+        if b in cache[s]:
+            cache[s].remove(b); cache[s].append(b)
+        else:
+            m += 1
+            if len(cache[s]) == assoc: cache[s].pop(0)
+            cache[s].append(b)
+    return m
+
+N, E = 64, 4
+row = [(i*N + j)*E for i in range(N) for j in range(N)]
+col = [(i*N + j)*E for j in range(N) for i in range(N)]
+print(misses(row, 4096, 64, 1), misses(col, 4096, 64, 1))    # 256 4096</code></pre>
+<p>Blocked matrix multiply in C (the compiler optimization to know):</p>
+<pre><code>for (int jj = 0; jj &lt; N; jj += B)
+  for (int kk = 0; kk &lt; N; kk += B)
+    for (int i = 0; i &lt; N; i++)
+      for (int j = jj; j &lt; min(jj+B, N); j++) {
+        double r = 0;
+        for (int k = kk; k &lt; min(kk+B, N); k++)
+          r += y[i][k] * z[k][j];
+        x[i][j] += r;
+      }</code></pre>
+<p>Software prefetch (x86-64 and RISC-V Zicbop extension):</p>
+<pre><code>prefetcht0 [rsi + 256]        # x86-64: bring the line 256 bytes ahead into all cache levels
+# RISC-V (Zicbop):  prefetch.r 256(a0)</code></pre>
+<h2>Notes</h2>
+<ul><li><strong>Strip mining:</strong> sometimes listed next to loop unrolling; it appears with vector code (splitting a long loop into pieces that fit the vector length, Topic 12) and, loosely, as blocking for caches.</li><li>Non-blocking caches only help out-of-order or multi-issue cores that can keep doing useful work during a miss.</li><li>Prefetching can hurt: wrong guesses waste bandwidth and evict useful data (pollution).</li><li>Way prediction saves energy because only one way is read.</li><li>Quick facts: cache blocking reduces misses in matrix operations; write buffer reduces write delays; victim cache reduces conflict misses; compiler optimizations rearrange code for locality; cache bypassing avoids pollution.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 2 (2.3 &quot;Ten Advanced Optimizations of Cache Performance&quot;), Appendix B (B.3); Jouppi, &quot;Improving Direct-Mapped Cache Performance by the Addition of a Small Fully-Associative Cache and Prefetch Buffers,&quot; ISCA 1990; [PH-RV] Ch. 5 (5.4, 5.14 on blocking); </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

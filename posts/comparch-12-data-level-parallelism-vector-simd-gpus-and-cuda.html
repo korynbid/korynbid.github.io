@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 12. Data-Level Parallelism: Vector, SIMD, GPUs and CUDA | korynbid</title>
+  <meta name="description" content="[COMPARCH] 12. Data-Level Parallelism: Vector, SIMD, GPUs and CUDA | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">12. Data-Level Parallelism: Vector, SIMD, GPUs and CUDA</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>DLP</strong> applies the <strong>same operation to many data elements</strong>. Three hardware families implement it:</p>
+<table><thead><tr><th>Family</th><th>Idea</th><th>Examples</th></tr></thead><tbody><tr><td><strong>Vector architectures</strong></td><td>Long vector registers, a vector length register (VL), pipelined functional units, strided/gather-scatter memory ops</td><td>Cray-style, RISC-V &quot;V&quot; extension, ARM SVE</td></tr><tr><td><strong>SIMD extensions</strong></td><td>Fixed-width registers (128/256/512 bits) split into lanes</td><td>x86 SSE/AVX/AVX-512, ARM NEON</td></tr><tr><td><strong>GPUs</strong></td><td>Thousands of threads, hardware-grouped into SIMD-like warps (SIMT)</td><td>NVIDIA GeForce/Tesla, AMD Radeon</td></tr></tbody></table>
+<p><strong>Vector concepts:</strong></p>
+<ul><li><strong>Vector length (VL):</strong> how many elements one instruction processes.</li><li><strong>Strip mining:</strong> if the loop count N exceeds the maximum vector length (MVL), process the loop in strips of ≤ MVL plus a remainder.</li><li><strong>Chaining:</strong> forward each element result to the next vector instruction without waiting for the whole vector (vector forwarding).</li><li><strong>Masked (predicated) instructions:</strong> a mask register enables or disables individual elements so <code>if</code> statements vectorize without branches.</li><li><strong>Gather/scatter:</strong> indexed loads/stores for irregular access.</li></ul>
+<p><strong>SIMD extension issues:</strong> data <strong>alignment</strong>, tail handling, no standard vector length (code must be rewritten for each new width), and the data must be laid out contiguously (prefer <em>structure of arrays</em>). Overlapping computation with memory loads helps hide latency.</p>
+<p><strong>GPUs and CUDA:</strong></p>
+<ul><li><strong>CUDA</strong> is NVIDIA&#x27;s platform for programming GPUs. You write a <strong>kernel</strong> run by many threads.</li><li>Hierarchy: <strong>thread → warp (32 threads) → thread block → grid</strong>. Blocks run on <strong>streaming multiprocessors (SMs)</strong>.</li><li><strong>SIMT:</strong> all threads of a warp execute one instruction in lock-step. <strong>Divergence</strong> (threads of a warp taking different branch paths) serializes the paths with masks and wastes lanes.</li><li><strong>Memory:</strong> registers, fast on-chip <strong>shared memory</strong> (per block), caches, global memory (GDDR/HBM). <strong>Coalescing:</strong> consecutive threads accessing consecutive addresses merge into few memory transactions.</li><li>Applications: graphics, scientific simulation, deep learning (frameworks such as TensorFlow run on CUDA).</li></ul>
+<p><strong>Roofline model:</strong> performance is bounded either by peak compute or by memory bandwidth, depending on <strong>arithmetic intensity</strong> (FLOPs per byte moved).</p>
+<h2>Key Formulas</h2>
+<pre><code>Lanes per register = register width / element width      (256-bit AVX2, 32-bit float → 8)
+Peak FLOPS = cores × (lanes × FLOP per lane per cycle) × frequency
+             (FMA counts as 2 FLOP)
+
+Strips needed = ceil(N / MVL)
+
+Vector time ≈ (convoys) × VL + startup           (one chime per convoy)
+
+Roofline:   Attainable GFLOP/s = min( Peak GFLOP/s , Peak bandwidth × Arithmetic intensity )
+            Ridge point = Peak GFLOP/s / Peak bandwidth
+
+CUDA blocks = ceil(N / threads per block);   warps per block = threads per block / 32</code></pre>
+<h2>Steps</h2>
+<p><strong>Vectorize a loop:</strong> (1) confirm iterations are independent (no loop-carried dependence), (2) replace scalar ops by vector ops, (3) strip-mine to the hardware vector length, (4) handle <code>if</code> with masks, (5) align or pad data.</p>
+<p><strong>Write a CUDA kernel:</strong> (1) compute global index <code>i = blockIdx.x * blockDim.x + threadIdx.x</code>, (2) guard <code>if (i &lt; n)</code>, (3) copy data to the device, (4) launch <code>&lt;&lt;&lt;blocks, threads&gt;&gt;&gt;</code>, (5) copy results back.</p>
+<h2>Worked Example</h2>
+<p><strong>A. SIMD width.</strong> AVX2 (256-bit) holds <strong>8</strong> floats or <strong>4</strong> doubles; AVX-512 holds 16 floats. Adding two arrays of 1,000,000 floats takes about 1,000,000 / 8 = <strong>125,000</strong> AVX2 additions (ideal), versus 1,000,000 scalar additions.</p>
+<p><strong>B. Strip mining.</strong> N = 200, MVL = 64: strips of 64, 64, 64 and <strong>8</strong> elements (4 vector iterations).</p>
+<p><strong>C. DAXPY chimes</strong> (<code>y = a·x + y</code>, one load/store unit): <code>LV V1,Rx</code> ; <code>MULVS.D V2,V1,F0</code> ; <code>LV V3,Ry</code> ; <code>ADDV.D V4,V2,V3</code> ; <code>SV Ry,V4</code>. With chaining the schedule needs <strong>3 convoys</strong> (load+multiply, load+add, store), so 64 elements take roughly 3 × 64 = <strong>192 cycles</strong> plus startup, about 3 cycles per element.</p>
+<p><strong>D. Masked operation.</strong> <code>for i: if (A[i] != 0) A[i] = A[i] - B[i];</code> → compute mask = (A != 0), then subtract only where the mask is true, no branch.</p>
+<p><strong>E. Peak FLOPS.</strong> 8 cores, 3 GHz, 2 AVX2 FMA units each (2 × 4 doubles × 2 FLOP = 16 FLOP/cycle): 8 × 3 × 16 = <strong>384 GFLOP/s</strong>.</p>
+<p><strong>F. Roofline.</strong> Peak = 10 TFLOP/s, bandwidth = 500 GB/s → ridge point = 20 FLOP/byte.</p>
+<ul><li>AI = 4 FLOP/byte → attainable = 500 × 4 = <strong>2 TFLOP/s</strong> (memory-bound).</li><li>AI = 40 FLOP/byte → attainable = <strong>10 TFLOP/s</strong> (compute-bound).</li></ul>
+<p><strong>G. CUDA launch.</strong> N = 1,000,000, 256 threads per block → ceil(1,000,000 / 256) = <strong>3907 blocks</strong>; each block has 8 warps; the last block has 64 idle threads, which is why the <code>if (i &lt; n)</code> guard is needed.</p>
+<p><strong>H. Divergence.</strong> In a warp where half the threads take the <code>if</code> path and half the <code>else</code> path, the hardware executes both paths one after the other, so throughput for that code halves.</p>
+<h2>Python / Assembly</h2>
+<pre><code>import numpy as np
+
+x = np.arange(8, dtype=np.float32)
+y = np.ones(8, dtype=np.float32)
+
+# DAXPY-style vector update (NumPy executes this with SIMD kernels)
+z = 2.0 * x + y
+
+# Masked operation: A[i] = A[i] - B[i] only where A[i] != 0
+A = np.array([3, 0, 5, 0, 7, 8, 0, 1], dtype=np.float32)
+B = np.array([1, 1, 1, 1, 1, 1, 1, 1], dtype=np.float32)
+mask = A != 0
+A = np.where(mask, A - B, A)
+print(A)          # [2. 0. 4. 0. 6. 7. 0. 0.]
+
+def roofline(peak_gflops, bw_gbs, ai):
+    return min(peak_gflops, bw_gbs * ai)
+print(roofline(10_000, 500, 4), roofline(10_000, 500, 40))   # 2000 10000</code></pre>
+<p>RISC-V Vector (RVV 1.0) DAXPY, strip-mined by <code>vsetvli</code>:</p>
+<pre><code># a0 = n, a1 = &amp;x, a2 = &amp;y, fa0 = a      y[i] = a * x[i] + y[i]
+daxpy:
+loop:
+    vsetvli t0, a0, e64, m1, ta, ma   # t0 = elements handled this strip (&lt;= VLMAX)
+    vle64.v v0, (a1)                  # load x strip
+    vle64.v v1, (a2)                  # load y strip
+    vfmacc.vf v1, fa0, v0             # v1 += fa0 * v0
+    vse64.v v1, (a2)                  # store y strip
+    slli    t1, t0, 3                 # bytes processed = elements * 8
+    add     a1, a1, t1
+    add     a2, a2, t1
+    sub     a0, a0, t0                # remaining elements
+    bnez    a0, loop
+    ret</code></pre>
+<p>Masked version of <code>if (A[i] != 0) A[i] -= B[i]</code> (mask lives in <code>v0</code>):</p>
+<pre><code>    fmv.d.x   ft0, zero               # ft0 = 0.0
+    vle64.v   v1, (a1)                # A
+    vle64.v   v2, (a2)                # B
+    vmfne.vf  v0, v1, ft0             # mask = (A != 0)
+    vfsub.vv  v1, v1, v2, v0.t        # A = A - B only where mask set
+    vse64.v   v1, (a1)</code></pre>
+<p>x86 AVX2 intrinsics (8 floats per instruction):</p>
+<pre><code>#include &lt;immintrin.h&gt;
+void add8(const float *a, const float *b, float *c, int n) {
+    int i = 0;
+    for (; i + 8 &lt;= n; i += 8) {
+        __m256 va = _mm256_loadu_ps(a + i);
+        __m256 vb = _mm256_loadu_ps(b + i);
+        _mm256_storeu_ps(c + i, _mm256_add_ps(va, vb));
+    }
+    for (; i &lt; n; i++) c[i] = a[i] + b[i];        // scalar tail
+}</code></pre>
+<p>CUDA kernel and launch:</p>
+<pre><code>__global__ void vadd(const float *a, const float *b, float *c, int n) {
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i &lt; n) c[i] = a[i] + b[i];
+}
+// host:  vadd&lt;&lt;&lt;(n + 255) / 256, 256&gt;&gt;&gt;(d_a, d_b, d_c, n);</code></pre>
+<h2>Notes</h2>
+<ul><li>SIMD vs vector: SIMD exposes a fixed register width, vector architectures expose a flexible vector length, so one binary adapts to different hardware.</li><li>A GPU is a throughput machine: it hides memory latency by switching among many warps instead of using big caches.</li><li>Masked instructions trade a branch for wasted lanes; they win when branches would be unpredictable.</li><li>Poor alignment or non-contiguous data can erase SIMD gains.</li><li>Quick facts: DLP = same operation on multiple data; SIMD processors and GPUs support DLP; masked vector instructions apply an operation only to chosen elements; CUDA is NVIDIA&#x27;s GPU programming platform; GPUs run thousands of threads at once.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 4 (4.1-4.4 vector, SIMD, GPUs, roofline); [PH-RV] Ch. 6 (6.6-6.7); [RV-Spec] &quot;V&quot; Vector Extension 1.0; Williams, Waterman &amp; Patterson, &quot;Roofline: An Insightful Visual Performance Model for Multicore Architectures,&quot; <em>CACM</em>, 2009; NVIDIA, <em>CUDA C++ Programming Guide</em>;</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

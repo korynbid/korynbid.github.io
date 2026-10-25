@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 10. Dynamic Scheduling, Branch Prediction and Speculation | korynbid</title>
+  <meta name="description" content="[COMPARCH] 10. Dynamic Scheduling, Branch Prediction and Speculation | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">10. Dynamic Scheduling, Branch Prediction and Speculation</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A simple pipeline issues instructions <strong>in order</strong>; one stalled instruction blocks everything behind it. <strong>Dynamic scheduling</strong> lets hardware execute instructions <strong>out of order</strong> as soon as their operands and a functional unit are ready, while still producing the right results.</p>
+<p><strong>Dependences recap</strong> (see Topic 9):</p>
+<ul><li><strong>RAW</strong> (true): real data flow, must be respected.</li><li><strong>WAR</strong> (anti) and <strong>WAW</strong> (output): <em>name</em> dependences caused by reusing register names. <strong>Register renaming</strong> removes them.</li></ul>
+<p><strong>Tomasulo&#x27;s algorithm</strong> (Robert Tomasulo, IBM 360/91, 1967):</p>
+<ul><li><strong>Reservation stations (RS):</strong> buffers in front of each functional unit that hold an instruction and its operands (or the tags of the units that will produce them).</li><li><strong>Register renaming via tags:</strong> an operand not yet computed is replaced by the tag of the RS that will produce it, which removes WAR and WAW hazards.</li><li><strong>Common Data Bus (CDB):</strong> broadcasts each result with its tag to every waiting RS and register at once.</li><li>Three steps per instruction: <strong>Issue</strong> (in order, allocate an RS, read ready operands or record tags) → <strong>Execute</strong> (when both operands are available) → <strong>Write result</strong> (broadcast on CDB).</li></ul>
+<p><strong>Register renaming (modern form):</strong> a <strong>rename table</strong> maps the <em>architectural</em> registers to a larger pool of <em>physical</em> registers; each new destination gets a fresh physical register, so only true RAW dependences remain.</p>
+<p><strong>Re-Order Buffer (ROB):</strong> instructions complete out of order but <strong>commit in program order</strong>. The ROB holds results until it is safe to write architectural state, giving <strong>precise exceptions</strong> and enabling <strong>speculation</strong>.</p>
+<p><strong>Branch prediction</strong> keeps the front end fed past unresolved branches:</p>
+<table><thead><tr><th>Predictor</th><th>Idea</th></tr></thead><tbody><tr><td>Static</td><td>Always taken / not taken, or by direction (backward taken)</td></tr><tr><td><strong>1-bit</strong></td><td>Remember last outcome; mispredicts twice per loop exit</td></tr><tr><td><strong>2-bit saturating counter</strong></td><td>Needs two wrong outcomes to flip; mispredicts once per loop exit</td></tr><tr><td><strong>Correlating / two-level</strong></td><td>Use global or local history of recent branches (e.g. gshare: PC XOR history)</td></tr><tr><td><strong>Tournament / TAGE</strong></td><td>Combine predictors; pick the best per branch (used in modern cores)</td></tr><tr><td><strong>BTB</strong> (branch target buffer)</td><td>Cache of predicted target addresses so fetch can redirect immediately</td></tr><tr><td><strong>Return address stack</strong></td><td>Predicts function-return targets</td></tr></tbody></table>
+<p><strong>Speculative execution:</strong> execute instructions beyond a predicted branch; commit them only if the prediction was right, otherwise <strong>flush</strong> (roll back) and restart on the correct path. Used in Intel and ARM cores. (The same mechanism is the root of the Spectre-class security attacks.)</p>
+<h2>Key Formulas</h2>
+<pre><code>CPI = CPI_base + (branch frequency) × (misprediction rate) × (misprediction penalty)
+
+2-bit counter:  states 00,01 = predict not taken;  10,11 = predict taken
+                taken → increment (saturate at 11);  not taken → decrement (saturate at 00)
+
+gshare index = (PC bits) XOR (global history register)
+
+Tomasulo reservation-station fields: Op | Vj | Vk | Qj | Qk | A | Busy
+   V = operand value, Q = tag of producing station (0 or blank = value is ready)</code></pre>
+<h2>Steps</h2>
+<p><strong>Tomasulo trace:</strong> (1) <em>Issue</em> in order: free RS available? Copy ready operand values; for operands still pending store the producing RS tag in Qj/Qk; set the destination register&#x27;s status to this RS, (2) <em>Execute</em> when Qj = Qk = 0, (3) <em>Write</em>: broadcast result and tag on CDB; waiting stations capture it; the register file updates only if its status still points to this RS.</p>
+<p><strong>With a ROB (4 steps):</strong> Issue → Execute → Write result (into ROB entry) → <strong>Commit</strong> (when the entry reaches the ROB head; writes register/memory, handles exceptions).</p>
+<p><strong>Mispredicted branch:</strong> (1) branch resolves, (2) flush all younger instructions from RS and ROB, (3) restore rename map, (4) restart fetch at the correct target.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Dependence analysis</strong> (H&amp;P-style sequence).</p>
+<pre><code>1  fdiv.d f0,  f2,  f4
+2  fadd.d f6,  f0,  f8      # RAW on f0 (from 1)
+3  fsd    f6,  0(x1)        # RAW on f6 (from 2)
+4  fsub.d f8,  f10, f14     # WAR with 2 (2 reads f8, 4 writes f8)
+5  fmul.d f6,  f10, f8      # RAW on f8 (from 4); WAW with 2 (both write f6)</code></pre>
+<ul><li>RAW: 1→2 (f0), 2→3 (f6), 4→5 (f8). Must be respected.</li><li>WAR: 2 reads <code>f8</code>, 4 writes <code>f8</code>. WAW: 2 and 5 both write <code>f6</code>.</li><li>Renaming removes WAR and WAW, so instructions 4 and 5 can run while the long <code>fdiv.d</code> is still executing.</li></ul>
+<p><strong>B. Tomasulo at issue time.</strong></p>
+<table><thead><tr><th>Instr</th><th>Station</th><th>Operands captured</th><th>Register status after issue</th></tr></thead><tbody><tr><td>1 fdiv</td><td>Div1</td><td>Vj = f2, Vk = f4 (both ready)</td><td>f0 → Div1</td></tr><tr><td>2 fadd</td><td>Add1</td><td>Qj = <strong>Div1</strong>, Vk = value of f8 (<strong>captured now</strong>)</td><td>f6 → Add1</td></tr><tr><td>3 fsd</td><td>Store1</td><td>waits for Add1 (value of f6)</td><td>none</td></tr><tr><td>4 fsub</td><td>Add2</td><td>Vj = f10, Vk = f14 (ready)</td><td>f8 → Add2</td></tr><tr><td>5 fmul</td><td>Mul1</td><td>Vj = f10, Qk = <strong>Add2</strong></td><td>f6 → <strong>Mul1</strong></td></tr></tbody></table>
+<ul><li>Instruction 2 already copied the <em>old</em> <code>f8</code>, so instruction 4 overwriting <code>f8</code> is harmless (WAR gone).</li><li><code>f6</code>&#x27;s status now points to Mul1, so when Add1 finishes, its result feeds Store1 through the CDB but <strong>does not</strong> overwrite <code>f6</code> in the register file (WAW gone).</li></ul>
+<p><strong>C. Loop predictor.</strong> A loop branch is taken 9 times then not taken once, repeated.</p>
+<ul><li><strong>1-bit:</strong> mispredicts the exit <em>and</em> the first iteration of the next pass → 2 per 10 → <strong>80%</strong> accuracy.</li><li><strong>2-bit:</strong> the exit only moves the counter from strongly taken to weakly taken, so the next pass is still predicted taken → 1 per 10 → <strong>90%</strong>.</li><li>Simulation over 20 passes starting cold: 1-bit = 0.80, 2-bit = 0.89 (approaches 0.90 in steady state).</li></ul>
+<p><strong>D. Misprediction cost.</strong> Base CPI 1.0, 20% branches, 15-cycle penalty:</p>
+<ul><li>5% mispredicted: CPI = 1 + 0.2 × 0.05 × 15 = <strong>1.15</strong>.</li><li>10% mispredicted: CPI = 1 + 0.2 × 0.10 × 15 = <strong>1.30</strong>.</li></ul>
+<p>Doubling the miss rate doubles the penalty, and deeper pipelines make it worse.</p>
+<p><strong>E. ROB and precise exceptions.</strong> Instructions 1-5 in the ROB; instruction 3 faults. Instructions 1-2 commit, 3 raises the exception at the ROB head, 4-5 (which may already have executed) are discarded. Software sees a state exactly as if the program had run in order up to instruction 3.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def run_1bit(outcomes):
+    state, correct = 0, 0
+    for o in outcomes:
+        correct += (state == o); state = o
+    return correct / len(outcomes)
+
+def run_2bit(outcomes, s=0):
+    correct = 0
+    for o in outcomes:
+        pred = 1 if s &gt;= 2 else 0
+        correct += (pred == o)
+        s = min(3, s + 1) if o else max(0, s - 1)
+    return correct / len(outcomes)
+
+loop = ([1] * 9 + [0]) * 20            # 1 = taken
+print(run_1bit(loop), run_2bit(loop))  # 0.8  0.89
+print(run_2bit(([1]*9 + [0]) * 100, s=3))   # 0.9 (warm start)
+
+def gshare_index(pc, ghr, bits=10):
+    return ((pc &gt;&gt; 2) ^ ghr) &amp; ((1 &lt;&lt; bits) - 1)</code></pre>
+<p>The branch-heavy code that predictors love or hate:</p>
+<pre><code># Counted loop: taken N-1 times, not taken once (easy for a 2-bit predictor)
+        li   t0, 100
+loop:   addi t0, t0, -1
+        bnez t0, loop
+
+# Data-dependent branch: hard to predict if the data are random
+        lw   t1, 0(a0)
+        bgez t1, skip        # ~50% taken on random data -&gt; many mispredictions
+        addi t2, t2, 1
+skip:</code></pre>
+<h2>Notes</h2>
+<ul><li>Tomasulo&#x27;s original design (IBM 360/91) handled floating point; modern cores use the same ideas with physical register files plus a ROB.</li><li>The ROB is what makes <strong>speculation</strong> safe; Tomasulo alone does not give precise exceptions.</li><li>Wide out-of-order engines are power-hungry; this is one reason ILP stopped scaling (Topic 11).</li><li>Branch-free code (conditional moves, predication, SIMD masks) can beat unpredictable branches.</li><li>Quick facts: Tomasulo uses reservation stations and register renaming; the CDB broadcasts results to all waiting instructions; the ROB executes out of order but commits in program order; a BTB caches predicted targets; a two-level predictor uses local or global history; register renaming solves WAR and WAW.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 3 (3.3-3.9); [PH-RV] Ch. 4 (4.10); Tomasulo, &quot;An Efficient Algorithm for Exploiting Multiple Arithmetic Units,&quot; <em>IBM J. Res. Dev.</em>, 1967; Smith, &quot;A Study of Branch Prediction Strategies,&quot; ISCA 1981; Kocher et al., &quot;Spectre Attacks: Exploiting Speculative Execution,&quot; IEEE S&amp;P 2019;</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

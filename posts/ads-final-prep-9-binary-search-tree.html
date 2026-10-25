@@ -30,8 +30,8 @@
   <div class="wrapper">
     <article class="post">
       <header class="post-header">
-        <h1 class="post-title">[ADS-FINAL-PREP] 9. Binary Search Tree</h1>
-        <p class="post-meta">Oct 24, 2026 &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
+        <h1 class="post-title">9. Binary Search Tree</h1>
+        <p class="post-meta">Oct 24, 2026 &middot; ADS-FINAL-PREP &middot; Algorithms &amp; Data Structures &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1713/1733" rel="noopener">https://t.me/c/2310214877/1713/1733</a></p>
       </header>
       <div class="post-content">
 <p><strong>Description:</strong> A Binary Search Tree (BST) is a node-based binary tree data structure where each node satisfies the following properties:</p>
@@ -54,52 +54,15 @@
 <ol><li>Start at the root node.</li><li>If the new value is smaller than the current node, move to the left child.</li><li>If the new value is larger than the current node, move to the right child.</li><li>Repeat steps 2–3 until an empty slot (<code>null</code>) is reached, and attach the new node there.</li></ol>
 <h2>Time Complexity</h2>
 <ul><li><strong>Search:</strong> O(log n) on average for balanced trees, where <code>n</code> is the number of nodes. In the worst-case scenario (unbalanced/skewed tree), search degrades to O(n).</li><li><strong>Insertion:</strong> Average O(log n), worst-case O(n).</li><li><strong>Deletion:</strong> Average O(log n), worst-case O(n).</li></ul>
-
 <h2>Practical Applications</h2>
 <ul><li><strong>Database Indexing:</strong> Used for quick record retrieval and ranged queries.</li><li><strong>Sorting Algorithms:</strong> Tree Sort builds a BST to output sorted data in-order.</li><li><strong>Dynamic Query Processing:</strong> Applied in routing algorithms and real-time lookup engines.</li></ul>
 <h2>Advantages</h2>
 <ul><li>Fast lookups, insertions, and deletions when the tree remains balanced.</li><li>Intuitive implementation offering strong dynamic data capabilities.</li></ul>
 <h2>Disadvantages</h2>
 <ul><li>Performance depends on tree height. If elements are inserted in pre-sorted order, the tree degenerates into a linear linked list with O(n) performance.</li><li>Self-balancing trees (such as AVL trees or Red-Black trees) are required to automatically maintain logarithmic height during dynamic modifications.</li></ul>
-<pre><code>class Node:
-    def __init__(self, key):
-        self.left = None
-        self.right = None
-        self.value = key
-
-class BinarySearchTree:
-    def __init__(self):
-        self.root = None
-
-    def insert(self, key):
-        if self.root is None:
-            self.root = Node(key)
-        else:
-            self._insert_recursive(self.root, key)
-
-    def _insert_recursive(self, node, key):
-        if key &lt; node.value:
-            if node.left is None:
-                node.left = Node(key)
-            else:
-                self._insert_recursive(node.left, key)
-        elif key &gt; node.value:
-            if node.right is None:
-                node.right = Node(key)
-            else:
-                self._insert_recursive(node.right, key)
-
-    def search(self, key):
-        return self._search_recursive(self.root, key)
-
-    def _search_recursive(self, node, key):
-        if node is None or node.value == key:
-            return node
-        if key &lt; node.value:
-            return self._search_recursive(node.left, key)
-        return self._search_recursive(node.right, key)</code></pre>      
-</div>
-      <p class="post-notice">If you noticed a mistake or copyright issues, please contact:
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
       <section class="comments">
@@ -125,7 +88,8 @@ class BinarySearchTree:
 
 <footer class="site-footer">
   <div class="wrapper">
-    <p class="text">&copy; 2026 korynbid</p>
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

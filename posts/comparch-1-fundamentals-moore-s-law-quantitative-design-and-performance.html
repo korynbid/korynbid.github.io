@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 1. Fundamentals: Moore&#x27;s Law, Quantitative Design and Performance | korynbid</title>
+  <meta name="description" content="[COMPARCH] 1. Fundamentals: Moore&#x27;s Law, Quantitative Design and Performance | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">1. Fundamentals: Moore&#x27;s Law, Quantitative Design and Performance</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Moore&#x27;s Law</strong> (Gordon Moore, Intel co-founder, 1965; revised 1975) observes that the number of transistors on an integrated circuit doubles roughly every two years. Some sources quote 18-24 months; the 18-month figure is usually attributed to Intel&#x27;s David House and refers to <em>performance</em>, not transistor count. The law drove decades of cheaper, faster, smaller chips.</p>
+<p>Why it matters and why it is slowing:</p>
+<ul><li><strong>Miniaturization:</strong> smaller transistors pack more logic per chip and switch faster (process nodes shrank from 10 µm in the 1970s to about 3 nm today).</li><li><strong>Clock speed:</strong> measured in GHz (billions of cycles per second). Frequencies stopped rising around 2004 because of the <strong>power wall</strong>.</li><li><strong>Dennard scaling</strong> (power density stays constant as transistors shrink) ended around 2004, so more transistors no longer meant free speed. The industry moved to multicore, parallelism and specialization.</li><li><strong>Physical and economic limits:</strong> leakage current, heat, lithography cost. 3D stacking and chiplets help continue progress.</li></ul>
+<p><strong>Quantitative design</strong> means making architecture decisions with measured numbers (latency, throughput, energy, cost) rather than intuition. Hennessy and Patterson&#x27;s guiding ideas:</p>
+<ol><li>Take advantage of <strong>parallelism</strong> (data, instruction, thread, request level).</li><li>Exploit the <strong>principle of locality</strong> (temporal and spatial).</li><li><strong>Focus on the common case</strong> (optimize what happens most often).</li><li><strong>Amdahl&#x27;s Law</strong> limits what any single improvement can deliver.</li><li><strong>The Processor Performance Equation</strong> ties it all together.</li></ol>
+<h2>Key Formulas</h2>
+<pre><code>Speedup (X vs Y)  = Time_old / Time_new = Perf_new / Perf_old
+
+CPU time = Instruction count (IC) × CPI × Clock period
+         = IC × CPI / Clock rate
+
+CPI (weighted) = Σ (fraction_i × CPI_i)
+
+Amdahl:   Speedup_overall = 1 / [ (1 − f) + f / s ]
+          f = fraction of ORIGINAL time that benefits, s = speedup of that part
+          Upper limit as s → ∞ :  1 / (1 − f)
+
+MIPS = IC / (Time × 10⁶) = Clock rate / (CPI × 10⁶)
+FLOPS = floating-point operations per second</code></pre>
+<p>Performance metrics to know:</p>
+<table><thead><tr><th>Metric</th><th>Meaning</th></tr></thead><tbody><tr><td>Latency (response time)</td><td>Time to finish one task</td></tr><tr><td>Throughput (bandwidth)</td><td>Tasks completed per unit time</td></tr><tr><td>Energy efficiency</td><td>Work per joule (e.g. FLOPS/W)</td></tr><tr><td>Dependability</td><td>Availability = MTTF / (MTTF + MTTR)</td></tr><tr><td>Benchmark suites</td><td>Standard programs (e.g. SPEC CPU) to compare machines fairly; summarize with the <strong>geometric mean</strong> of ratios</td></tr></tbody></table>
+<h2>Steps</h2>
+<p><strong>To compare two machines:</strong> (1) fix the workload, (2) measure execution time on each, (3) speedup = slower time ÷ faster time.</p>
+<p><strong>To find CPU time:</strong> (1) get IC from the compiler/profiler, (2) get CPI (weighted by instruction mix), (3) get clock period, (4) multiply.</p>
+<p><strong>To apply Amdahl:</strong> (1) find the fraction f of <em>original</em> time the improvement touches, (2) find the speedup s of that fraction, (3) plug into the formula, (4) check against the 1/(1 − f) ceiling.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Transistor growth.</strong> A chip has 2 billion transistors in 2020. Doubling every 2 years gives 2 × 2⁵ = <strong>64 billion</strong> in 2030 (5 doublings in 10 years).</p>
+<p><strong>B. Speedup.</strong> Program takes 12 s on X and 8 s on Y. Speedup of Y over X = 12/8 = <strong>1.5</strong>, meaning Y is 50% faster.</p>
+<p><strong>C. CPU time.</strong> IC = 2 × 10⁹, CPI = 1.5, clock = 3 GHz. CPU time = (2 × 10⁹ × 1.5) / (3 × 10⁹) = <strong>1.0 s</strong>.</p>
+<p><strong>D. Weighted CPI.</strong> Mix: ALU 50% (CPI 1), loads 20% (CPI 2), stores 10% (CPI 2), branches 20% (CPI 3). CPI = 0.5(1) + 0.2(2) + 0.1(2) + 0.2(3) = 0.5 + 0.4 + 0.2 + 0.6 = <strong>1.7</strong>.</p>
+<p><strong>E. Amdahl, single enhancement.</strong> A part that uses 40% of execution time is made 10× faster. Speedup = 1 / (0.6 + 0.4/10) = 1 / 0.64 = <strong>1.5625</strong>. Even a 10× boost on 40% of the work yields only 1.56×.</p>
+<p><strong>F. Amdahl, parallel cores.</strong> Program is 95% parallelizable.</p>
+<table><thead><tr><th>Cores</th><th>Speedup</th></tr></thead><tbody><tr><td>8</td><td>1 / (0.05 + 0.95/8) = 5.93</td></tr><tr><td>64</td><td>1 / (0.05 + 0.95/64) = 15.4</td></tr><tr><td>∞</td><td>1 / 0.05 = 20 (hard ceiling)</td></tr></tbody></table>
+<p>Example: 90% parallelizable → maximum speedup 1/0.1 = <strong>10×</strong>.</p>
+<p><strong>G. MIPS and peak FLOPS.</strong> 3 GHz, CPI 1.5 → 3000 / 1.5 = <strong>2000 MIPS</strong>. A core with two 256-bit FMA units does 2 units × 4 doubles × 2 FLOP = 16 DP FLOP/cycle, so 8 cores at 3 GHz peak at 8 × 3 × 16 = <strong>384 GFLOPS</strong>.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def speedup(t_old, t_new):
+    return t_old / t_new
+
+def cpu_time(ic, cpi, clock_hz):
+    return ic * cpi / clock_hz
+
+def weighted_cpi(mix):               # mix = [(fraction, cpi), ...]
+    return sum(f * c for f, c in mix)
+
+def amdahl(f, s):
+    return 1.0 / ((1 - f) + f / s)
+
+print(cpu_time(2e9, 1.5, 3e9))                              # 1.0
+print(round(weighted_cpi([(.5,1),(.2,2),(.1,2),(.2,3)]), 2))   # 1.7
+print(amdahl(0.4, 10))                                      # 1.5625
+print([round(amdahl(0.95, n), 2) for n in (8, 64, 10**9)])  # [5.93, 15.42, 20.0]</code></pre>
+<p>Measuring cycles on real hardware (x86-64 and RISC-V read a cycle counter):</p>
+<pre><code># RISC-V: read the cycle counter before and after a code region
+    rdcycle t0
+    # ... code under test ...
+    rdcycle t1
+    sub     t2, t1, t0        # cycles elapsed</code></pre>
+<h2>Notes</h2>
+<ul><li><strong>Common mistake:</strong> lowering voltage does not reduce power &quot;exponentially.&quot; Dynamic power depends on <strong>V² (quadratic)</strong>. See Topic 4.</li><li><strong>MIPS is a poor cross-machine metric:</strong> it ignores instruction complexity (a CISC instruction does more than a RISC one). Use execution time on real programs.</li><li>Amdahl&#x27;s <em>f</em> is the fraction of <strong>original</strong> time. Using the fraction of the new time is a common mistake.</li><li>Higher clock rate alone does not mean faster: IC and CPI also change with design.</li><li>Quick facts: Moore proposed it in 1965; it is slowing but 3D stacking sustains progress; key metrics are latency, throughput and energy efficiency.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 1 (1.1-1.9); [PH-RV] Ch. 1; Moore, &quot;Cramming More Components onto Integrated Circuits,&quot; <em>Electronics</em>, 1965; Amdahl, &quot;Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities,&quot; AFIPS 1967; </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

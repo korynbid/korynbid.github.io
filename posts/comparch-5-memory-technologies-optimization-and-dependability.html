@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 5. Memory Technologies, Optimization and Dependability | korynbid</title>
+  <meta name="description" content="[COMPARCH] 5. Memory Technologies, Optimization and Dependability | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">5. Memory Technologies, Optimization and Dependability</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Different storage technologies trade speed, density, cost, volatility and endurance:</p>
+<table><thead><tr><th>Technology</th><th>Cell</th><th>Volatile?</th><th>Typical latency (order of magnitude)</th><th>Use</th></tr></thead><tbody><tr><td><strong>SRAM</strong></td><td>6 transistors (flip-flop)</td><td>Yes</td><td>~1 ns (a few cycles)</td><td>Registers, L1-L3 caches, TLBs</td></tr><tr><td><strong>DRAM</strong></td><td>1 transistor + 1 capacitor</td><td>Yes (refresh needed)</td><td>~50-100 ns</td><td>Main memory (DDR4/DDR5)</td></tr><tr><td><strong>HBM</strong></td><td>Stacked DRAM on interposer</td><td>Yes</td><td>DRAM-class, huge bandwidth</td><td>GPUs, accelerators</td></tr><tr><td><strong>Flash (NAND)</strong></td><td>Floating-gate cell</td><td><strong>No</strong></td><td>tens of µs</td><td>SSDs, phones</td></tr><tr><td><strong>HDD</strong></td><td>Spinning magnetic disk</td><td>No</td><td>milliseconds</td><td>Cheap bulk storage</td></tr></tbody></table>
+<p><strong>SRAM vs DRAM:</strong></p>
+<table><thead><tr><th>Feature</th><th>SRAM</th><th>DRAM</th></tr></thead><tbody><tr><td>Cell</td><td>6 transistors, no refresh</td><td>1 transistor + 1 capacitor, refresh required</td></tr><tr><td>Speed</td><td>Very fast, predictable timing</td><td>Slower, more complex timing</td></tr><tr><td>Density / cost</td><td>Low density, high cost per bit</td><td>High density, low cost per bit</td></tr><tr><td>Power</td><td>No refresh, higher static power per cell</td><td>Refresh overhead, dynamic power</td></tr><tr><td>Typical use</td><td>CPU caches</td><td>System memory</td></tr></tbody></table>
+<p><strong>DRAM basics:</strong> the array is organized in banks of rows and columns. A read <em>activates</em> a row into the <strong>row buffer</strong> (RAS), then selects columns (CAS). Capacitors leak, so every row must be refreshed (typically every ~64 ms). <strong>DDR</strong> transfers data on both clock edges. <strong>HBM</strong> stacks DRAM dies and connects them with a very wide interface for bandwidth.</p>
+<p><strong>Flash</strong> is non-volatile and fast but cells wear out after limited write/erase cycles, so controllers use <strong>wear leveling</strong> (spread writes evenly) and error correction.</p>
+<p><strong>Memory optimizations (main memory level):</strong> multiple <strong>banks</strong> and <strong>interleaving</strong>, open-row (page) policy to exploit the row buffer, prefetching, write buffering, and wider/faster interfaces (DDR generations, HBM).</p>
+<p><strong>Dependability:</strong></p>
+<ul><li><strong>Soft errors:</strong> transient bit flips (cosmic rays, noise); corrected, no permanent damage.</li><li><strong>Hard errors:</strong> permanent defects.</li><li><strong>ECC</strong> (error-correcting code) memory detects and corrects errors; <strong>SECDED</strong> = single-error correct, double-error detect.</li><li><strong>ChipKill</strong> survives the failure of an entire DRAM chip (multi-bit protection).</li><li><strong>RAID</strong> adds redundancy across disks for fault tolerance and performance.</li><li><strong>Scrubbing</strong> periodically reads and corrects memory to stop errors accumulating.</li></ul>
+<h2>Key Formulas</h2>
+<pre><code>Peak DRAM bandwidth = transfer rate (MT/s) × bus width (bytes)
+Hamming bound (single-error correct): 2^r ≥ m + r + 1     (m data bits, r check bits)
+SECDED check bits = r + 1
+Availability = MTTF / (MTTF + MTTR)
+Annual failure rate (AFR) ≈ 8760 h / MTTF
+Interleaved access time (n banks) ≈ T_access + (n − 1) · T_bus</code></pre>
+<h2>Steps</h2>
+<p><strong>DRAM bandwidth:</strong> (1) read the transfer rate (MT/s), (2) multiply by bus width in bytes, (3) multiply by number of channels.</p>
+<p><strong>Check bits for ECC:</strong> (1) pick m data bits, (2) find the smallest r with 2^r ≥ m + r + 1, (3) add 1 parity bit for double-error detection.</p>
+<p><strong>Hamming (7,4) single-bit correction:</strong> (1) place check bits at positions 1, 2, 4, (2) compute even-parity bits over the position groups, (3) on receipt recompute the syndrome; its value is the position of the flipped bit.</p>
+<h2>Worked Example</h2>
+<p><strong>A. DDR4-3200.</strong> 3200 MT/s × 8 B = <strong>25.6 GB/s</strong> per 64-bit channel; dual channel = <strong>51.2 GB/s</strong>.</p>
+<p><strong>B. HBM2.</strong> 1024-bit interface × 2 Gb/s per pin ÷ 8 = <strong>256 GB/s per stack</strong>; four stacks ≈ 1 TB/s.</p>
+<p><strong>C. ECC overhead.</strong> 64 data bits: need r with 2^r ≥ 64 + r + 1 → r = 7 (128 ≥ 72). Add 1 for double detection → <strong>8 check bits</strong>, a (72, 64) code, overhead 8/64 = <strong>12.5%</strong>.</p>
+<p><strong>D. Hamming (7,4).</strong> Data d1..d4 = 1 0 1 1. p1 = d1⊕d2⊕d4 = 0; p2 = d1⊕d3⊕d4 = 1; p4 = d2⊕d3⊕d4 = 0. Codeword (positions 1-7) = <code>0 1 1 0 0 1 1</code>. Suppose bit 6 flips → <code>0 1 1 0 0 0 1</code>. Syndrome: s1 (positions 1,3,5,7) = 0; s2 (2,3,6,7) = 1; s4 (4,5,6,7) = 1 → s4 s2 s1 = 110 = <strong>6</strong>. Flip position 6 back.</p>
+<p><strong>E. Disk reliability.</strong> MTTF = 1,000,000 h → AFR ≈ 8760/10⁶ ≈ <strong>0.88%</strong>. A farm of 1000 disks expects about <strong>8.8 failures per year</strong>. With MTTR = 24 h, availability = 10⁶/(10⁶ + 24) ≈ <strong>99.9976%</strong> per disk.</p>
+<p><strong>F. Interleaving.</strong> Four words, each bank access 40 ns, bus transfer 10 ns. Single bank, sequential: 4 × 40 = 160 ns. Four-way interleaved: 40 + 3 × 10 = <strong>70 ns</strong>.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def encode74(d1, d2, d3, d4):
+    p1 = d1 ^ d2 ^ d4
+    p2 = d1 ^ d3 ^ d4
+    p4 = d2 ^ d3 ^ d4
+    return [p1, p2, d1, p4, d2, d3, d4]          # positions 1..7
+
+def correct74(c):
+    s1 = c[0] ^ c[2] ^ c[4] ^ c[6]
+    s2 = c[1] ^ c[2] ^ c[5] ^ c[6]
+    s4 = c[3] ^ c[4] ^ c[5] ^ c[6]
+    pos = s4 * 4 + s2 * 2 + s1                    # 0 means no error
+    if pos:
+        c[pos - 1] ^= 1
+    return c, pos
+
+word = encode74(1, 0, 1, 1)         # [0,1,1,0,0,1,1]
+word[5] ^= 1                        # flip position 6
+print(correct74(word))              # ([0,1,1,0,0,1,1], 6)
+
+def ddr_bandwidth_gbs(mt_s, bus_bits=64, channels=1):
+    return mt_s * (bus_bits / 8) * channels / 1000
+
+print(ddr_bandwidth_gbs(3200))      # 25.6</code></pre>
+<p>Non-temporal stores bypass the cache for streaming writes (x86-64 AVX):</p>
+<pre><code>vmovntdq [rdi], ymm0     # streaming store: avoids polluting the cache</code></pre>
+<h2>Notes</h2>
+<ul><li>DRAM must be refreshed; SRAM does not. That is why DRAM latency and power have extra terms.</li><li>Flash is limited by write cycles, not read cycles. HDDs are slow because of mechanical seek and rotation but remain the cheapest per terabyte.</li><li>Hard-error handling often means retiring bad pages or spare rows, not just ECC.</li><li>Hybrid systems combine all layers (DRAM cache + SSD + HDD) for cost-performance.</li><li>Quick facts: prefetching loads data into cache before it is requested; interleaving accesses multiple banks simultaneously; write-back reduces memory writes; wear leveling prolongs flash life; RAID provides fault tolerance.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 2 (2.1-2.2, 2.6), Appendix D (storage, in editions that include it) and Ch. 1 (1.7 dependability); [PH-RV] Ch. 5 (5.2, 5.5); Hamming, &quot;Error Detecting and Error Correcting Codes,&quot; <em>Bell System Technical Journal</em>, 1950; </p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

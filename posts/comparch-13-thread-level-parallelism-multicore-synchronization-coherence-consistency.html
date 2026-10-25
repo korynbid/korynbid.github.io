@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 13. Thread-Level Parallelism: Multicore, Synchronization, Coherence, Consistency | korynbid</title>
+  <meta name="description" content="[COMPARCH] 13. Thread-Level Parallelism: Multicore, Synchronization, Coherence, Consistency | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">13. Thread-Level Parallelism: Multicore, Synchronization, Coherence, Consistency</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>TLP</strong> runs multiple threads or processes at once. It became the main route to performance once single-core clock speed and ILP stopped scaling.</p>
+<p><strong>Process vs thread:</strong></p>
+<table><thead><tr><th></th><th>Process</th><th>Thread</th></tr></thead><tbody><tr><td>Address space</td><td>Own, isolated</td><td>Shared with other threads of the same process</td></tr><tr><td>Creation / switch cost</td><td>Heavy</td><td>Light</td></tr><tr><td>Communication</td><td>IPC (pipes, sockets, shared memory)</td><td>Direct shared variables (needs synchronization)</td></tr><tr><td>Failure isolation</td><td>Strong</td><td>One bad thread can crash the whole process</td></tr><tr><td>Example</td><td>Browser and text editor</td><td>Browser tabs as threads of one process</td></tr></tbody></table>
+<p><strong>Multicore and SMP:</strong> a multicore chip puts several cores on one die. In a <strong>symmetric multiprocessor (SMP)</strong> all processors have <strong>equal (uniform) access to shared memory (UMA)</strong>. Larger machines use <strong>NUMA</strong> (non-uniform memory access): each socket has local memory that is faster than remote memory. Two programming models: <strong>shared memory</strong> (threads, pthreads, OpenMP) and <strong>message passing</strong> (MPI).</p>
+<p><strong>Why more cores don&#x27;t give linear speedup:</strong> serial fractions (Amdahl), synchronization waits, memory-bandwidth contention, load imbalance and communication.</p>
+<p><strong>Synchronization:</strong> controlling access to shared data.</p>
+<ul><li><strong>Race condition:</strong> result depends on timing of unsynchronized accesses.</li><li><strong>Mutex/lock:</strong> only one thread in the <strong>critical section</strong>.</li><li><strong>Atomic primitives:</strong> test-and-set, <strong>compare-and-swap (CAS)</strong>, load-linked/store-conditional (<strong>LL/SC</strong>), fetch-and-add.</li><li><strong>Barrier:</strong> all threads wait until all arrive.</li><li><strong>Deadlock:</strong> threads wait on each other forever.</li></ul>
+<p><strong>Cache coherence:</strong> each core has private caches, so several copies of one memory block can exist; coherence makes sure all cores see <strong>one consistent value per location</strong>. Two approaches:</p>
+<ul><li><strong>Snooping</strong> (bus-based): every cache watches (snoops) bus transactions. Good for small core counts.</li><li><strong>Directory-based:</strong> a directory tracks which caches hold each block; scalable to many cores.</li></ul>
+<p>Two write strategies: <strong>write-invalidate</strong> (a writer invalidates other copies; the common choice) and write-update.</p>
+<p><strong>MESI protocol</strong> (Papamarcos &amp; Patel, 1984): each cache line is in one of four states.</p>
+<table><thead><tr><th>State</th><th>Meaning</th><th>Memory up to date?</th><th>Other caches may hold it?</th></tr></thead><tbody><tr><td><strong>M</strong>odified</td><td>Only copy, dirty</td><td>No</td><td>No</td></tr><tr><td><strong>E</strong>xclusive</td><td>Only copy, clean</td><td>Yes</td><td>No</td></tr><tr><td><strong>S</strong>hared</td><td>Clean, possibly in several caches</td><td>Yes</td><td>Yes</td></tr><tr><td><strong>I</strong>nvalid</td><td>Not usable</td><td>n/a</td><td>n/a</td></tr></tbody></table>
+<p><strong>Coherence misses:</strong> <em>true sharing</em> (threads genuinely share a word) and <strong>false sharing</strong> (different variables on the same cache line cause needless invalidations).</p>
+<p><strong>Memory consistency model:</strong> defines the <strong>order</strong> in which memory operations of different threads may appear to others (coherence is per location, consistency is across locations).</p>
+<ul><li><strong>Sequential consistency (SC):</strong> as if all operations ran in one global order that respects each thread&#x27;s program order (Lamport 1979). Simple but slow to implement.</li><li><strong>TSO</strong> (total store order, x86): stores may be delayed in a store buffer, so a later load can pass an earlier store.</li><li><strong>Relaxed / weak models</strong> (ARM, RISC-V RVWMO, Power): most reorderings allowed unless you insert <strong>fences</strong> or use acquire/release operations.</li></ul>
+<p><strong>Multithreading performance:</strong> limited by lock contention, false sharing and bandwidth. SMT (Topic 11) adds hardware threads inside a core.</p>
+<h2>Key Formulas</h2>
+<pre><code>Amdahl (n cores):         S(n) = 1 / [ (1 − f) + f / n ]
+Gustafson (scaled work):  S(n) = s + n · (1 − s)            (s = serial fraction of the PARALLEL run)
+Parallel efficiency:      E(n) = S(n) / n
+
+Directory storage (full bit-vector) per block = (number of cores) bits (+ state)
+   overhead % = cores / (block size in bits)
+
+Probability false sharing hurts: any write to a shared line invalidates all other copies</code></pre>
+<h2>Steps</h2>
+<p><strong>Protect a shared counter:</strong> (1) identify the shared variable, (2) acquire a lock (or use an atomic add), (3) update, (4) release.</p>
+<p><strong>MESI on a read miss:</strong> (1) issue bus read, (2) if another cache holds the block in M, it supplies the data and writes it back, state becomes S in both, (3) if others hold it in S/E → requester gets S, (4) if nobody has it → requester gets <strong>E</strong>.</p>
+<p><strong>MESI on a write:</strong> (1) if the line is M → write locally, (2) if E → silently change to M (no bus traffic), (3) if S → broadcast invalidate/upgrade, then M, (4) if I → read-for-ownership, other copies become I, then M.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Amdahl vs Gustafson.</strong> Serial fraction 5%, 64 cores.</p>
+<ul><li>Amdahl (fixed problem size): 1 / (0.05 + 0.95/64) = <strong>15.4</strong>.</li><li>Gustafson (problem grows with machine): 0.05 + 64 × 0.95 = <strong>60.85</strong>.</li></ul>
+<p>Which one applies depends on whether the workload is fixed or scales with the hardware.</p>
+<p><strong>B. MESI trace</strong> (two cores, one block X, initially only in memory).</p>
+<table><thead><tr><th>Step</th><th>Event</th><th>Core 0</th><th>Core 1</th><th>Bus / memory action</th></tr></thead><tbody><tr><td>1</td><td>C0 reads X</td><td><strong>E</strong></td><td>I</td><td>BusRd, memory supplies, no sharers</td></tr><tr><td>2</td><td>C1 reads X</td><td><strong>S</strong></td><td><strong>S</strong></td><td>BusRd, both now share</td></tr><tr><td>3</td><td>C0 writes X</td><td><strong>M</strong></td><td><strong>I</strong></td><td>Upgrade/invalidate C1&#x27;s copy</td></tr><tr><td>4</td><td>C1 reads X</td><td><strong>S</strong></td><td><strong>S</strong></td><td>C0 supplies data, writes back to memory</td></tr><tr><td>5</td><td>C1 writes X</td><td><strong>I</strong></td><td><strong>M</strong></td><td>C0 invalidated</td></tr></tbody></table>
+<p>A core that reads a private block (E) and then writes it moves <strong>E → M with no bus traffic</strong>.</p>
+<p><strong>C. False sharing.</strong> Two threads increment <code>counter[0]</code> and <code>counter[1]</code> (two 8-byte longs) that sit in the same 64 B line. Each write invalidates the other core&#x27;s copy, so the line <strong>ping-pongs</strong> between caches and both threads slow down dramatically. Fix: pad each counter to its own 64 B line.</p>
+<p><strong>D. Memory-consistency litmus test (store buffering).</strong> Initially x = y = 0.</p>
+<pre><code>Thread 0:  x = 1;  r1 = y;        Thread 1:  y = 1;  r2 = x;</code></pre>
+<ul><li>Sequential consistency forbids r1 = 0 <strong>and</strong> r2 = 0.</li><li>TSO (x86) and relaxed models <strong>allow</strong> it, since each store may still be in a store buffer when the other thread loads.</li><li>Fix: put a full fence between the store and the load in each thread.</li></ul>
+<p><strong>E. Directory overhead.</strong> 64 cores, 64-byte (512-bit) blocks: full bit-vector = 64 bits per block → 64/512 = <strong>12.5%</strong> extra storage; it grows linearly with core count, which is why large systems use coarser sharer encodings.</p>
+<h2>Python / Assembly</h2>
+<pre><code>class MESI:
+    def __init__(self, n): self.s = [&#x27;I&#x27;] * n
+    def read(self, c):
+        if self.s[c] != &#x27;I&#x27;: return &#x27;hit&#x27;
+        others = [o for o in range(len(self.s)) if o != c and self.s[o] != &#x27;I&#x27;]
+        for o in others: self.s[o] = &#x27;S&#x27;          # an M copy is written back here
+        self.s[c] = &#x27;S&#x27; if others else &#x27;E&#x27;
+        return &#x27;BusRd&#x27;
+    def write(self, c):
+        if self.s[c] == &#x27;M&#x27;: return &#x27;hit&#x27;
+        if self.s[c] == &#x27;E&#x27;: self.s[c] = &#x27;M&#x27;; return &#x27;silent E-&gt;M&#x27;
+        for o in range(len(self.s)):
+            if o != c: self.s[o] = &#x27;I&#x27;
+        self.s[c] = &#x27;M&#x27;; return &#x27;BusRdX/Upgrade&#x27;
+
+m = MESI(2)
+for who, op in [(0,&#x27;r&#x27;), (1,&#x27;r&#x27;), (0,&#x27;w&#x27;), (1,&#x27;r&#x27;), (1,&#x27;w&#x27;)]:
+    print(who, op, m.read(who) if op == &#x27;r&#x27; else m.write(who), m.s)
+# 0 r BusRd [&#x27;E&#x27;,&#x27;I&#x27;] | 1 r BusRd [&#x27;S&#x27;,&#x27;S&#x27;] | 0 w BusRdX/Upgrade [&#x27;M&#x27;,&#x27;I&#x27;]
+# 1 r BusRd [&#x27;S&#x27;,&#x27;S&#x27;] | 1 w BusRdX/Upgrade [&#x27;I&#x27;,&#x27;M&#x27;]</code></pre>
+<p>Protecting shared data with a lock (race conditions may not appear on every run, but the lock is what makes the result guaranteed):</p>
+<pre><code>import threading
+counter, lock = 0, threading.Lock()
+
+def work(n):
+    global counter
+    for _ in range(n):
+        with lock:                 # critical section
+            counter += 1
+
+ts = [threading.Thread(target=work, args=(100_000,)) for _ in range(4)]
+[t.start() for t in ts]; [t.join() for t in ts]
+print(counter)                     # always 400000</code></pre>
+<p>RISC-V spinlock using an atomic swap, with acquire/release ordering:</p>
+<pre><code># a0 = address of lock word (0 = free, 1 = held)
+acquire:
+    li    t0, 1
+again:
+    amoswap.w.aq t1, t0, (a0)     # atomically swap in 1, get old value (acquire)
+    bnez  t1, again               # old value was 1 -&gt; someone holds it, retry
+    # ---- critical section ----
+release:
+    amoswap.w.rl x0, x0, (a0)     # write 0 (release)</code></pre>
+<p>Compare-and-swap built from LR/SC (a1 = expected, a2 = new value):</p>
+<pre><code>cas:
+    lr.w  t0, (a0)                # load-reserved
+    bne   t0, a1, fail            # value differs -&gt; CAS fails
+    sc.w  t1, a2, (a0)            # store-conditional (t1 = 0 on success)
+    bnez  t1, cas                 # reservation lost -&gt; retry
+fail:</code></pre>
+<p>Ordering with fences (store-buffering fix and producer/consumer):</p>
+<pre><code># store-buffering fix, thread 0:        # producer / consumer:
+    sw    t0, 0(a0)     # x = 1         # producer:  sw a2, 0(a0)   # data
+    fence rw, rw        # full fence                 fence w, w
+    lw    t1, 0(a1)     # r1 = y                     sw t0, 0(a1)   # flag = 1
+                                        # consumer:  spin: lw t1, 0(a1); beqz t1, spin
+                                        #            fence r, r;  lw a3, 0(a0)</code></pre>
+<h2>Notes</h2>
+<ul><li><strong>Common mistake:</strong> ARM and x86 are not both weakly consistent. x86 uses <strong>TSO</strong>, a relatively strong model; ARM and RISC-V are the genuinely <strong>weak/relaxed</strong> ones.</li><li>MESI example: a core that updates a value notifies the others, which invalidate their copies.</li><li>Python threads do not give CPU parallelism (GIL); the lock example is about correctness, not speed.</li><li>Use thread-local data and reduce sharing; <strong>padding and alignment</strong> avoid false sharing.</li><li>Core count has limits: bandwidth, power and software scalability, not just transistor budget.</li><li>Quick facts: processes have separate address spaces, threads share one; SMP processors share memory equally; coherence keeps cached data consistent; MESI protocol; relaxed consistency allows reordering for speed.</li></ul>
+<p><strong>References:</strong> [HP6] Ch. 5 (5.1-5.7: centralized/distributed shared memory, synchronization, memory consistency); [PH-RV] Ch. 6 (6.5 shared-memory multiprocessors, 6.10), Ch. 5 (5.10 cache coherence); Papamarcos &amp; Patel, &quot;A Low-Overhead Coherence Solution for Multiprocessors with Private Cache Memories,&quot; ISCA 1984; Lamport, &quot;How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs,&quot; <em>IEEE Trans. Computers</em>, 1979; [RV-Spec] Vol. I (&quot;A&quot; extension, memory model);</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

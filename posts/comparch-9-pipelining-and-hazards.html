@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[COMPARCH] 9. Pipelining and Hazards | korynbid</title>
+  <meta name="description" content="[COMPARCH] 9. Pipelining and Hazards | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">9. Pipelining and Hazards</h1>
+        <p class="post-meta">Oct 25, 2026 &middot; COMPARCH &middot; Computer Architecture &middot; Author: Algo-holics &middot; Source: <a href="https://t.me/kbtukbtu/583" rel="noopener">https://t.me/kbtukbtu/583</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p><strong>Pipelining</strong> overlaps the execution of several instructions by splitting each into stages, like an assembly line. The classic RISC-V pipeline has five stages:</p>
+<p><code>IF (Fetch) → ID (Decode / register read) → EX (Execute / address calc) → MEM (Memory access) → WB (Write back)</code></p>
+<p>Pipelining does <strong>not</strong> shorten the latency of one instruction; it raises <strong>throughput</strong> (ideally one instruction finishes per cycle, CPI = 1).</p>
+<p><strong>Hazards</strong> stop the next instruction from executing in its scheduled cycle:</p>
+<table><thead><tr><th>Hazard</th><th>Cause</th><th>Typical fixes</th></tr></thead><tbody><tr><td><strong>Structural</strong></td><td>Two instructions need the same hardware in the same cycle (e.g. one memory port for instruction fetch and data)</td><td>Duplicate resources (split I/D caches), stall</td></tr><tr><td><strong>Data</strong></td><td>An instruction needs a result that is not ready</td><td><strong>Forwarding (bypassing)</strong>, stalls, instruction scheduling</td></tr><tr><td><strong>Control</strong></td><td>Branches change the PC before the next fetch is known</td><td>Stall, predict not taken, branch prediction, delayed branches</td></tr></tbody></table>
+<p><strong>Data dependences (also called hazards when they cause a stall):</strong></p>
+<ul><li><strong>RAW</strong> (read after write): true dependence. The consumer needs the producer&#x27;s value.</li><li><strong>WAR</strong> (write after read): anti-dependence (name dependence).</li><li><strong>WAW</strong> (write after write): output dependence (name dependence).</li></ul>
+<p>In a simple <strong>in-order</strong> 5-stage pipeline only <strong>RAW</strong> hazards occur; WAR and WAW appear with out-of-order execution (Topic 10) and are removed by <strong>register renaming</strong>.</p>
+<h2>Key Formulas</h2>
+<pre><code>Time for n instructions on a k-stage pipeline (no stalls) = (k + n − 1) cycles
+Unpipelined time = n · k cycles (if one instruction takes k cycles)
+Ideal pipeline speedup → k as n → ∞
+
+Pipelined clock period = max(stage delay) + register overhead
+
+CPI_pipelined = 1 + (stall cycles per instruction)
+Speedup from pipelining = Time_unpipelined / Time_pipelined
+                        = (CPI_unpipe × T_unpipe) / (CPI_pipe × T_pipe)
+
+Branch stalls per instruction = branch frequency × misprediction rate × penalty</code></pre>
+<h2>Steps</h2>
+<p><strong>To draw a pipeline diagram:</strong> (1) write instructions in rows, cycles in columns, (2) place IF, ID, EX, MEM, WB for each instruction, one cycle later than the previous, (3) check each register read against the producing instruction, (4) if the value is not available even with forwarding, insert a stall bubble.</p>
+<p><strong>To handle a RAW hazard:</strong> (1) ALU result → next ALU instruction: forward from EX/MEM to EX, no stall, (2) load result → next instruction: forward from MEM/WB, <strong>one stall</strong> (load-use), (3) reorder independent instructions to fill the slot.</p>
+<h2>Worked Example</h2>
+<p><strong>A. Speedup with overhead.</strong> Unpipelined instruction takes 5 ns total; five equal stages of 1 ns; register overhead 0.2 ns → clock = 1.2 ns. Speedup per instruction rate = 5 / 1.2 = <strong>4.17</strong>. For n = 100: unpipelined 500 ns, pipelined (5 + 99) × 1.2 = 124.8 ns → speedup <strong>4.01</strong>.</p>
+<p><strong>B. Cycle count.</strong> n = 100, k = 5: pipelined = 104 cycles, unpipelined = 500 cycles → speedup <strong>4.81</strong> (approaches 5 as n grows).</p>
+<p><strong>C. Forwarding removes an ALU stall.</strong></p>
+<pre><code>add x1, x2, x3
+sub x4, x1, x5      # needs x1: forwarded from add&#x27;s EX/MEM latch, no stall</code></pre>
+<p><strong>D. Load-use hazard (1 stall even with forwarding).</strong></p>
+<table><thead><tr><th>Instruction</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead><tbody><tr><td><code>ld  x1, 0(x2)</code></td><td>IF</td><td>ID</td><td>EX</td><td>MEM</td><td>WB</td><td></td><td></td><td></td></tr><tr><td><code>add x3, x1, x4</code></td><td></td><td>IF</td><td>ID</td><td>stall</td><td>EX</td><td>MEM</td><td>WB</td><td></td></tr><tr><td><code>sub x5, x3, x6</code></td><td></td><td></td><td>IF</td><td>stall</td><td>ID</td><td>EX</td><td>MEM</td><td>WB</td></tr></tbody></table>
+<p>The loaded value only exists at the end of MEM (cycle 4), so <code>add</code> must start EX in cycle 5.</p>
+<p><strong>E. Scheduling away the stalls.</strong></p>
+<pre><code># Before: two load-use stalls          # After: zero stalls
+lw  x1, 0(x10)    # b                  lw  x1, 0(x10)    # b
+lw  x2, 4(x10)    # c                  lw  x2, 4(x10)    # c
+add x3, x1, x2    # STALL (x2)         lw  x4, 8(x10)    # e
+lw  x4, 8(x10)    # e                  lw  x5, 12(x10)   # f
+lw  x5, 12(x10)   # f                  add x3, x1, x2
+sub x6, x4, x5    # STALL (x5)         sub x6, x4, x5</code></pre>
+<p><strong>F. CPI with hazards.</strong> 25% loads, 40% of loads are followed immediately by a dependent instruction (1 stall); 20% branches, predictor wrong 10% of the time, 2-cycle penalty. CPI = 1 + 0.25 × 0.4 × 1 + 0.2 × 0.1 × 2 = 1 + 0.10 + 0.04 = <strong>1.14</strong>. With &quot;predict not taken&quot; and 60% of branches actually taken: 1 + 0.10 + 0.2 × 0.6 × 2 = <strong>1.34</strong>.</p>
+<p><strong>G. Structural hazard.</strong> Single memory port, 30% of instructions access data: each causes a 1-cycle stall → CPI = 1 + 0.3 = <strong>1.3</strong>. Separate instruction and data caches remove it.</p>
+<h2>Python / Assembly</h2>
+<pre><code>def load_use_stalls(prog):
+    &quot;&quot;&quot;prog: list of tuples (op, dest, src1, src2...)&quot;&quot;&quot;
+    stalls = 0
+    for prev, cur in zip(prog, prog[1:]):
+        if prev[0] == &#x27;ld&#x27; and prev[1] in cur[2:]:
+            stalls += 1
+    return stalls
+
+prog = [(&#x27;ld&#x27;, &#x27;x1&#x27;, &#x27;x2&#x27;), (&#x27;add&#x27;, &#x27;x3&#x27;, &#x27;x1&#x27;, &#x27;x4&#x27;), (&#x27;sub&#x27;, &#x27;x5&#x27;, &#x27;x3&#x27;, &#x27;x6&#x27;)]
+print(load_use_stalls(prog))                        # 1
+
+def pipeline_cycles(n, k=5, stalls=0):
+    return k + n - 1 + stalls
+print(pipeline_cycles(100))                         # 104</code></pre>
+<h2>Notes</h2>
+<ul><li>A deeper pipeline allows a faster clock but increases branch penalties and hazard costs; there is an optimal depth.</li><li><strong>Common mistake:</strong> pipelining does not let &quot;several commands execute in one cycle.&quot; More precisely, several instructions are <em>in flight</em> at once (one per stage); completing more than one per cycle needs a <strong>superscalar</strong> design (Topic 11).</li><li>Forwarding means a result is passed from a pipeline register straight to the unit that needs it, bypassing the register file.</li><li>Quick facts: pipeline stages are fetch, decode, execute, memory access, write-back; a stall is a delay due to hazards; branch prediction minimizes control stalls; data hazards are mitigated by forwarding, stalling or reordering; register renaming removes false dependences.</li></ul>
+<p><strong>References:</strong> [HP6] Appendix C (C.1-C.3) and Ch. 3 (3.1); [PH-RV] Ch. 4 (4.5-4.8);</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script src="https://giscus.app/client.js"
+                data-repo="korynbid/korynbid.github.io"
+                data-repo-id="R_kgDOVVEnUQ"
+                data-category="Comments"
+                data-category-id="DIC_kwDOVVEnUc4DJegb"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="bottom"
+                data-theme="transparent_dark"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+        </script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
