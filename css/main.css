@@ -173,3 +173,38 @@ blockquote {
 
 /* "more..." link under each category on the index */
 .more { margin: 6px 0 0; font-size: 14px; }
+
+/* Theme switcher */
+.theme-toggle {
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--sand);
+  background: transparent;
+  border: 1px solid var(--taupe);
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin-right: 14px;
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--sand); }
+.theme-toggle:focus-visible { outline: 2px solid var(--taupe); outline-offset: 3px; }
+
+/* Themes: the default (dark) palette lives in :root above; the others override its variables */
+:root[data-theme="light"] {
+  --ink: #fbfaf7; --slate: #e6e2d8; --taupe: #6b6558; --sand: #23272e;
+  color-scheme: light;
+}
+:root[data-theme="sepia"] {
+  --ink: #f4ecd8; --slate: #e6d9bb; --taupe: #7a6a4f; --sand: #3b2f1e;
+  color-scheme: light;
+}
+:root[data-theme="contrast"] {
+  --ink: #000000; --slate: #1a1a1a; --taupe: #ffe14d; --sand: #ffffff;
+  color-scheme: dark;
+}
+:root[data-theme="contrast"] a { text-decoration: underline; }
+:root[data-theme="black"] {
+  --ink: #000000; --slate: #121212; --taupe: #9a8f7e; --sand: #e0d3b9;
+  color-scheme: dark;
+}

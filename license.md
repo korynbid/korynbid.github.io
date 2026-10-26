@@ -20,6 +20,7 @@ The code of this website (the build tool, styles and scripts) is open source und
 
 - **Visit statistics:** GoatCounter counts page views, with basic information such as the page visited, the referring site, browser and country. It does not use cookies.
 - **Comments:** comments use Giscus and are stored as public GitHub Discussions. To comment you sign in to GitHub, and your comment and GitHub username are public. GitHub's own terms and privacy statement apply to them.
+- **Theme choice:** the site saves your chosen color theme in your browser (local storage) so it is remembered on the next page. It is not sent anywhere.
 - **Hosting:** the site is hosted on GitHub Pages, which may keep technical logs such as IP addresses under GitHub's privacy statement.
 
 This page is a plain-language notice, not legal advice.
