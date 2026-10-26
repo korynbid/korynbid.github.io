@@ -154,3 +154,22 @@ blockquote {
 
 /* View counter */
 .post-views { margin-top: 10px; font-size: 14px; color: var(--taupe); }
+
+/* Tables */
+.post-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+.post-content th, .post-content td {
+  padding: 8px 12px;
+  border: 1px solid var(--slate);
+  text-align: left;
+  white-space: nowrap;
+}
+.post-content th { background: var(--slate); font-weight: 400; }
+
+/* "more..." link under each category on the index */
+.more { margin: 6px 0 0; font-size: 14px; }
