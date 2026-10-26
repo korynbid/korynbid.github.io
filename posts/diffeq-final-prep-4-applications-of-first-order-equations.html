@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 4. Applications of First-Order Equations | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 4. Applications of First-Order Equations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">4. Applications of First-Order Equations</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>First-order equations model growth and decay, mixing, cooling, motion under resistance, and geometric families of curves. The skill here is <strong>setting up</strong> the equation from words.</p>
+<h2>4.1 Growth and Decay</h2>
+<p>Q′ = aQ gives Q(t) = Q₀e^(a(t − t₀)).</p>
+<ul><li>Decay uses a = −k with k &gt; 0: Q = Q₀e⁻ᵏᵗ.</li><li><strong>Half-life</strong> τ: k = (ln 2)/τ, equivalently Q = Q₀ 2^(−t/τ).</li><li><strong>Interest compounded n times per year:</strong> Q(t) = Q₀(1 + r/n)ⁿᵗ. As n → ∞ this becomes <strong>continuous compounding</strong></li></ul>
+<p>  ``<code>text   Q(t) = Q₀eʳᵗ.   </code>``</p>
+<ul><li><strong>Doubling time</strong> at continuous rate r: t = (ln 2)/r.</li><li>With a source or a drain, the model becomes linear: Q′ = −kQ + s (constant input s), with limit s/k.</li></ul>
+<h2>4.2 Cooling and Mixing</h2>
+<p><strong>Newton&#x27;s law of cooling:</strong> T′ = −k(T − Tₘ), k &gt; 0, so</p>
+<pre><code>T(t) = Tₘ + (T₀ − Tₘ)e⁻ᵏᵗ.</code></pre>
+<p>If the time of the initial state is unknown, use two measurements and take the ratio of the two equations to eliminate the unknown shift.</p>
+<p><strong>Mixing (tank) problems:</strong> for the amount Q(t) of solute,</p>
+<pre><code>Q′ = (rate in)(concentration in) − (rate out)Q/(V(t)),     V(t) = V₀ + (rᵢₙ − rₒᵤₜ)t.</code></pre>
+<p>This is a linear equation.</p>
+<h2>4.3 Elementary Mechanics</h2>
+<p>Newton&#x27;s second law m v′ = F.</p>
+<ul><li><strong>Falling body with linear drag:</strong> m v′ = mg − c v, so v(t) = (mg/c)(1 − e^(−ct/m)) when v(0)=0, and the <strong>terminal velocity</strong> is mg/c.</li><li>Position follows from y′ = v.</li><li>Use consistent units (for g = 9.8 m/s² or 32 ft/s²).</li></ul>
+<h2>4.4 Autonomous Second-Order Equations</h2>
+<p>If y″ = F(y,y′) has no explicit x, set v = y′ so that y″ = vdv/(dy). The equation becomes first order in v as a function of y. Solve for v(y), then solve y′ = v(y).</p>
+<ul><li>For y″ = F(y): ½v² = ∫F(y) dy + C (an energy integral).</li></ul>
+<h2>4.5 Applications to Curves</h2>
+<ul><li><strong>Orthogonal trajectories:</strong> if a family satisfies y′ = f(x,y), curves that cross it at right angles satisfy y′ = −1/(f(x,y)). To find the family&#x27;s equation, differentiate and eliminate the parameter.</li><li>Geometric conditions (tangent length, normal length, area under the curve) are translated into an equation for y′.</li></ul>
+<h2>Common Pitfalls</h2>
+<ul><li>Mixing up the sign of k in decay and cooling formulas.</li><li>Forgetting that V(t) changes when the inflow and outflow rates differ.</li><li>Mixing units (minutes vs hours, grams vs kilograms).</li><li>Forgetting to eliminate the parameter before taking the negative reciprocal in orthogonal trajectories.</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>A substance has half-life 1250 years and Q(0)=40 g. Find the amount left after 500 years and the time needed to reach 5 g.</li><li>A substance loses 10% of its mass in 6 days. Find its half-life.</li><li>A bank pays 4.5% interest compounded continuously. (a) How long does it take for a deposit to triple? (b) What initial deposit grows to $50,000 in 12 years at 3.5%?</li><li>A tank holds 400 L of brine containing 10 kg of salt. Brine with 0.2 kg/L enters at 5 L/min and the well-mixed solution leaves at 5 L/min. Find Q(t) and lim_(t → ∞) Q(t).</li><li>Coffee at 90°C is placed in a 22°C room and cools to 70°C in 5 minutes. When will it reach 40°C?</li><li>An object is placed outside where the temperature is −5°C. At 2:10 and 2:14 its temperature is 30°C and 18°C. At what time was it initially at 60°C?</li><li>A 5 kg object falls from rest with air resistance 2v newtons. Find v(t) and the terminal velocity. Use g=9.8 m/s².</li><li>A tank starts with 200 L of pure water. A solution with 0.1 kg/L enters at 4 L/min and the mixture leaves at 2 L/min. Write and solve the initial value problem for Q(t). State for how long the model is valid if the tank holds 500 L.</li><li>Solve y″ = 4y³ with y(0) = 1, y′(0) = −√2 using v = y′.</li><li>Find the orthogonal trajectories of the family y = Cx².</li></ol>
+<h2>Conclusion</h2>
+<p>Most applications reduce to Q′ = (in) − (out) or &quot;rate proportional to something&quot;. Write down the quantity, the rates and units first; the solution method is then one of the first-order techniques from Chapter 2.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 1. Introduction | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 1. Introduction | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">1. Introduction</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>differential equation (DE)</strong> is an equation that contains an unknown function together with one or more of its derivatives. If the unknown depends on one variable, the equation is an <strong>ordinary</strong> differential equation (ODE). The goal is to find the functions that satisfy the equation, or at least to describe how they behave.</p>
+<p>Differential equations turn statements about <em>rates of change</em> into mathematics. &quot;The speed of cooling is proportional to the temperature difference&quot; becomes T′ = −k(T − Tₘ).</p>
+<h2>Key Ideas and Vocabulary</h2>
+<ul><li><strong>Order:</strong> the order of the highest derivative that appears.</li><li><strong>Linear:</strong> the unknown and its derivatives appear only to the first power, are not multiplied together, and are not inside other functions. A linear equation of order n has the form</li></ul>
+<p>  ``<code>text   aₙ(x)y⁽ⁿ⁾ + … + a₁(x)y′ + a₀(x)y = g(x).   </code>``   It is <strong>homogeneous</strong> if g ≡ 0, otherwise <strong>nonhomogeneous</strong>.</p>
+<ul><li><strong>Solution:</strong> a function that makes the equation true on an interval. It can be <strong>explicit</strong> (y = f(x)) or <strong>implicit</strong> (F(x,y) = C).</li><li><strong>General solution:</strong> a family containing arbitrary constants (as many as the order, for a linear equation). A <strong>particular solution</strong> has the constants fixed.</li><li><strong>Singular solution:</strong> a solution that is not in the general family (for example, a constant solution lost when dividing by an expression).</li><li><strong>Initial value problem (IVP):</strong> an equation plus conditions at one point, such as y(x₀) = y₀ (and y′(x₀) = y₁ for second order).</li><li><strong>Direction field:</strong> at each point (x,y) draw a short segment with slope f(x,y) for the equation y′ = f(x,y). Solution curves follow the segments. <strong>Isoclines</strong> are curves f(x,y) = c along which the slope is constant.</li></ul>
+<h2>Methods</h2>
+<p><strong>Checking a solution.</strong> Differentiate the candidate as many times as the order, substitute, and simplify to 0 = 0 (or to the right-hand side).</p>
+<p><strong>Building an equation from a family of curves.</strong> If a family has n arbitrary constants, differentiate n times and eliminate the constants.</p>
+<p><strong>Sketching a direction field.</strong></p>
+<ol><li>Compute f(x,y) on a grid.</li><li>Draw a short segment with that slope at each grid point.</li><li>Mark isoclines (for example, where the slope is 0) to see where solutions are flat.</li><li>Trace a few smooth curves that follow the segments.</li></ol>
+<p><strong>Modeling.</strong> Name the unknown, translate &quot;rate of change&quot; to a derivative, translate &quot;proportional to&quot; to a constant multiple, and write the initial state as an initial condition.</p>
+<h2>Common Pitfalls</h2>
+<ul><li>Calling an equation linear because it &quot;looks simple&quot;. Terms like y², yy′, sin y or √(y′) make it nonlinear.</li><li>Forgetting that the number of constants in the general solution matches the order.</li><li>Writing a solution without the interval on which it is valid.</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>State the order of each equation and whether it is linear or nonlinear:</li></ol>
+<p>   (a) y″ + 3x y′ = sin x  (b) (y′)³ + y = x  (c) y‴ − y² = 0  (d) y′ + 4y = eˣ</p>
+<ol><li>Verify that y = C₁e³ˣ + C₂e⁻ˣ is a solution of y″ − 2y′ − 3y = 0 for all constants C₁, C₂.</li><li>Show that x² + y² = C defines solutions of x + y y′ = 0 implicitly. Describe the solution curves geometrically.</li><li>Find a first-order equation that has y = Ce⁻²ˣ + 1 as its general solution (eliminate C).</li><li>For y′ = y − x: (a) compute the slope at (0,0), (1,0), (0,1) and (2,3); (b) find the isocline of slope 0; (c) sketch the direction field on −2 ≤ x ≤ 2, −2 ≤ y ≤ 2.</li><li>A population P grows at a rate proportional to √P, and P(0) = 100. Write the initial value problem.</li><li>Find the second-order equation satisfied by y = C₁x + C₂x² on x &gt; 0.</li></ol>
+<h2>Conclusion</h2>
+<p>Everything else in the course depends on this vocabulary: identify the order, decide whether the equation is linear, know what kind of solution you are looking for, and always keep initial conditions and intervals in view.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

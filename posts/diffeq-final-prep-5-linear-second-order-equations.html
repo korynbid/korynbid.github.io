@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 5. Linear Second-Order Equations | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 5. Linear Second-Order Equations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">5. Linear Second-Order Equations</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>The general linear second-order equation is</p>
+<pre><code>P₀(x)y″ + P₁(x)y′ + P₂(x)y = F(x).</code></pre>
+<p>Because the equation is linear, solutions combine well, and the whole theory is built on that.</p>
+<h2>5.1 Homogeneous Equations: Theory</h2>
+<ul><li>If y₁, y₂ solve the homogeneous equation, so does c₁y₁ + c₂y₂.</li><li>Two solutions form a <strong>fundamental set</strong> iff their <strong>Wronskian</strong> is nonzero:</li></ul>
+<p>  ``<code>text   W(y₁,y₂) = y₁y₂′ − y₁′y₂ ≠ 0.   </code>``</p>
+<ul><li>The general solution is y = c₁y₁ + c₂y₂.</li><li><strong>Nonhomogeneous equations:</strong> y = yₕ + yₚ, where yₕ is the general solution of the homogeneous equation and yₚ is any one particular solution.</li></ul>
+<h2>5.2 Constant-Coefficient Homogeneous Equations</h2>
+<p>For ay″ + by′ + cy = 0 use y = eʳˣ and solve ar² + br + c = 0.</p>
+<table><thead><tr><th>Roots</th><th>General solution</th></tr></thead><tbody><tr><td>Distinct real r₁ ≠ r₂</td><td>c₁e^(r₁x) + c₂e^(r₂x)</td></tr><tr><td>Double real r</td><td>eʳˣ(c₁ + c₂x)</td></tr><tr><td>Complex α ± iβ</td><td>e^(αx)(c₁ cos βx + c₂ sin βx)</td></tr></tbody></table>
+<h2>5.3–5.5 Undetermined Coefficients</h2>
+<p>For ay″ + by′ + cy = F(x) where F is a polynomial, exponential, sine/cosine, or a product of these, guess the form of yₚ and solve for its coefficients.</p>
+<table><thead><tr><th>Right-hand side</th><th>Trial yₚ</th></tr></thead><tbody><tr><td>pₘ(x) (degree m)</td><td>Aₘxᵐ + … + A₀</td></tr><tr><td>e^(αx)pₘ(x)</td><td>e^(αx)(Aₘxᵐ + … + A₀)</td></tr><tr><td>e^(αx)(Pₘ cos βx + Qₘ sin βx)</td><td>e^(αx)(A(x)cos βx + B(x)sin βx), with A, B polynomials of degree m</td></tr></tbody></table>
+<p><strong>Resonance rule.</strong> If α (or α ± iβ in the trigonometric case) is a root of the characteristic equation with multiplicity s (0, 1 or 2), multiply the whole trial function by xˢ.</p>
+<ul><li>Important detail: for e^(αx)(cos βx, sin βx), multiply by x only if the <em>complex number</em> α + iβ is a root. A real root equal to α is not enough when β ≠ 0.</li><li>Sums of right-hand sides: find a particular solution for each term and add.</li><li>Plug yₚ into the equation, collect like terms, and compare coefficients.</li></ul>
+<h2>5.6 Reduction of Order</h2>
+<p>Given one nonzero solution y₁ of the homogeneous equation, look for y = u y₁.</p>
+<ol><li>Substitute y = uy₁, y′ = u′y₁ + uy₁′, y″ = u″y₁ + 2u′y₁′ + uy₁″.</li><li>The terms with u cancel, leaving an equation in u′ and u″ only.</li><li>Let z = u′. This is a <strong>first-order linear equation</strong> for z.</li><li>Solve for z, integrate to get u, then y = uy₁.</li></ol>
+<p>This also works for the nonhomogeneous equation (the right-hand side stays).</p>
+<h2>5.7 Variation of Parameters</h2>
+<p>For P₀y″ + P₁y′ + P₂y = F with known fundamental solutions y₁, y₂, look for yₚ = u₁y₁ + u₂y₂ where</p>
+<pre><code>⎧ u₁′y₁ + u₂′y₂ = 0
+⎩ u₁′y₁′ + u₂′y₂′ = F/P₀</code></pre>
+<p>Solve this 2×2 system (substitution, elimination or Cramer&#x27;s rule) for u₁′, u₂′, integrate (constants of integration may be dropped), and form yₚ.</p>
+<ul><li>Use variation of parameters when undetermined coefficients does not apply (for example sec x, tan x, eˣ/x) or when coefficients are not constant.</li><li>Be careful to divide by P₀: the right side of the second equation is F/P₀.</li></ul>
+<h2>Common Pitfalls</h2>
+<ul><li>Forgetting the resonance factor x or x².</li><li>Using e^(αx) in the trial function with the wrong α when the right side has a trigonometric factor.</li><li>Applying initial conditions to yₕ alone instead of to the full y = yₕ + yₚ.</li><li>In variation of parameters, forgetting to divide by the leading coefficient.</li></ul>
+<h2>Practice Problems</h2>
+<p><strong>Homogeneous</strong></p>
+<ol><li>y″ − 4y′ + 13y = 0, y(0) = 2, y′(0) = −1.</li><li>y″ + 6y′ + 9y = 0, y(0) = 1, y′(0) = 0.</li></ol>
+<p><strong>Undetermined coefficients</strong></p>
+<ol><li>y″ − 3y′ − 10y = 6e⁻²ˣ.</li><li>y″ + 2y′ + 5y = 3e⁻ˣ cos 2x.</li><li>y″ − 2y′ + y = xeˣ.</li><li>y″ + 9y = 4x² − 1.</li><li>y″ + y = x cos x.</li><li>y″ − 5y′ + 6y = e³ˣ + 2x, y(0) = 0, y′(0) = 1.</li></ol>
+<p><strong>Reduction of order</strong></p>
+<ol><li>x²y″ − 4xy′ + 6y = 0, given y₁ = x², for x &gt; 0.</li><li>xy″ − (x+1)y′ + y = 0, given y₁ = eˣ, for x &gt; 0.</li></ol>
+<p><strong>Variation of parameters</strong></p>
+<ol><li>y″ + y = sec x, on −π/2 &lt; x &lt; π/2.</li><li>y″ − 2y′ + y = eˣ/x, for x &gt; 0.</li><li>x²y″ − 2y = 3x, given y₁ = x², y₂ = x⁻¹, for x &gt; 0.</li></ol>
+<h2>Conclusion</h2>
+<p>For constant coefficients, find the characteristic roots; for a nice right side, guess yₚ (with the resonance rule); otherwise use variation of parameters. When one solution of a variable-coefficient equation is known, reduction of order finds the second.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 8. Laplace Transforms | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 8. Laplace Transforms | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">8. Laplace Transforms</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>The <strong>Laplace transform</strong> turns a differential equation into an algebraic equation:</p>
+<pre><code>F(s) = ℒ{f(t)} = ∫₀^∞ e⁻ˢᵗf(t) dt.</code></pre>
+<p>Initial conditions are built in, and discontinuous or impulsive forcing is handled naturally.</p>
+<h2>8.1–8.2 Transform, Inverse Transform, Table</h2>
+<p>The transform is <strong>linear</strong>, and the inverse transform ℒ⁻¹ is found with a table plus <strong>partial fractions</strong>.</p>
+<table><thead><tr><th>f(t)</th><th>F(s)</th><th>f(t)</th><th>F(s)</th></tr></thead><tbody><tr><td>1</td><td>1/s</td><td>eᵃᵗ</td><td>1/(s−a)</td></tr><tr><td>tⁿ (n=1,2,…)</td><td>n!/sⁿ⁺¹</td><td>tᵖ (p&gt;−1)</td><td>Γ(p+1)/sᵖ⁺¹</td></tr><tr><td>√t</td><td>√π/(2s^(3/2))</td><td>t^(n−1/2)</td><td>(1·3·5⋯(2n−1)√π)/(2ⁿs^(n+1/2))</td></tr><tr><td>sin at</td><td>a/(s²+a²)</td><td>cos at</td><td>s/(s²+a²)</td></tr><tr><td>t sin at</td><td>2as/(s²+a²)²</td><td>t cos at</td><td>(s²−a²)/(s²+a²)²</td></tr><tr><td>sin at − at cos at</td><td>2a³/(s²+a²)²</td><td>sin at + at cos at</td><td>2as²/(s²+a²)²</td></tr><tr><td>cos at − at sin at</td><td>s(s²−a²)/(s²+a²)²</td><td>cos at + at sin at</td><td>s(s²+3a²)/(s²+a²)²</td></tr><tr><td>sin(at+b)</td><td>(s sin b + a cos b)/(s²+a²)</td><td>cos(at+b)</td><td>(s cos b − a sin b)/(s²+a²)</td></tr><tr><td>sinh at</td><td>a/(s²−a²)</td><td>cosh at</td><td>s/(s²−a²)</td></tr><tr><td>eᵃᵗ sin bt</td><td>b/((s−a)²+b²)</td><td>eᵃᵗ cos bt</td><td>(s−a)/((s−a)²+b²)</td></tr><tr><td>eᵃᵗ sinh bt</td><td>b/((s−a)²−b²)</td><td>eᵃᵗ cosh bt</td><td>(s−a)/((s−a)²−b²)</td></tr><tr><td>tⁿeᵃᵗ</td><td>n!/(s−a)ⁿ⁺¹</td><td>f(ct)</td><td>(1/c)F(s/c)</td></tr><tr><td>u_c(t)=u(t−c)</td><td>e⁻ᶜˢ/s</td><td>δ(t−c)</td><td>e⁻ᶜˢ</td></tr><tr><td>u_c(t)f(t−c)</td><td>e⁻ᶜˢF(s)</td><td>u_c(t)g(t)</td><td>e⁻ᶜˢℒ{g(t+c)}</td></tr><tr><td>eᶜᵗf(t)</td><td>F(s−c)</td><td>tⁿf(t)</td><td>(−1)ⁿF⁽ⁿ⁾(s)</td></tr><tr><td>(1/t)f(t)</td><td>∫ₛ^∞ F(u) du</td><td>∫₀ᵗf(v) dv</td><td>F(s)/s</td></tr><tr><td>∫₀ᵗf(t−τ)g(τ) dτ</td><td>F(s)G(s)</td><td>f(t+T)=f(t)</td><td>(∫₀ᵀe⁻ˢᵗf(t) dt)/(1−e⁻ˢᵀ)</td></tr></tbody></table>
+<p><strong>Derivatives:</strong></p>
+<pre><code>ℒ{f′} = sF(s) − f(0),     ℒ{f″} = s²F(s) − sf(0) − f′(0),</code></pre>
+<pre><code>ℒ{f⁽ⁿ⁾} = sⁿF − sⁿ⁻¹f(0) − … − f⁽ⁿ⁻¹⁾(0).</code></pre>
+<h2>8.3 Solving Initial Value Problems</h2>
+<ol><li>Transform both sides, using the derivative formulas with the given y(0), y′(0).</li><li>Solve algebraically for Y(s) = ℒ{y}.</li><li>Decompose Y(s) into simple fractions (complete the square for irreducible quadratics).</li><li>Invert term by term using the table.</li></ol>
+<h2>8.4–8.5 Unit Step Function and Piecewise Forcing</h2>
+<ul><li>u_c(t) = 0 for t &lt; c and 1 for t ≥ c.</li><li>A piecewise function is written as a sum of steps, for example &quot;g₁(t) on [0,c), g₂(t) on [c,∞)&quot; equals g₁(t) + u_c(t) [g₂(t) − g₁(t)].</li><li><strong>Second shifting theorem:</strong> ℒ{u_c(t)f(t−c)} = e⁻ᶜˢF(s). To use it on u_c(t)g(t), first rewrite g(t) as a function of (t−c).</li></ul>
+<h2>8.6 Convolution</h2>
+<pre><code>(f*g)(t) = ∫₀ᵗf(t−τ)g(τ) dτ,     ℒ{f*g} = F(s)G(s).</code></pre>
+<p>Useful for inverting products such as 1/(s²(s²+1)) when partial fractions is awkward, and for equations with an unspecified forcing function.</p>
+<h2>8.7 Equations with Impulses</h2>
+<p>δ(t−c) models a unit impulse at time c. Since ℒ{δ(t−c)} = e⁻ᶜˢ, the solution responds with a sudden jump in y′ of size equal to the impulse at t = c.</p>
+<h2>Common Pitfalls</h2>
+<ul><li>Forgetting the −y(0) and −y′(0) terms (or their signs).</li><li>Not completing the square for s² + bs + c with complex roots.</li><li>Using the second shifting theorem without writing the function in terms of (t−c).</li><li>Inverting e⁻ᶜˢF(s) and forgetting the factor u_c(t).</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>Compute ℒ{t²e⁻³ᵗ} and ℒ{5 sin 4t − 2 cos t}.</li><li>Find ℒ⁻¹{(3s+7)/(s² − 2s − 8)}.</li><li>Find ℒ⁻¹{e⁻³ˢ/(s²+4)}.</li><li>Use convolution to find ℒ⁻¹{1/(s²(s²+1))}.</li><li>Solve y″ − 4y′ + 3y = e²ᵗ, y(0) = 1, y′(0) = 0.</li><li>Solve y″ + 4y = 8 sin 2t, y(0) = 1, y′(0) = −2.</li><li>Solve y″ + 6y′ + 10y = 0, y(0) = 1, y′(0) = 1.</li><li>Solve y″ + y′ − 6y = 5, y(0) = 0, y′(0) = 2.</li><li>Write the function that is 0 for t&lt;2, equals t−2 for 2 ≤ t&lt;5, and equals 3 for t ≥ 5 using unit step functions, and find its Laplace transform.</li><li>Solve y″ + y = f(t), y(0)=0, y′(0)=0, where f(t)=1 for 0 ≤ t&lt;π and f(t) = 0 for t ≥ π.</li><li>Solve y″ + 4y = δ(t − π) + 2δ(t−2π), y(0) = 0, y′(0) = 1.</li></ol>
+<h2>Conclusion</h2>
+<p>Transform, solve algebraically, decompose, invert. The table of transforms and the shifting, derivative and convolution rules cover nearly every problem in this chapter.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

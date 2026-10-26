@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 7. Series Solutions of Linear Second-Order Equations | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 7. Series Solutions of Linear Second-Order Equations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">7. Series Solutions of Linear Second-Order Equations</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>When the coefficients are not constant, solutions can often be written as <strong>power series</strong>. The method depends on whether the expansion point is an <em>ordinary point</em> or a <em>regular singular point</em>.</p>
+<h2>7.1 Review of Power Series</h2>
+<ul><li>A power series ∑aₙ(x − x₀)ⁿ has a <strong>radius of convergence</strong> ρ given by the ratio test: ρ = lim |aₙ/aₙ₊₁| (when the limit exists).</li><li>Inside the radius, series can be added, multiplied, differentiated and integrated term by term.</li><li><strong>Index shifting:</strong> to combine sums, rewrite them so each has the same power xⁿ. For example</li></ul>
+<p>  ``<code>text   ∑ₙ₌₂^∞ n(n−1)aₙxⁿ⁻² = ∑ₙ₌₀^∞ (n+2)(n+1)aₙ₊₂xⁿ.   </code>``</p>
+<ul><li>If ∑aₙxⁿ = 0 on an interval, then every aₙ = 0. This is what lets us extract a <strong>recurrence relation</strong>.</li></ul>
+<h2>7.2–7.3 Series Near an Ordinary Point</h2>
+<p>x₀ is an <strong>ordinary point</strong> of P₀y″ + P₁y′ + P₂y = 0 if P₀(x₀) ≠ 0 (with Pᵢ analytic).</p>
+<ol><li>Put y = ∑ₙ₌₀^∞ aₙ(x−x₀)ⁿ and differentiate.</li><li>Substitute and shift indices so all sums have the same power.</li><li>Set the coefficient of each power to zero to get a <strong>recurrence</strong> for aₙ.</li><li>a₀ and a₁ stay free; compute the rest. Collect into two independent series y = a₀y₁ + a₁y₂.</li><li>The series converges at least on the interval reaching the nearest (possibly complex) singular point.</li></ol>
+<h2>7.4 Regular Singular Points and Euler Equations</h2>
+<p>x₀ is a <strong>regular singular point</strong> if P₀(x₀) = 0 but both</p>
+<pre><code>p₀ = lim_(x → x₀) (x−x₀)P₁/P₀,     q₀ = lim_(x → x₀) (x−x₀)²P₂/P₀</code></pre>
+<p>exist and are finite. The simplest case is the <strong>Euler equation</strong></p>
+<pre><code>x²y″ + αxy′ + βy = 0.</code></pre>
+<p>Try y = xʳ (for x&gt;0). The <strong>indicial equation</strong> is r(r−1) + αr + β = 0.</p>
+<table><thead><tr><th>Roots</th><th>General solution (x&gt;0)</th></tr></thead><tbody><tr><td>Distinct real r₁, r₂</td><td>c₁x^(r₁) + c₂x^(r₂)</td></tr><tr><td>Double r</td><td>xʳ(c₁ + c₂ ln x)</td></tr><tr><td>Complex λ ± iμ</td><td>x^λ[c₁ cos(μ ln x) + c₂ sin(μ ln x)]</td></tr></tbody></table>
+<h2>7.5–7.7 The Method of Frobenius</h2>
+<p>Near a regular singular point x₀ = 0, look for</p>
+<pre><code>y = xʳ∑ₙ₌₀^∞ aₙxⁿ,     a₀ ≠ 0.</code></pre>
+<ol><li>Substitute; the lowest power of x gives the <strong>indicial equation</strong> r(r−1) + p₀r + q₀ = 0 with roots r₁ ≥ r₂.</li><li>Higher powers give a recurrence for aₙ in terms of r.</li><li>Use the largest root first: y₁ = x^(r₁)∑aₙxⁿ always exists.</li><li>The second solution depends on the roots:</li></ol>
+<table><thead><tr><th>Case</th><th>Second solution</th></tr></thead><tbody><tr><td>r₁ − r₂ <strong>not</strong> an integer</td><td>y₂ = x^(r₂)∑bₙxⁿ</td></tr><tr><td>r₁ = r₂</td><td>y₂ = y₁ ln x + x^(r₁)∑bₙxⁿ</td></tr><tr><td>r₁ − r₂ a positive integer</td><td>y₂ = c y₁ ln x + x^(r₂)∑bₙxⁿ (with c possibly 0)</td></tr></tbody></table>
+<h2>Common Pitfalls</h2>
+<ul><li>Shifting an index incorrectly and misaligning powers of x.</li><li>Forgetting that the series may start at a later index for some terms.</li><li>Using xʳ with the <em>smaller</em> root first when roots differ by an integer, which can make the recurrence break down.</li><li>Applying the Euler solution formulas for x&lt;0 without replacing x by |x|.</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>Find the radius of convergence of (a) ∑(n (x−2)ⁿ)/3ⁿ, (b) ∑xⁿ/n!, (c) ∑n! xⁿ.</li><li>Rewrite ∑ₙ₌₁^∞ n aₙxⁿ⁻¹ + ∑ₙ₌₀^∞ aₙxⁿ⁺¹ as a single sum of xⁿ terms.</li><li>Find the recurrence for y″ − xy′ + 2y = 0 about x = 0, and compute a₂,…,a₆ in terms of a₀, a₁. Identify any polynomial solution.</li><li>For (1 + x²)y″ + xy′ − y = 0 about x = 0, find the recurrence relation and the first four terms of each independent series. What lower bound for the radius of convergence do you expect?</li><li>Solve the Euler equations for x &gt; 0: (a) x²y″ + 2xy′ − 6y = 0, (b) x²y″ − 3xy′ + 4y = 0, (c) x²y″ + xy′ + 9y = 0.</li><li>Solve the IVP x²y″ − 2xy′ + 2y = 0, y(1) = 3, y′(1) = 1.</li><li>Classify x = 0 and x = 1 for x(x−1)²y″ + y′ + xy = 0 as ordinary, regular singular or irregular singular.</li><li>Find the indicial equation and the first three terms of a Frobenius solution of 3xy″ + y′ − y = 0.</li><li>Find the indicial roots of xy″ + 2y′ + xy = 0. What form will the second solution take, and why?</li></ol>
+<h2>Conclusion</h2>
+<p>Series methods handle equations that no elementary technique can. At an ordinary point, expand in xⁿ and read off a recurrence; at a regular singular point, use xʳ∑aₙxⁿ and the indicial equation, watching how the two roots relate.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

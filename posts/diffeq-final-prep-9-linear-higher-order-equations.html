@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 9. Linear Higher-Order Equations | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 9. Linear Higher-Order Equations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">9. Linear Higher-Order Equations</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Everything from Chapter 5 extends to equations of order n:</p>
+<pre><code>P₀(x)y⁽ⁿ⁾ + P₁(x)y⁽ⁿ⁻¹⁾ + … + Pₙ(x)y = F(x).</code></pre>
+<h2>9.1 Theory</h2>
+<ul><li>A homogeneous equation of order n has <strong>n linearly independent solutions</strong> y₁,…,yₙ, and its general solution is ∑cᵢyᵢ.</li><li><strong>Wronskian:</strong> the determinant of the matrix with rows yᵢ, yᵢ′, …, yᵢ⁽ⁿ⁻¹⁾. If it is nonzero at a point of the interval, the solutions are independent.</li><li>The IVP with n initial conditions y(x₀), y′(x₀),…,y⁽ⁿ⁻¹⁾(x₀) has a unique solution when the coefficients are continuous and P₀ ≠ 0.</li><li>Nonhomogeneous: y = yₕ + yₚ.</li></ul>
+<h2>9.2 Constant-Coefficient Homogeneous Equations</h2>
+<p>Use y = eʳˣ to get the <strong>characteristic polynomial</strong> of degree n.</p>
+<ul><li>Each simple real root r gives eʳˣ.</li><li>A real root of multiplicity m gives eʳˣ, xeʳˣ, …, xᵐ⁻¹eʳˣ.</li><li>A complex pair α ± iβ of multiplicity m gives xʲe^(αx)cos βx and xʲe^(αx)sin βx for j = 0,…,m−1.</li><li>To find roots of a cubic or quartic: try rational roots (factors of the constant term over factors of the leading coefficient), divide, then solve the remaining quadratic.</li></ul>
+<h2>9.3 Undetermined Coefficients</h2>
+<p>Same trial functions as in Chapter 5. The resonance rule uses the <strong>multiplicity</strong> of the matching characteristic root: multiply the trial function by xˢ where s is that multiplicity (this can now exceed 2).</p>
+<h2>9.4 Variation of Parameters</h2>
+<p>Write yₚ = ∑uₖyₖ and impose</p>
+<pre><code>∑ₖ uₖ′yₖ⁽ʲ⁾ = 0  (j = 0,…,n−2),     ∑ₖuₖ′yₖ⁽ⁿ⁻¹⁾ = F/P₀.</code></pre>
+<p>This is an n × n linear system for u₁′,…,uₙ′ (use Cramer&#x27;s rule with Wronskian determinants), then integrate each uₖ′.</p>
+<h2>Common Pitfalls</h2>
+<ul><li>Missing a repeated root (check that the number of solutions equals the order).</li><li>Mistakes in polynomial factoring; always verify a found root.</li><li>Forgetting to apply all n initial conditions.</li><li>In variation of parameters, using F instead of F/P₀.</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>y‴ − 6y″ + 11y′ − 6y = 0.</li><li>y⁽⁴⁾ − 16y = 0.</li><li>y⁽⁴⁾ + 8y″ + 16y = 0.</li><li>y‴ − 2y″ − 5y′ + 6y = 0.</li><li>y‴ − 3y″ + 2y′ = 0, y(0) = 1, y′(0) = 0, y″(0) = 2.</li><li>y‴ − y″ − 4y′ + 4y = 6e²ˣ.</li><li>y‴ + y′ = 4x − 2 sin x.</li><li>y⁽⁴⁾ − y = 3eˣ.</li><li>Verify that x, x², x³ solve x³y‴ − 3x²y″ + 6xy′ − 6y = 0 on x&gt;0, show they are independent, and find a particular solution of x³y‴ − 3x²y″ + 6xy′ − 6y = x⁴ by variation of parameters.</li><li>Compute the Wronskian of eˣ, xeˣ, e⁻²ˣ and state whether they are independent.</li></ol>
+<h2>Conclusion</h2>
+<p>Higher order brings no new ideas, only more bookkeeping: an nth degree characteristic polynomial, n independent solutions, n initial conditions, and an n × n system in variation of parameters.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

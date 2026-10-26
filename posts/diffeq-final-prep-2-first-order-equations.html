@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 2. First-Order Equations | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 2. First-Order Equations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">2. First-Order Equations</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A first-order equation can be written y′ = f(x,y) or in differential form M(x,y) dx + N(x,y) dy = 0. Different structures call for different methods, so the first step is always <strong>classification</strong>.</p>
+<h2>Classification Checklist</h2>
+<p>Work through these in order:</p>
+<ol><li>Can it be written y′ + P(x)y = f(x)? → <strong>linear</strong> (2.1).</li><li>Can it be written g(y) y′ = h(x)? → <strong>separable</strong> (2.2).</li><li>Is it y′ + P(x)y = f(x)yʳ? → <strong>Bernoulli</strong> (2.4).</li><li>Is it y′ = g(y/x)? → <strong>homogeneous</strong> (2.4).</li><li>Is M_y = Nₓ? → <strong>exact</strong> (2.5).</li><li>If not exact, does an integrating factor depending on one variable exist? (2.6)</li></ol>
+<h2>2.1 Linear First-Order Equations</h2>
+<p>Standard form: y′ + P(x)y = f(x), with P, f continuous on an interval (a,b).</p>
+<ul><li><strong>Integrating factor:</strong> μ(x) = e^(∫P(x) dx). Then (μy)′ = μf and</li></ul>
+<p>  ``<code>text   y = (1/μ)(∫ μf dx + C).   </code>``</p>
+<ul><li><strong>Equivalent method (variation of the constant):</strong> solve the homogeneous equation y₁′ + P y₁ = 0 for one nonzero y₁, then set y = u y₁. This gives u′ = f/y₁, so u = ∫f/y₁ dx + C.</li><li><strong>Existence and uniqueness (linear case):</strong> if P, f are continuous on (a,b) and x₀ ∈ (a,b), the IVP y(x₀) = y₀ has exactly one solution, and it exists on the whole interval (a,b).</li></ul>
+<h2>2.2 Separable Equations</h2>
+<p>If y′ = h(x) g(y), then</p>
+<pre><code>∫ dy/(g(y)) = ∫h(x) dx + C.</code></pre>
+<ul><li>Every root y = c of g(y) = 0 gives a <strong>constant solution</strong>. These can be lost when dividing, so list them separately.</li><li>The <strong>interval of validity</strong> of an IVP solution is the largest interval containing x₀ on which the solution is defined and the steps are legitimate (no division by zero, square root of a negative, and so on).</li></ul>
+<h2>2.3 Existence and Uniqueness for Nonlinear Equations</h2>
+<p><strong>Theorem.</strong> If f and f_y are continuous on an open rectangle containing (x₀,y₀), then y′ = f(x,y), y(x₀)=y₀ has a unique solution on some (possibly small) interval around x₀.</p>
+<ul><li>The theorem is <strong>local</strong>: for nonlinear equations solutions can blow up or leave the region where f is continuous.</li><li>If f_y fails to be continuous at (x₀,y₀), uniqueness may fail. A classic example is y′ = 3y^(2/3), y(0)=0, which has both y = 0 and y = x³.</li><li>Two different solution curves of the same equation cannot cross at a point where the theorem applies.</li></ul>
+<h2>2.4 Transformations into Separable or Linear Equations</h2>
+<p><strong>Bernoulli equation:</strong> y′ + P(x)y = f(x)yʳ, with r ≠ 0, 1.</p>
+<ul><li>Substitute z = y¹⁻ʳ. Then z′ + (1−r)P z = (1−r)f, which is linear.</li><li>Equivalent route: solve y₁′ + Py₁ = 0, then put y = u y₁ and obtain the separable equation u′/uʳ = f y₁ʳ⁻¹.</li><li>For r &gt; 0, y = 0 is also a solution.</li></ul>
+<p><strong>Riccati equation:</strong> y′ = a(x) + b(x)y + c(x)y².</p>
+<ul><li>If one solution y₁ is known, substitute y = y₁ + z. The result is a Bernoulli equation in z with r = 2.</li></ul>
+<p><strong>Homogeneous equation:</strong> y′ = g(y/x).</p>
+<ul><li>Substitute v = y/x, so y = vx and y′ = v′x + v. Then x v′ = g(v) − v, which is separable.</li></ul>
+<p><strong>Lines-intersection type:</strong> y′ = (a₁x + b₁y + c₁)/(a₂x + b₂y + c₂).</p>
+<ul><li>Solve a₁x + b₁y + c₁ = 0, a₂x+b₂y+c₂ = 0 for the intersection point (x₀,y₀), shift X = x − x₀, Y = y − y₀, and the equation becomes homogeneous in X, Y.</li></ul>
+<h2>2.5 Exact Equations</h2>
+<p>M dx + N dy = 0 is <strong>exact</strong> when M_y = Nₓ (on a simply connected region). Then there is F(x,y) with Fₓ = M and F_y = N, and the solutions are F(x,y) = C.</p>
+<p>Method:</p>
+<ol><li>Check M_y = Nₓ.</li><li>Integrate F = ∫M dx + g(y).</li><li>Differentiate in y and set equal to N to find g′(y).</li><li>Integrate to find g(y) and write F(x,y) = C.</li></ol>
+<p>(You may also start from F = ∫N dy + g(x). Choose whichever integral is easier.)</p>
+<h2>2.6 Integrating Factors</h2>
+<p>If M_y ≠ Nₓ, look for μ so that μM dx + μN dy = 0 is exact.</p>
+<ul><li>If (M_y − Nₓ)/N depends only on x: μ(x) = e^(∫ (M_y − Nₓ)/N dx).</li><li>If (Nₓ − M_y)/M depends only on y: μ(y) = e^(∫ (Nₓ − M_y)/M dy).</li><li>After multiplying, <strong>always re-check</strong> that the new M_y = Nₓ before integrating.</li><li>An integrating factor can also be found by inspection, for example factors of the form xᵃyᵇ.</li></ul>
+<h2>Common Pitfalls</h2>
+<ul><li>Dividing by g(y) in a separable equation and forgetting the constant solutions.</li><li>Forgetting the unknown function g(y) (or g(x)) when integrating for F.</li><li>Using the wrong sign in the integrating-factor formulas. Test the result by re-checking exactness.</li><li>Giving a solution without its interval of validity, or without applying the initial condition.</li><li>Substituting z = y¹⁻ʳ but forgetting to transform back to y.</li></ul>
+<h2>Practice Problems</h2>
+<p><strong>Linear (2.1)</strong></p>
+<ol><li>y′ + (3/x)y = x², y(1) = 2.</li><li>y′ + (tan x) y = cos² x, y(0) = 1, on −π/2 &lt; x &lt; π/2.</li><li>(x+2) y′ + 3y = 0, y(0) = 4. State the interval of validity.</li></ol>
+<p><strong>Separable (2.2)</strong></p>
+<ol><li>Find all solutions of y′ = eˣ(y² − 4).</li><li>y′ = (3x² + 1)/(2y − 4), y(0) = 1. Solve and find the interval of validity.</li><li>P′ = 0.2 P(1 − P/500), P(0) = 50. Find P(t) and lim_(t → ∞) P(t).</li></ol>
+<p><strong>Existence and uniqueness (2.3)</strong></p>
+<ol><li>For y′ = √(y − x), describe the region where the theorem guarantees a unique solution through (x₀,y₀).</li><li>Show that y′ = 3y^(2/3), y(0)=0 has more than one solution. Explain why this does not contradict the theorem.</li></ol>
+<p><strong>Transformations (2.4)</strong></p>
+<ol><li>x y′ + y = x³y², y(1) = ½.</li><li>y′ − 4y = 2x√y.</li><li>y′ = y² − 2xy + x² + 1, given the particular solution y₁ = x.</li><li>y′ = (x² + y²)/(xy).</li><li>y′ = (x + y − 3)/(x − y − 1).</li></ol>
+<p><strong>Exact equations (2.5)</strong></p>
+<ol><li>(2xy³ + 3x²) dx + (3x²y² + 4y) dy = 0.</li><li>(eʸ + y cos x) dx + (xeʸ + sin x) dy = 0.</li><li>(2xy + 3) dx + (x² − 4y) dy = 0, y(1) = 2.</li><li>Find the constant k for which (kxy² + 4x³) dx + (3x²y + 5) dy = 0 is exact, then solve it.</li></ol>
+<p><strong>Integrating factors (2.6)</strong></p>
+<ol><li>(3xy + y²) dx + (x² + xy) dy = 0.</li><li>y² dx + (xy + 3) dy = 0.</li></ol>
+<h2>Conclusion</h2>
+<p>Classification decides the method. Linear → integrating factor. Separable → integrate both sides. Bernoulli, Riccati and homogeneous → substitute. Exact → find a potential F. Not exact → try an integrating factor, and always check the result.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

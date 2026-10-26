@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 6. Applications of Linear Second-Order Equations | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 6. Applications of Linear Second-Order Equations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">6. Applications of Linear Second-Order Equations</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Mass–spring systems, electrical circuits and orbital motion are all described by the same type of equation, so one set of techniques covers all of them.</p>
+<h2>6.1–6.2 Spring–Mass Systems</h2>
+<p>The displacement y(t) from equilibrium (measured positive downward unless stated) satisfies</p>
+<pre><code>my″ + cy′ + ky = F(t).</code></pre>
+<ul><li>m = mass, c = damping constant, k = spring constant, F = external force.</li><li><strong>Finding k:</strong> a weight stretches the spring by ΔL in equilibrium, so mg = k ΔL and k = mg/ΔL. In US units a weight of W lb has mass m = W/32 slugs, and lengths must be in feet.</li><li><strong>Sign convention:</strong> &quot;above equilibrium&quot; means negative y; &quot;downward velocity&quot; means positive y′.</li></ul>
+<p><strong>Undamped free motion</strong> (c = 0, F = 0): y = c₁ cos ω₀t + c₂ sin ω₀t = R cos(ω₀t − φ).</p>
+<ul><li>Natural frequency ω₀ = √(k/m), period T = 2π/ω₀, amplitude R = √(c₁² + c₂²), phase angle φ with c₁ = R cos φ, c₂ = R sin φ.</li></ul>
+<p><strong>Damped free motion</strong> (c &gt; 0, F = 0): the discriminant c² − 4mk decides the type.</p>
+<table><thead><tr><th>Condition</th><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>c² &lt; 4mk</td><td>Underdamped</td><td>e^(−ct/2m)(c₁ cos ω₁t + c₂ sin ω₁t) with ω₁ = √(4mk − c²)/(2m); oscillates with decaying amplitude (time-varying amplitude Re^(−ct/2m))</td></tr><tr><td>c² = 4mk</td><td>Critically damped</td><td>e^(−ct/2m)(c₁ + c₂t); no oscillation (at most one crossing of equilibrium)</td></tr><tr><td>c² &gt; 4mk</td><td>Overdamped</td><td>Two decaying exponentials; no oscillation</td></tr></tbody></table>
+<p>Free vibrations with infinitely many oscillations occur exactly in the underdamped case.</p>
+<p><strong>Forced motion.</strong></p>
+<ul><li>With damping, y = yₕ + yₚ where yₕ → 0 is the <strong>transient</strong> and yₚ is the <strong>steady-state</strong> solution.</li><li><strong>Undamped resonance:</strong> if F(t) = A cos ωt + B sin ωt with ω = ω₀, then yₚ contains terms t cos ω₀t, t sin ω₀t and the displacement is <strong>unbounded</strong>.</li></ul>
+<h2>6.3 The RLC Circuit</h2>
+<p>For charge Q(t) on the capacitor in a series circuit with inductance L, resistance R, capacitance C and source E(t):</p>
+<pre><code>LQ″ + RQ′ + (1/C)Q = E(t),     I = Q′.</code></pre>
+<p>It is the same equation as the spring with m ↔ L, c ↔ R, k ↔ 1/C.</p>
+<h2>6.4 Motion Under a Central Force</h2>
+<p>A particle with polar coordinates (r,θ) and force 𝐅 = F(r) 𝐞ᵣ obeys</p>
+<pre><code>m(r″ − rθ′²) = F(r),     m(rθ″ + 2r′θ′) = 0.</code></pre>
+<ul><li>The second equation gives r²θ′ = h (constant): angular momentum per unit mass is conserved, and the radius vector sweeps equal areas in equal times.</li><li>With u = 1/r as a function of θ:</li></ul>
+<p>  ``<code>text   d²u/(dθ²) + u = −F(1/u)/(mh²u²).   </code>``</p>
+<ul><li>For an inverse-square attraction F = −mμ/r² this becomes u″ + u = μ/h², whose solutions are conic sections.</li></ul>
+<h2>Common Pitfalls</h2>
+<ul><li>Forgetting to convert inches to feet or centimeters to meters.</li><li>Using the weight where the mass is needed (divide by g).</li><li>Wrong sign of the initial velocity or displacement (&quot;above&quot; vs &quot;below&quot;).</li><li>Treating ω = ω₀ in a <em>damped</em> system as resonance with unbounded growth (damping keeps it bounded).</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>A 12 lb weight stretches a spring 3 inches in equilibrium. It is released 6 inches above equilibrium with a downward velocity of 2 ft/s. No damping. Find the displacement, amplitude, period and frequency.</li><li>A 4 kg mass stretches a spring 20 cm. The damping constant is 24 N·s/m and the mass is released from 0.1 m below equilibrium at rest. Classify the motion and find y(t). Use g = 9.8 m/s².</li><li>A 2 kg mass is attached to a spring with k = 18 N/m. For what value of c is the motion critically damped?</li><li>A 16 lb weight stretches a spring 8 inches. An external force F(t) = 3 cos ωt lb acts with no damping. For what ω is the displacement unbounded?</li><li>Find the steady-state solution of y″ + 2y′ + 5y = 10 cos 3t.</li><li>In an RLC circuit L = 1 H, R = 4 Ω, C = 1/13 F, E(t) = 20 sin 2t V, with Q(0) = 0, I(0) = 0. Set up and solve for Q(t).</li><li>A mass–spring system has m = 0.5, c = 3, k = 4 and starts at y(0) = 0, y′(0)=1. Classify the damping and find y(t).</li><li>A spring of natural length 0.8 m becomes 0.95 m long when a 3 kg mass hangs from it. The mass is pulled 5 cm below equilibrium and given an upward velocity of 0.4 m/s. Find the undamped motion.</li><li>Show that for any central force, r²θ′ is constant.</li><li>For a central force F(r) = −mk²r (a harmonic attraction), write the equation for u(θ) = 1/r in terms of h and k.</li></ol>
+<h2>Conclusion</h2>
+<p>A physical problem becomes a linear second-order equation my″ + cy′ + ky = F(t) (or the circuit analogue). Read the problem for m, c, k, F and the initial conditions, convert units carefully, and then apply the Chapter 5 methods.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

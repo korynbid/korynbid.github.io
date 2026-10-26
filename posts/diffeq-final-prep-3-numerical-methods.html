@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 3. Numerical Methods | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 3. Numerical Methods | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">3. Numerical Methods</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>Most differential equations cannot be solved in closed form. <strong>Numerical methods</strong> approximate the solution of y′ = f(x,y), y(x₀)=y₀ at equally spaced points xᵢ = x₀ + ih, where h is the <strong>step size</strong>.</p>
+<h2>Key Formulas</h2>
+<p><strong>Euler&#x27;s method</strong></p>
+<pre><code>yₙ₊₁ = yₙ + h f(xₙ,yₙ).</code></pre>
+<p>Follow the tangent line for one step.</p>
+<p><strong>Improved Euler (Heun) method</strong></p>
+<pre><code>yₙ₊₁ = yₙ + h/2[f(xₙ,yₙ) + f(xₙ + h, yₙ + h f(xₙ,yₙ))].</code></pre>
+<p>Average the slope at the start of the step with the slope at the Euler prediction for the end.</p>
+<p><strong>Runge–Kutta method (RK4)</strong></p>
+<pre><code>k₁   = f(xₙ,yₙ),
+k₂   = f(xₙ + h/2, yₙ + (h/2)k₁),
+k₃   = f(xₙ + h/2, yₙ + (h/2)k₂),
+k₄   = f(xₙ + h, yₙ + h k₃),
+yₙ₊₁ = yₙ + (h/6) (k₁ + 2k₂ + 2k₃ + k₄).</code></pre>
+<p>(Some texts include the factor h inside each kᵢ; the result is the same.)</p>
+<h2>Error and Accuracy</h2>
+<table><thead><tr><th>Method</th><th>Local error</th><th>Global error</th><th>Slope evaluations per step</th></tr></thead><tbody><tr><td>Euler</td><td>O(h²)</td><td>O(h)</td><td>1</td></tr><tr><td>Improved Euler</td><td>O(h³)</td><td>O(h²)</td><td>2</td></tr><tr><td>RK4</td><td>O(h⁵)</td><td>O(h⁴)</td><td>4</td></tr></tbody></table>
+<ul><li>Halving h roughly halves the Euler error, quarters the improved Euler error, and divides the RK4 error by about 16.</li><li>The number of steps to reach x_end from x₀ is (x_end − x₀)/h.</li><li><strong>Tabulating at coarse spacing:</strong> if you compute with h = 0.025 but want a table at spacing 0.1, record every 4th value (y₄, y₈, y₁₂,…). With h = 0.05, record every 2nd value.</li></ul>
+<h2>Method (Hand Computation)</h2>
+<ol><li>Write f(x,y) explicitly and list x₀, y₀, h.</li><li>Compute xₙ₊₁ = xₙ + h.</li><li>Evaluate the slope(s) with the <strong>current</strong> yₙ, then update.</li><li>Keep several extra decimals during the work and round only at the end.</li><li>If an exact solution is known, compare and compute the error |y(xₙ) − yₙ|.</li></ol>
+<h2>Common Pitfalls</h2>
+<ul><li>Using the <em>new</em> x or y inside the first slope evaluation.</li><li>Using h/2 for the shift in k₄ (it should be the full h).</li><li>Rounding too early, so errors accumulate.</li><li>Using a calculator in degrees when f contains trigonometric functions.</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>Euler&#x27;s method for y′ = 3x − y, y(0) = 2, with h = 0.2. Find y₁, y₂, y₃.</li><li>Improved Euler for y′ = y − x², y(0) = 1, with h = 0.1. Find y₁ and y₂.</li><li>One step of RK4 for y′ = x + 2y, y(0) = 1, with h = 0.1. Give k₁,…,k₄ and y₁.</li><li>The equation y′ + 3y = e⁻ˣ, y(0) = 0 has the exact solution y = ½(e⁻ˣ − e⁻³ˣ). Use Euler with h = 0.2 and h = 0.1 to approximate y(0.4) and compare the errors.</li><li>To approximate y(2) for y′ = sin(xy), y(0)=1 with h = 0.05, how many steps are needed? If you want a table at spacing 0.25, which values do you record?</li><li>Explain, using the error orders above, why RK4 with h = 0.2 can be more accurate than Euler with h = 0.01 for a smooth problem, even though it takes fewer steps.</li></ol>
+<h2>Conclusion</h2>
+<p>Euler&#x27;s method is the simplest idea (follow the tangent), improved Euler corrects it with a second slope, and RK4 combines four slopes for much higher accuracy. Smaller steps always help but cost more evaluations.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

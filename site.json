@@ -509,5 +509,105 @@
     "reference": "https://t.me/kbtukbtu/583",
     "license": "",
     "date": "2026-10-25"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 1. Introduction",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-1-introduction",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq1_introduction.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 2. First-Order Equations",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-2-first-order-equations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq2_firstorderequations.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 3. Numerical Methods",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-3-numerical-methods",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq3_numerical_methods.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 4. Applications of First-Order Equations",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-4-applications-of-first-order-equations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq4_applications_of_firstorder_equations.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 5. Linear Second-Order Equations",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-5-linear-second-order-equations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq5_linear_secondorder_eq.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 6. Applications of Linear Second-Order Equations",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-6-applications-of-linear-second-order-equations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq6_applications_of_linear_secondorder_eq.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 7. Series Solutions of Linear Second-Order Equations",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-7-series-solutions-of-linear-second-order-equations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq7_series_solutions_for_linear_secondorder.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 8. Laplace Transforms",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-8-laplace-transforms",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq8_laplace_transforms.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 9. Linear Higher-Order Equations",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-9-linear-higher-order-equations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq9_linear_higherorder.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
+  },
+  {
+    "title": "[DIFFEQ-FINAL-PREP] 10. Linear Systems of Differential Equations",
+    "category": "Differential Equations",
+    "slug": "diffeq-final-prep-10-linear-systems-of-differential-equations",
+    "source": "C:\\Users\\lum\\Downloads\\files(2)\\md\\dq10_linear_systems.md",
+    "author": "Archiveskk",
+    "reference": "https://t.me/c/2310214877/1867/4793",
+    "license": "",
+    "date": "2026-10-26"
   }
 ]

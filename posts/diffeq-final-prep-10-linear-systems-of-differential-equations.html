@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>[DIFFEQ-FINAL-PREP] 10. Linear Systems of Differential Equations | korynbid</title>
+  <meta name="description" content="[DIFFEQ-FINAL-PREP] 10. Linear Systems of Differential Equations | korynbid">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="../js/theme.js"></script>
+  <link rel="icon" type="image/png" href="../fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../fav/favicon.svg">
+  <link rel="shortcut icon" href="../fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="../fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="../index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+      <a class="page-link" href="../about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">10. Linear Systems of Differential Equations</h1>
+        <p class="post-meta">Oct 26, 2026 &middot; DIFFEQ-FINAL-PREP &middot; Differential Equations &middot; Author: Archiveskk &middot; Source: <a href="https://t.me/c/2310214877/1867/4793" rel="noopener">https://t.me/c/2310214877/1867/4793</a></p>
+      </header>
+      <div class="post-content">
+<h2>Description</h2>
+<p>A <strong>system</strong> couples several unknown functions:</p>
+<pre><code>𝐲′ = A(t)𝐲 + 𝐟(t),     𝐲 = (y₁,…,yₙ)ᵀ.</code></pre>
+<p>Systems arise naturally in models with several interacting quantities, and every higher-order equation can be rewritten as a first-order system.</p>
+<h2>10.1–10.2 From Equations to Systems</h2>
+<p>To rewrite y⁽ⁿ⁾ = G(t,y,y′,…,y⁽ⁿ⁻¹⁾) as a system, set y₁ = y, y₂ = y′, …, yₙ = y⁽ⁿ⁻¹⁾. Then y₁′ = y₂, …, yₙ₋₁′ = yₙ, yₙ′ = G(t,y₁,…,yₙ).</p>
+<h2>10.3 Basic Theory of Homogeneous Systems</h2>
+<ul><li>n solutions 𝐲₁,…,𝐲ₙ of 𝐲′ = A𝐲 form a <strong>fundamental set</strong> if the matrix Y = [𝐲₁ ⋯ 𝐲ₙ] (a <strong>fundamental matrix</strong>) has det Y ≠ 0.</li><li>General solution: 𝐲 = c₁𝐲₁ + … + cₙ𝐲ₙ = Y𝐜.</li><li>An IVP 𝐲(t₀) = 𝐲₀ has a unique solution when A is continuous.</li></ul>
+<h2>10.4–10.6 Constant-Coefficient Systems 𝐲′ = A𝐲</h2>
+<p>Look for 𝐲 = e^(λt)𝛏. Then (A − λI)𝛏 = 𝟎, so λ is an eigenvalue (det(A − λI) = 0) and 𝛏 an eigenvector.</p>
+<table><thead><tr><th>Eigenvalue type</th><th>Solutions</th></tr></thead><tbody><tr><td>Distinct real λᵢ</td><td>e^(λᵢt)𝛏ᵢ</td></tr><tr><td>Complex α ± iβ, eigenvector 𝛏 = 𝐚 + i𝐛</td><td>e^(αt)(𝐚 cos βt − 𝐛 sin βt) and e^(αt)(𝐚 sin βt + 𝐛 cos βt)</td></tr><tr><td>Repeated real λ with only one eigenvector 𝛏 (defective)</td><td>e^(λt)𝛏 and e^(λt)(𝛏 t + 𝛈) with (A − λI)𝛈 = 𝛏</td></tr></tbody></table>
+<p>For a repeated eigenvalue with a full set of independent eigenvectors, simply use one exponential solution per eigenvector. In 3×3 problems with a triple defective eigenvalue, a chain of generalized eigenvectors is needed.</p>
+<h2>10.7 Variation of Parameters for Nonhomogeneous Systems</h2>
+<p>For 𝐲′ = A𝐲 + 𝐟(t) with a fundamental matrix Y of the homogeneous system:</p>
+<pre><code>𝐲ₚ = Y𝐮,     Y𝐮′ = 𝐟 ⟺ 𝐮′ = Y⁻¹𝐟.</code></pre>
+<ol><li>Compute det Y.</li><li>Solve for 𝐮′ (for 2×2: Cramer&#x27;s rule, replacing the k-th column of Y by 𝐟 to get uₖ′ = det Yₖ/det Y).</li><li>Integrate each uₖ′ (constants may be omitted).</li><li>Multiply: 𝐲ₚ = Y𝐮 is a <strong>matrix times a vector</strong>.</li><li>The general solution is 𝐲 = Y𝐜 + 𝐲ₚ.</li></ol>
+<h2>Common Pitfalls</h2>
+<ul><li>Computing eigenvectors incorrectly (always check (A − λI)𝛏 = 𝟎).</li><li>Placing eigenvectors in the wrong columns of Y relative to their exponentials.</li><li>Multiplying in the wrong order (𝐲ₚ = Y𝐮, not 𝐮Y).</li><li>Dropping arithmetic signs when combining the constants cᵢ with terms of 𝐲ₚ.</li></ul>
+<h2>Practice Problems</h2>
+<ol><li>Rewrite y‴ − 2y″ + y′ − 5y = sin t as a first-order system.</li><li>Solve 𝐲′ = [[3, 1], [2, 2]]𝐲.</li><li>Solve 𝐲′ = [[1, −2], [2, 1]]𝐲 and give real-valued solutions.</li><li>Solve 𝐲′ = [[3, −1], [1, 1]]𝐲 (one eigenvalue, defective).</li><li>Solve 𝐲′ = [[2, 0, 0], [0, 1, 2], [0, 2, 1]]𝐲.</li><li>Solve the IVP 𝐲′ = [[0, 1], [−4, 0]]𝐲, 𝐲(0) = (2, 0)ᵀ.</li><li>Verify that Y(t) = [[e³ᵗ, e⁻ᵗ], [e³ᵗ, −e⁻ᵗ]] is a fundamental matrix of 𝐲′ = [[1, 2], [2, 1]]𝐲. Explain using det Y and by checking each column.</li><li>Find a particular solution and the general solution of 𝐲′ = [[1, 2], [2, 1]]𝐲 + (3, 2t)ᵀ.</li><li>Find a particular solution of 𝐲′ = [[0, 1], [−4, 0]]𝐲 + (eᵗ, 0)ᵀ.</li><li>Find a particular solution of 𝐲′ = [[−2, 1], [1, −2]]𝐲 + (2e⁻ᵗ, e⁻ᵗ)ᵀ using variation of parameters.</li></ol>
+<h2>Conclusion</h2>
+<p>Systems are solved with linear algebra: eigenvalues and eigenvectors for the homogeneous part, and a fundamental matrix with 𝐮′ = Y⁻¹𝐟 for the forcing. The three eigenvalue cases (real distinct, complex, defective) cover all 2×2 problems.</p>
+      </div>
+      <p class="post-notice">All rights remain with the original author (Archiveskk). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+        If you noticed a mistake or copyright issues, please contact:
+        <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
+      <p class="post-views" id="views" hidden></p>
+      <section class="comments">
+        <script>(function(){var s=document.createElement('script');s.src='https://giscus.app/client.js';var a={"data-repo": "korynbid/korynbid.github.io", "data-repo-id": "R_kgDOVVEnUQ", "data-category": "Comments", "data-category-id": "DIC_kwDOVVEnUc4DJegb", "data-mapping": "pathname", "data-strict": "0", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-input-position": "bottom", "data-lang": "en"};a['data-theme']=window.korynTheme?korynTheme.giscus():'transparent_dark';for(var k in a)s.setAttribute(k,a[k]);s.setAttribute('crossorigin','anonymous');s.async=true;document.currentScript.parentNode.appendChild(s);})();</script>
+      </section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="../js/views.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
