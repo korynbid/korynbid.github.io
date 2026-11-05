@@ -8,11 +8,11 @@ A small open source website for sharing study notes and articles.
 
 - **Categories:** the home page groups articles by category and shows the first few of each. A "more..." link opens a page listing every article in that category.
 - **Live search:** search articles by title and category right on the home page.
-- **Credit for every article:** each article shows its date, series tag, category, original author and a link to the source.
+- **Credit for every article:** each article shows its date, series tag, category and original author.
 - **Comments:** powered by [Giscus](https://giscus.app) and stored in this repository's GitHub Discussions. A GitHub account is needed to comment.
 - **Visit counts:** page views are counted with [GoatCounter](https://www.goatcounter.com), a privacy-friendly analytics service that does not use cookies.
 - **Dark theme and mobile layout:** the pages work on phones and desktops.
-- **Static and fast:** plain HTML, CSS and a little JavaScript, hosted on GitHub Pages with no server and no database.
+- **Static and fast:** plain HTML, CSS and a little JavaScript, hosted on GitHub Pages.
 
 ## Project structure
 

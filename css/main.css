@@ -200,11 +200,40 @@ blockquote {
   color-scheme: light;
 }
 :root[data-theme="contrast"] {
-  --ink: #000000; --slate: #1a1a1a; --taupe: #ffe14d; --sand: #ffffff;
+  --ink: #000000; --slate: #1a1a1a; --taupe: #E1DCC9; --sand: #ffffff;
   color-scheme: dark;
 }
 :root[data-theme="contrast"] a { text-decoration: underline; }
 :root[data-theme="black"] {
   --ink: #000000; --slate: #121212; --taupe: #9a8f7e; --sand: #e0d3b9;
   color-scheme: dark;
+}
+
+/* C++-style week counter on the index page */
+:root {
+  --c-kw: #d38bd0; --c-ty: #5fd0b8; --c-num: #b5cea8; --c-str: #e0a584; --c-cm: #8fbf7a;
+}
+:root[data-theme="light"]    { --c-kw: #8a3ea8; --c-ty: #1b7f6e; --c-num: #2e7d32; --c-str: #b0472a; --c-cm: #3f6b34; }
+:root[data-theme="sepia"]    { --c-kw: #7d3c98; --c-ty: #1a6f63; --c-num: #2e6b2f; --c-str: #9c4524; --c-cm: #4e6129; }
+:root[data-theme="contrast"] { --c-kw: #ff9dff; --c-ty: #5ffff0; --c-num: #b6ff8c; --c-str: #ffb58c; --c-cm: #8cff8c; }
+pre.cpp {
+  font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, "Liberation Mono", monospace;
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 30px;
+}
+pre.cpp code { font: inherit; }
+.cpp .kw { color: var(--c-kw); }
+.cpp .ty { color: var(--c-ty); }
+.cpp .num { color: var(--c-num); }
+.cpp .str { color: var(--c-str); }
+.cpp .cm { color: var(--c-cm); font-style: italic; }
+
+/* ASCII logo inside the week counter; shrinks on narrow screens so it never scrolls sideways */
+.cpp .art {
+  display: block;
+  color: var(--c-ty);
+  line-height: 1.15;
+  font-size: clamp(5px, calc((100vw - 56px) / 45), 14px);
+  user-select: none;
 }

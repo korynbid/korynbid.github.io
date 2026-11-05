@@ -2,7 +2,7 @@
 
 ## Articles
 
-Articles on korynbid are shared with credit. The original author and the source are shown at the top of each article, and the works an article is based on are listed in its references.
+Articles on korynbid are shared with credit. The original author is shown at the top of each article, and the works an article is based on are listed in its references.
 
 Unless an article states a different license or permission in its notice, **all rights remain with the original author and with the rights holders of the works the article is based on**. Publishing an article here does not transfer any rights and does not give you a license to copy, republish or reuse it. If you want to reuse an article, ask the original author or rights holder.
 
@@ -14,7 +14,7 @@ If you are an author or rights holder and want an article corrected, credited di
 
 ## Website code
 
-The code of this website (the build tool, styles and scripts) is open source under the MIT License. See the LICENSE file in the [project repository](https://github.com/korynbid/korynbid.github.io). The MIT License covers the code only, not the articles.
+The code of this website (styles and scripts) is open source under the MIT License. See the LICENSE file in the [project repository](https://github.com/korynbid/korynbid.github.io). The MIT License covers the code only, not the articles.
 
 ## Privacy
 
