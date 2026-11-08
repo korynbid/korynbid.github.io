@@ -200,7 +200,7 @@ blockquote {
   color-scheme: light;
 }
 :root[data-theme="contrast"] {
-  --ink: #000000; --slate: #1a1a1a; --taupe: #E1DCC9; --sand: #ffffff;
+  --ink: #000000; --slate: #1a1a1a; --taupe: #ffe14d; --sand: #ffffff;
   color-scheme: dark;
 }
 :root[data-theme="contrast"] a { text-decoration: underline; }
@@ -236,4 +236,45 @@ pre.cpp code { font: inherit; }
   line-height: 1.15;
   font-size: clamp(5px, calc((100vw - 56px) / 45), 14px);
   user-select: none;
+}
+
+/* Series menu: a collapsible list on phones, an island left of the container on wide screens */
+.page-content { position: relative; }
+.menu-rail { display: none; }
+.menu-mobile {
+  margin-bottom: 24px;
+  background: var(--slate);
+  border: 1px solid var(--taupe);
+  border-radius: 6px;
+}
+.menu-mobile summary { cursor: pointer; padding: 10px 14px; font-size: 15px; }
+.menu-mobile .menu-list { max-height: 55vh; padding: 0 8px 8px; }
+.menu-list { list-style: none; margin: 0; overflow-y: auto; position: relative; }
+.menu-list li { margin: 0; }
+.menu-list a { display: block; padding: 5px 10px; border-radius: 4px; font-size: 14px; line-height: 1.35; }
+.menu-list a:hover { background: var(--ink); text-decoration: none; }
+.menu-list a[aria-current="page"] { background: var(--ink); box-shadow: inset 3px 0 0 var(--taupe); }
+.menu-title { margin: 0 0 8px; padding: 0 10px; font-size: 13px; color: var(--taupe); letter-spacing: 0.5px; }
+
+@media (min-width: 1250px) {
+  .menu-mobile { display: none; }
+  .menu-rail {
+    display: block;
+    position: absolute;
+    top: 40px;
+    bottom: 40px;
+    left: calc(50% - 616px);
+    width: 230px;
+    pointer-events: none;
+  }
+  .menu-island {
+    position: sticky;
+    top: 16px;
+    pointer-events: auto;
+    background: var(--slate);
+    border: 1px solid var(--taupe);
+    border-radius: 10px;
+    padding: 14px 8px;
+  }
+  .menu-island .menu-list { max-height: calc(100vh - 120px); }
 }
