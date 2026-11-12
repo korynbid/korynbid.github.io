@@ -97,7 +97,7 @@ print(pipeline_cycles(100))                         # 104</code></pre>
 <ul><li>A deeper pipeline allows a faster clock but increases branch penalties and hazard costs; there is an optimal depth.</li><li><strong>Common mistake:</strong> pipelining does not let &quot;several commands execute in one cycle.&quot; More precisely, several instructions are <em>in flight</em> at once (one per stage); completing more than one per cycle needs a <strong>superscalar</strong> design (Topic 11).</li><li>Forwarding means a result is passed from a pipeline register straight to the unit that needs it, bypassing the register file.</li><li>Quick facts: pipeline stages are fetch, decode, execute, memory access, write-back; a stall is a delay due to hazards; branch prediction minimizes control stalls; data hazards are mitigated by forwarding, stalling or reordering; register renaming removes false dependences.</li></ul>
 <p><strong>References:</strong> [HP6] Appendix C (C.1-C.3) and Ch. 3 (3.1); [PH-RV] Ch. 4 (4.5-4.8);</p>
       </div>
-      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license-page.html">Copyright &amp; license</a>.
         If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
@@ -111,7 +111,7 @@ print(pipeline_cycles(100))                         # 104</code></pre>
 <footer class="site-footer">
   <div class="wrapper">
     <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
-      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+      <a href="../license-page.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

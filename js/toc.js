@@ -12,7 +12,7 @@
   var root = /\/(posts|categories)\//.test(path) ? '../' : '';
   var file = path.replace(/\/+$/, '').split('/').pop().replace(/\.html$/, '');
   var LINKS = [['Home', 'index.html', 'index'], ['Submit', 'submit.html', 'submit'],
-               ['About', 'about.html', 'about'], ['License', 'license.html', 'license']];
+               ['About', 'about.html', 'about'], ['License', 'license-page.html', 'license-page']];
   var here = path.replace(/\/+$/, '').split('/').pop().replace(/\.html$/, '');
 
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }

@@ -139,7 +139,7 @@ fail:</code></pre>
 <ul><li><strong>Common mistake:</strong> ARM and x86 are not both weakly consistent. x86 uses <strong>TSO</strong>, a relatively strong model; ARM and RISC-V are the genuinely <strong>weak/relaxed</strong> ones.</li><li>MESI example: a core that updates a value notifies the others, which invalidate their copies.</li><li>Python threads do not give CPU parallelism (GIL); the lock example is about correctness, not speed.</li><li>Use thread-local data and reduce sharing; <strong>padding and alignment</strong> avoid false sharing.</li><li>Core count has limits: bandwidth, power and software scalability, not just transistor budget.</li><li>Quick facts: processes have separate address spaces, threads share one; SMP processors share memory equally; coherence keeps cached data consistent; MESI protocol; relaxed consistency allows reordering for speed.</li></ul>
 <p><strong>References:</strong> [HP6] Ch. 5 (5.1-5.7: centralized/distributed shared memory, synchronization, memory consistency); [PH-RV] Ch. 6 (6.5 shared-memory multiprocessors, 6.10), Ch. 5 (5.10 cache coherence); Papamarcos &amp; Patel, &quot;A Low-Overhead Coherence Solution for Multiprocessors with Private Cache Memories,&quot; ISCA 1984; Lamport, &quot;How to Make a Multiprocessor Computer That Correctly Executes Multiprocess Programs,&quot; <em>IEEE Trans. Computers</em>, 1979; [RV-Spec] Vol. I (&quot;A&quot; extension, memory model);</p>
       </div>
-      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license-page.html">Copyright &amp; license</a>.
         If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
@@ -153,7 +153,7 @@ fail:</code></pre>
 <footer class="site-footer">
   <div class="wrapper">
     <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
-      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+      <a href="../license-page.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>

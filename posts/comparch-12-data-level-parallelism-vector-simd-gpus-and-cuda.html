@@ -132,7 +132,7 @@ void add8(const float *a, const float *b, float *c, int n) {
 <ul><li>SIMD vs vector: SIMD exposes a fixed register width, vector architectures expose a flexible vector length, so one binary adapts to different hardware.</li><li>A GPU is a throughput machine: it hides memory latency by switching among many warps instead of using big caches.</li><li>Masked instructions trade a branch for wasted lanes; they win when branches would be unpredictable.</li><li>Poor alignment or non-contiguous data can erase SIMD gains.</li><li>Quick facts: DLP = same operation on multiple data; SIMD processors and GPUs support DLP; masked vector instructions apply an operation only to chosen elements; CUDA is NVIDIA&#x27;s GPU programming platform; GPUs run thousands of threads at once.</li></ul>
 <p><strong>References:</strong> [HP6] Ch. 4 (4.1-4.4 vector, SIMD, GPUs, roofline); [PH-RV] Ch. 6 (6.6-6.7); [RV-Spec] &quot;V&quot; Vector Extension 1.0; Williams, Waterman &amp; Patterson, &quot;Roofline: An Insightful Visual Performance Model for Multicore Architectures,&quot; <em>CACM</em>, 2009; NVIDIA, <em>CUDA C++ Programming Guide</em>;</p>
       </div>
-      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license.html">Copyright &amp; license</a>.
+      <p class="post-notice">All rights remain with the original author (Algo-holics). Publishing here does not grant a license to copy or reuse this text. <a href="../license-page.html">Copyright &amp; license</a>.
         If you noticed a mistake or copyright issues, please contact:
         <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a></p>
       <p class="post-views" id="views" hidden></p>
@@ -146,7 +146,7 @@ void add8(const float *a, const float *b, float *c, int n) {
 <footer class="site-footer">
   <div class="wrapper">
     <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
-      <a href="../license.html">Copyright, license &amp; privacy</a></p>
+      <a href="../license-page.html">Copyright, license &amp; privacy</a></p>
   </div>
 </footer>
 <script src="../js/views.js"></script>
