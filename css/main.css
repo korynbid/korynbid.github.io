@@ -183,7 +183,9 @@ blockquote {
   background: transparent;
   border: 1px solid var(--taupe);
   border-radius: 3px;
-  padding: 2px 10px;
+  padding: 2px 0;
+  min-width: 34px;
+  text-align: center;
   margin-right: 14px;
   cursor: pointer;
 }
@@ -238,43 +240,73 @@ pre.cpp code { font: inherit; }
   user-select: none;
 }
 
-/* Series menu: a collapsible list on phones, an island left of the container on wide screens */
-.page-content { position: relative; }
-.menu-rail { display: none; }
-.menu-mobile {
-  margin-bottom: 24px;
-  background: var(--slate);
-  border: 1px solid var(--taupe);
-  border-radius: 6px;
-}
-.menu-mobile summary { cursor: pointer; padding: 10px 14px; font-size: 15px; }
-.menu-mobile .menu-list { max-height: 55vh; padding: 0 8px 8px; }
+/* Menu list styles (used by the table of contents drawer) */
 .menu-list { list-style: none; margin: 0; overflow-y: auto; position: relative; }
 .menu-list li { margin: 0; }
 .menu-list a { display: block; padding: 5px 10px; border-radius: 4px; font-size: 14px; line-height: 1.35; }
 .menu-list a:hover { background: var(--ink); text-decoration: none; }
 .menu-list a[aria-current="page"] { background: var(--ink); box-shadow: inset 3px 0 0 var(--taupe); }
-.menu-title { margin: 0 0 8px; padding: 0 10px; font-size: 13px; color: var(--taupe); letter-spacing: 0.5px; }
 
-@media (min-width: 1250px) {
-  .menu-mobile { display: none; }
-  .menu-rail {
-    display: block;
-    position: absolute;
-    top: 40px;
-    bottom: 40px;
-    left: calc(50% - 616px);
-    width: 230px;
-    pointer-events: none;
-  }
-  .menu-island {
-    position: sticky;
-    top: 16px;
-    pointer-events: auto;
-    background: var(--slate);
-    border: 1px solid var(--taupe);
-    border-radius: 10px;
-    padding: 14px 8px;
-  }
-  .menu-island .menu-list { max-height: calc(100vh - 120px); }
+/* Table of contents: hamburger button in the header + slide-in drawer listing every series */
+.toc-toggle {
+  font: inherit;
+  line-height: 1;
+  color: var(--sand);
+  background: transparent;
+  border: 1px solid var(--taupe);
+  border-radius: 3px;
+  padding: 5px 8px;
+  margin-right: 10px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.toc-toggle svg { display: block; width: 18px; height: 14px; }
+.toc-toggle:hover, .toc-toggle[aria-expanded="true"] { border-color: var(--sand); }
+.toc-toggle:focus-visible, .toc-close:focus-visible { outline: 2px solid var(--taupe); outline-offset: 3px; }
+
+.toc-backdrop {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(0, 0, 0, 0.5);
+}
+.toc-panel {
+  position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
+  width: min(360px, 88vw);
+  display: flex; flex-direction: column;
+  background: var(--slate);
+  border-right: 1px solid var(--taupe);
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform .2s ease, visibility 0s linear .2s;
+}
+.toc-panel.open { transform: none; visibility: visible; transition: transform .2s ease; }
+.toc-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; border-bottom: 1px solid var(--taupe);
+}
+.toc-head h2 { margin: 0; font-size: 18px; }
+.toc-close {
+  font: inherit; font-size: 22px; line-height: 1;
+  color: var(--sand); background: transparent; border: 0; cursor: pointer; padding: 2px 8px;
+}
+.toc-scroll { overflow-y: auto; padding: 8px 8px 24px; }
+.toc-nav .menu-list { overflow: visible; }
+/* one shared left edge: links, heading and group titles all sit 10px inside the 8px gutter */
+.toc-panel .menu-list a, .toc-panel .toc-group summary { padding-left: 10px; padding-right: 10px; }
+.toc-panel .toc-heading {
+  margin: 14px 0 6px;
+  padding: 14px 10px 0;
+  border-top: 1px solid var(--taupe);
+  font-size: 18px;
+  line-height: 1.3;
+}
+.toc-group { margin: 0; }
+.toc-group summary {
+  cursor: pointer; padding: 8px 10px; border-radius: 4px;
+  font-size: 14px; letter-spacing: .5px; color: var(--taupe);
+}
+.toc-group summary:hover { background: var(--ink); }
+.toc-group[open] summary { color: var(--sand); }
+.toc-group .menu-list { overflow: visible; max-height: none; padding-bottom: 6px; }
+@media (prefers-reduced-motion: reduce) {
+  .toc-panel, .toc-panel.open { transition: none; }
 }

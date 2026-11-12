@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Submit an article | korynbid</title>
+  <meta name="description" content="Submit an article | korynbid">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/theme.js"></script>
+  <link rel="icon" type="image/png" href="fav/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="fav/favicon.svg">
+  <link rel="shortcut icon" href="fav/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="fav/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Korynbid">
+  <link rel="manifest" href="fav/site.webmanifest">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrapper">
+    <a class="site-title" href="index.html">korynbid</a>
+    <nav class="site-nav">
+      <button id="theme-toggle" class="theme-toggle" type="button" title="Change theme" hidden>Theme</button>
+    </nav>
+  </div>
+</header>
+
+<main class="page-content">
+  <div class="wrapper">
+    <article class="post">
+      <header class="post-header">
+        <h1 class="post-title">Submit an article</h1>
+      </header>
+      <div class="post-content">
+<p>Want to share your own study notes or an article? Write it in Markdown and send it through the submission form on GitHub. One submission can contain a single article or a whole series.</p>
+<h2>How to submit</h2>
+<ol>
+<li>Open the <a href="https://github.com/korynbid/korynbid.github.io/issues/new?template=submit-article.yml">submission form</a>. You need a free GitHub account.</li>
+<li>Enter the series tag (for example <code>ADS-FINAL-PREP</code>) and, if the article is based on someone else's work, a reference link to the original source.</li>
+<li>Choose how you want to be credited: by your GitHub username, or anonymously.</li>
+<li>Paste your Markdown into the box. For a very long file, drag and drop the <code>.md</code> file into the box instead.</li>
+<li>Tick the rights box and send the form. Your submission is reviewed and then published with the credit you chose.</li>
+</ol>
+<p>The form creates a public GitHub issue, so your text and your GitHub username are visible to everyone. Choosing "anonymously" only means your name is not shown on the published article. If you do not want to use GitHub, you can email the files to <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a> instead.</p>
+<h2>Article structure</h2>
+<p>Every article follows the same simple structure, so a series reads the same from start to end.</p>
+<p>One file can contain an entire series. Every new article inside the file starts with its own single <code>#</code> heading:</p>
+<pre><code># 1. First Article
+
+## Description
+One short paragraph: what the topic is and why it matters.
+
+## Main section
+Explain the idea. Use lists, tables and code examples.
+
+### Subsection
+Details, syntax, examples.
+
+## Conclusion
+Two or three sentences that sum everything up.
+
+# 2. Second Article
+
+## Description
+The next article of the series starts with a new # heading.
+
+## Conclusion
+Short summary.
+</code></pre>
+<ul>
+<li><strong>One file, one article or a whole series.</strong> Save it as UTF-8 with the <code>.md</code> extension. A clear name works best, such as <code>3_sql-ddl-dml.md</code> for one article or <code>db-final-prep.md</code> for a series.</li>
+<li><strong>Every new article starts with a <code>#</code>.</strong> Use a single <code>#</code> heading for the title of each article. Start it with the article number in the series (<code># 3. SQL ...</code>), because the number sets its place in the series menu.</li>
+<li><strong>Description first.</strong> Open each article with a <code>## Description</code> section.</li>
+<li><strong>Headings in order.</strong> Inside an article use <code>##</code> for sections and <code>###</code> for subsections, and do not skip levels. Never use a single <code>#</code> for anything except a new article.</li>
+<li><strong>Long articles.</strong> Split them into parts with a line of three dashes (<code>---</code>) and headings like <code>## Part II: Another big block</code>.</li>
+<li><strong>Code in code blocks.</strong> Always add the language name so it is highlighted correctly.</li>
+<li><strong>End each article with a conclusion.</strong> A <code>## Conclusion</code> section closes it.</li>
+<li><strong>Leave the extras to the form.</strong> Do not write the author, date, series tag or references inside the file. The form collects them once for everything you send.</li>
+</ul>
+<h2>Basic Markdown syntax</h2>
+<table>
+<thead>
+<tr>
+<th>You want</th>
+<th>You write</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heading</td>
+<td><code># Title</code>, <code>## Section</code>, <code>### Subsection</code></td>
+</tr>
+<tr>
+<td>Bold</td>
+<td><code>**bold text**</code></td>
+</tr>
+<tr>
+<td>Italic</td>
+<td><code>*italic text*</code></td>
+</tr>
+<tr>
+<td>Inline code</td>
+<td><code>`SELECT * FROM t;`</code></td>
+</tr>
+<tr>
+<td>Link</td>
+<td><code>[link text](https://example.com)</code></td>
+</tr>
+<tr>
+<td>Bulleted list</td>
+<td><code>* item</code> or <code>- item</code> on each line</td>
+</tr>
+<tr>
+<td>Numbered list</td>
+<td><code>1. item</code>, <code>2. item</code></td>
+</tr>
+<tr>
+<td>Quote</td>
+<td><code>&gt; quoted text</code></td>
+</tr>
+<tr>
+<td>Divider</td>
+<td><code>---</code> on its own line</td>
+</tr>
+</tbody>
+</table>
+<p>A code block starts and ends with three backticks. Put the language name right after the opening ones, for example <code>sql</code>, <code>python</code> or <code>cpp</code>.</p>
+<p>A table uses pipes, and the second line of dashes separates the header from the rows:</p>
+<pre><code>| Type | Purpose |
+|------|---------|
+| DDL  | Create and change structures |
+| DML  | Change data |
+</code></pre>
+<p>Leave an empty line before and after headings, lists, tables and code blocks.</p>
+<h2>Rights and credit</h2>
+<ul>
+<li>Send only your own work, or work you have permission to share.</li>
+<li>If the article is based on someone else's work, add its link in the reference field of the form.</li>
+<li>The author is credited at the top of the article, unless you chose to stay anonymous. Rights stay with the original author, as described on the <a href="license.html">copyright, license and privacy page</a>.</li>
+<li>Want an article corrected or removed? Write to <a href="mailto:lebroskiofficial@proton.me">lebroskiofficial@proton.me</a> with the link to the article.</li>
+</ul>
+      </div>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrapper">
+    <p class="text">&copy; 2026 korynbid. Articles belong to their original authors.
+      <a href="license.html">Copyright, license &amp; privacy</a></p>
+  </div>
+</footer>
+<script src="js/search.js"></script>
+<script src="js/week.js"></script>
+<script src="js/menu-data.js"></script>
+<script src="js/toc.js"></script>
+<script data-goatcounter="https://korynbid.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

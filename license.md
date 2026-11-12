@@ -2,11 +2,15 @@
 
 ## Articles
 
-Articles on korynbid are shared with credit. The original author is shown at the top of each article, and the works an article is based on are listed in its references.
+Articles on korynbid are shared with credit. The original author is shown at the top of each article, unless the contributor chose to stay anonymous, and the works an article is based on are listed in its references.
 
 Unless an article states a different license or permission in its notice, **all rights remain with the original author and with the rights holders of the works the article is based on**. Publishing an article here does not transfer any rights and does not give you a license to copy, republish or reuse it. If you want to reuse an article, ask the original author or rights holder.
 
 Some articles carry a specific license or a note that they are shared with the author's permission. That note applies only to that article.
+
+## Submitting articles
+
+Articles are sent through the [submission form](https://github.com/korynbid/korynbid.github.io/issues/new?template=submit-article.yml) on GitHub; see the [Submit](submit.html) page. Send only your own work, or work you have permission to share. If an article is based on someone else's work, add a reference link to the original source. By submitting you confirm that you wrote the article or have permission to share it, and that it may be published here, credited the way you chose in the form. Rights stay with you and with the rights holders of the works your article is based on.
 
 ## Mistakes and takedown requests
 
@@ -14,12 +18,13 @@ If you are an author or rights holder and want an article corrected, credited di
 
 ## Website code
 
-The code of this website (styles and scripts) is open source under the MIT License. See the LICENSE file in the [project repository](https://github.com/korynbid/korynbid.github.io). The MIT License covers the code only, not the articles.
+The code of this website (templates, styles, scripts and build tools) is open source under the MIT License. See the LICENSE file in the [project repository](https://github.com/korynbid/korynbid.github.io). The MIT License covers the code only, not the articles.
 
 ## Privacy
 
 - **Visit statistics:** GoatCounter counts page views, with basic information such as the page visited, the referring site, browser and country. It does not use cookies.
 - **Comments:** comments use Giscus and are stored as public GitHub Discussions. To comment you sign in to GitHub, and your comment and GitHub username are public. GitHub's own terms and privacy statement apply to them.
+- **Submissions:** the submission form creates a public GitHub issue. The text you send and your GitHub username are public, and GitHub's own terms and privacy statement apply. Choosing to be anonymous means your name is not shown on the published article; the issue itself still shows your username.
 - **Theme choice:** the site saves your chosen color theme in your browser (local storage) so it is remembered on the next page. It is not sent anywhere.
 - **Hosting:** the site is hosted on GitHub Pages, which may keep technical logs such as IP addresses under GitHub's privacy statement.
 

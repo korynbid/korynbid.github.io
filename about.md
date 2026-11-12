@@ -6,8 +6,12 @@
 
 - Articles are written in Markdown.
 - Every article is filed under a category. The home page lists all articles grouped by category and has a live search by title and category.
-- Articles that belong to a series share a `[TAG]` in their title and link to each other with previous and next buttons.
+- Articles that belong to a series share a `[TAG]` in their title and link to each other with previous and next buttons. A table of contents shows all articles grouped by series.
 - The site is fully static and hosted on GitHub Pages.
+
+## Share your own notes
+
+Anyone can submit articles. Write them in Markdown and send them through the [submission form](https://github.com/korynbid/korynbid.github.io/issues/new?template=submit-article.yml) on GitHub. One submission can contain an entire series: every new article in it starts with a `#` heading. See the [Submit](submit.html) page for the details and a short Markdown guide.
 
 ## Sources and credit
 

@@ -49,5 +49,5 @@ body:
     attributes:
       label: Rights
       options:
-        - label: I wrote this article, or I have permission to share it, and it may be published on korynbid with credit to the author.
+        - label: I wrote this article, or I have permission to share it, and it may be published on korynbid, credited the way I chose above.
           required: true

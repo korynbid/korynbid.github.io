@@ -3,6 +3,9 @@
                 ['contrast', 'High contrast'], ['black', 'Black']];
   var GISCUS = { dark: 'transparent_dark', black: 'transparent_dark', light: 'light',
                  sepia: 'light', contrast: 'dark_high_contrast' };
+  // one single-character icon per theme (\uFE0E forces text, not emoji, rendering)
+  var ICONS = { dark: '\u263E', light: '\u2600\uFE0E', sepia: '\u270E',
+                contrast: '\u25D0', black: '\u25CF' };
   var current = 'dark';
 
   function valid(t) { return THEMES.some(function (x) { return x[0] === t; }); }
@@ -17,8 +20,9 @@
     document.documentElement.setAttribute('data-theme', t);
     var b = document.getElementById('theme-toggle');
     if (b) {
-      b.textContent = 'Theme: ' + name(t);
+      b.textContent = ICONS[t];
       b.title = 'Change theme (now: ' + name(t) + ')';
+      b.setAttribute('aria-label', 'Change theme (now: ' + name(t) + ')');
     }
   }
 
