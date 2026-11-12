@@ -1,0 +1,53 @@
+name: Submit an article
+description: Send one or more Markdown articles to be published on korynbid.
+title: "[Submission] "
+labels: ["submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing! Please read the [Submit page](https://koryn.bid/submit.html) first.
+        Everything you post here, including your GitHub username, is **public**.
+  - type: input
+    id: series
+    attributes:
+      label: Series tag
+      description: Short tag shared by all articles of one series, written in capitals with dashes.
+      placeholder: ADS-FINAL-PREP
+    validations:
+      required: true
+  - type: input
+    id: reference
+    attributes:
+      label: Reference link
+      description: Link to the original source, if the article is based on someone else's work.
+      placeholder: https://example.com/original-article
+    validations:
+      required: false
+  - type: dropdown
+    id: credit
+    attributes:
+      label: Credit
+      description: Anonymous means your name is not shown on the published article. This issue itself stays public.
+      options:
+        - Credit me by my GitHub username
+        - Publish anonymously
+    validations:
+      required: true
+  - type: textarea
+    id: article
+    attributes:
+      label: Article (Markdown)
+      description: |
+        Paste your Markdown here. One submission can contain an entire series; every new article starts with a `#` heading.
+        For very long files, drag and drop the `.md` file into this box instead.
+      render: markdown
+    validations:
+      required: true
+  - type: checkboxes
+    id: rights
+    attributes:
+      label: Rights
+      options:
+        - label: I wrote this article, or I have permission to share it, and it may be published on korynbid with credit to the author.
+          required: true
